@@ -1,4 +1,4 @@
-import { AuthToken, Role } from '../types'
+import type { AuthToken, Role } from '../types'
 
 type UserCanPayload = {
   rolesCan?: Role[]

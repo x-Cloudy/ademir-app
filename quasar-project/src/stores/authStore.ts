@@ -1,5 +1,5 @@
 import { defineStore, acceptHMRUpdate } from 'pinia';
-import { AuthLoginForm, AuthToken, AuthUser, Role, UpdateAuthUser } from '../types'
+import type { AuthLoginForm, AuthToken, AuthUser, Role, UpdateAuthUser } from '../types'
 import { AuthService } from '../services/auth.service'
 import type { AxiosResponse } from 'axios';
 import { api } from 'boot/axios'
@@ -77,7 +77,7 @@ export const useAuthStore = defineStore('auth', {
 
     async logout() {
       this.clearAuth()
-      // await authService.logout()
+      await authService.logout()
     },
 
     async me(): Promise<void> {

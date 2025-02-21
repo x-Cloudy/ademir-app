@@ -1,4 +1,4 @@
-import { AuthLoginForm, AuthToken, AuthUser } from '../types'
+import type { AuthLoginForm, AuthToken, AuthUser } from '../types'
 import { api } from 'boot/axios'
 import { isValidLoginToken } from 'src/utils/auth-helper'
 import { TOKEN_STORAGE_KEY, USER_STORAGE_KEY  } from 'src/stores/authStore'
@@ -48,8 +48,9 @@ export class AuthService {
   async logout() {
     try {
       const url = '/api/auth/logout'
-      void api.post(url)
+      await api.post(url)
     } catch (error) {
+      console.log(error)
     } finally {
       this.clearAuth()
     }
