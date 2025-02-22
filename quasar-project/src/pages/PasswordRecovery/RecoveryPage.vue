@@ -1,8 +1,8 @@
 <template>
   <q-page class="flex flex-center" style="overflow-y: hidden;">
-    <q-card class="login-card row">
-
-      <div class="col-6" style="
+    <q-card :class="isMobile() ? 'mobile-recovery-card' : 'recovery-card row'"
+      :flat="isMobile()">
+      <div v-if="!isMobile()" class="col-6" style="
         background: linear-gradient(205.88deg, rgba(141, 167, 206, 0.34) 0.3%, rgba(250, 252, 255, 0.34) 94.16%);
         border-radius: 0;
       ">
@@ -26,7 +26,7 @@
       </div>
 
       <!-- Right side with login form -->
-      <div class="col-6 q-pa-md">
+      <div :class="isMobile() ? '' : 'col-6 q-pa-md'">
         <div class="column q-gutter-y-md">
           <div class="text-center q-pt-lg">
             <h5 class="text-primary q-mb-none" style="font-weight: bold; font-family: Poppins;">
@@ -68,6 +68,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import isMobile from 'src/utils/isMobile';
 import image from 'assets/password-recovery.png'
 import GradBtn from 'src/components/MobileButton/GradBtn.vue';
 
@@ -76,11 +77,20 @@ const email = ref('')
 </script>
 
 <style lang="scss" scoped>
-.login-card {
+.recovery-card {
   width: 900px;
   max-width: 90vw;
   border-radius: 8px;
   height: 650px;
   overflow: hidden;
+}
+
+.mobile-recovery-card {
+  width: 900px;
+  max-width: 90vw;
+  border-radius: 8px;
+  height: 650px;
+  overflow: hidden;
+  background-color: transparent;
 }
 </style>
