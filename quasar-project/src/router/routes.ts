@@ -3,18 +3,18 @@ import type { RouteRecordRaw } from 'vue-router';
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
+    component: () => import('layouts/ContainerLayout.vue'),
+    children: [{ path: '', component: () => import('pages/Entry/EntryPage.vue') }],
+  },
+  {
+    path: '/recuperar-senha',
+    component: () => import('layouts/ContainerLayout.vue'),
+    children: [{ path: '', component: () => import('pages/PasswordRecovery/RecoveryPage.vue') }],
+  },        
+  {
+    path: '/home',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/IndexPage.vue') }],
-  },
-  {
-    path: '/login',
-    component: () => import('layouts/ContainerLayout.vue'),
-    children: [{ path: '', component: () => import('pages/Login/LoginPage.vue') }],
-  },
-  {
-    path: '/register',
-    component: () => import('layouts/ContainerLayout.vue'),
-    children: [{ path: '', component: () => import('pages/Register/RegisterPage.vue') }],
   },
 
   // Always leave this as last one,
