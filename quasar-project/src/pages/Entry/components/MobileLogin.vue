@@ -109,7 +109,7 @@
               <GradBtn :title="'Registrar'" :type="'button'" @btn-click="emit('onRegister', registerForm)" />
             </div>
 
-            <div class="text-center q-gutter-y-sm">
+            <div class="text-center q-mt-md">
               <div class="text-grey-7 q-mt-md" style="margin-bottom: 150px;">
                 Já tem uma conta?
                 <q-btn flat color="primary" label="Login" class="text-weight-medium q-px-xs" size="md" no-caps
