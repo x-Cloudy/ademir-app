@@ -1,5 +1,7 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
+  <q-layout view="lHh Lpr lFf" style="
+    background: linear-gradient(169.4deg, rgba(57, 132, 244, .1) -6.01%, rgba(12, 211, 255, .05) 36.87%, rgba(47, 124, 240, .1) 78.04%, rgba(14, 101, 232, .1) 103.77%);
+  ">
     <q-header elevated>
       <div class="q-px-xl bg-white row" style="
           display: flex;
@@ -8,7 +10,7 @@
           align-items: center;
         ">
         <div class="flex items-center col-8 no-wrap">
-          <q-img :src="logo" style="width: 130px; margin-right: 4rem; min-width: 100px;" />
+          <q-img :src="logo2" style="width: 130px; margin-right: 4rem; min-width: 100px;" />
           <div style="display: flex; width: auto; gap: 3rem;">
             <p @click="router.push('/usuarios')">Usuários</p>
             <p @click="router.push('/grafico')">Gráfico
@@ -38,6 +40,7 @@
 import { useRouter } from 'vue-router';
 import GradBtn from 'src/components/MobileButton/GradBtn.vue';
 import logo from 'assets/mutualaid-logo.655e052.svg'
+import logo2 from 'assets/newLogo.png'
 const router = useRouter()
 
 </script>
