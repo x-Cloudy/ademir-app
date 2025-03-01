@@ -1,20 +1,25 @@
 <template>
   <div class="q-px-md flex justify-center">
-    <q-card style="width: 100%; height: 65px; margin-bottom: 1rem; justify-content: space-between;" class="q-pa-sm flex items-center text-grey-8">
+    <q-card 
+      style="width: 100%; height: 65px; margin-bottom: 1rem; justify-content: space-between; background-color: rgb(43, 42, 42);" 
+      class="q-pa-sm flex items-center text-white">
       <h6  
-        style="margin: 0; font-weight: 600; text-transform: uppercase; margin-left: 1rem;" class="text-header-gradient"
+        style="margin: 0; font-weight: 600; text-transform: uppercase; margin-left: 1rem;" class="text-warning"
       >Editar e remover usuarios
       </h6>
 
       <div class="flex">
-        <q-input 
-          dense 
+        <q-input
+          color="warning" 
+          label-color="black"
+          class="q-pl-xs"
+          style="background-color: white; border-radius: 3px;"
+          dense
           label="Pesquisar usuário" 
-          outlined 
           v-model="search as string" 
           type="text"
           />
-        <q-btn icon="search" dense size="md" class="search-btn"/>
+        <q-btn icon="search" flat dense size="md" class="q-ml-sm bg-warning text-black"/>
       </div>
     </q-card>
 
@@ -22,7 +27,7 @@
       <template v-slot:header="props">
         <q-tr :props="props">
           <q-th v-for="col in cols(props)" :key="col.name" :props="props" class="text-white"
-            style="background: #0A6AEB">
+            style="background-color: rgb(43, 42, 42);">
             {{
               col.label
             }}
@@ -112,15 +117,4 @@ const mock = [
   font-size: 10px;
 }
 
-.text-header-gradient {
-  background: linear-gradient(169.4deg, #3984f4 -6.01%, #0cd3ff 36.87%, #2f7cf0 78.04%, #0e65e8 103.77%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.search-btn {
-  border: 1px solid rgba(211, 211, 211, 0.808);
-  border-left: none;
-}
 </style>
