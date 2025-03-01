@@ -1,5 +1,5 @@
 <template>
-  <div class="q-pa-md q-mt-xl flex justify-center">
+  <div class="q-px-md flex justify-center">
     <q-card style="width: 100%; height: 65px; margin-bottom: 1rem; justify-content: space-between;" class="q-pa-sm flex items-center text-grey-8">
       <h6  
         style="margin: 0; font-weight: 600; text-transform: uppercase; margin-left: 1rem;" class="text-header-gradient"
