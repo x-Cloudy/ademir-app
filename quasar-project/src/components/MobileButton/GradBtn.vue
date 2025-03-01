@@ -28,7 +28,7 @@ const emit = defineEmits(['btn-click'])
   width: 100%;
   border-radius: 10px;
   height: 50px;
-  background: linear-gradient(90deg, #6EA2F0 0%, #0A6AFB 100%);
-  color: white;
+  background: linear-gradient(120deg, #000000 5%, #6b6b6b 100%);
+  color: rgb(255, 208, 0);
 }
 </style>

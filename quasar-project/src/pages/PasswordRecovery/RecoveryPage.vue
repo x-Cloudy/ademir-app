@@ -3,33 +3,34 @@
     <q-card :class="isMobile() ? 'mobile-recovery-card' : 'recovery-card row'"
       :flat="isMobile()">
       <div v-if="!isMobile()" class="col-6" style="
-        background: linear-gradient(205.88deg, rgba(141, 167, 206, 0.34) 0.3%, rgba(250, 252, 255, 0.34) 94.16%);
+        background-color: rgb(43, 42, 42);
         border-radius: 0;
       ">
         <div class="column items-center justify-center full-height q-pa-md">
-          <h5 class="text-weight-semibold text-grey-8" style="text-align: center; font-family: Poppins;">
+          <h5 class="text-weight-semibold text-grey-8" 
+            style="text-align: center; font-family: Poppins; color: darkgrey !important;">
             Tenha a sua <br />
-            <span style="font-size: 25px; font-weight: bold;">
+            <span style="font-size: 25px; font-weight: bold; color: white;">
               Liberdade financeira
             </span>
           </h5>
-          <img :src="image" alt="password recovery"
-            style="max-width: 100%; position: relative; z-index: 100;">
-          <div style="
+          <img :src="image" alt="Financial Freedom Illustration"
+            style="max-width: 90%; position: relative; z-index: 100;">
+          <!-- <div style="
             position: absolute;
             width: 50%; 
             bottom: 0;
             height: 196px; 
             background: rgba(217, 217, 217, 0.48);
-          "></div>
+          "></div> -->
         </div>
       </div>
 
       <!-- Right side with login form -->
-      <div :class="isMobile() ? '' : 'col-6 q-pa-md'">
+      <div :class="isMobile() ? '' : 'col-6 q-pa-md bg-grey-3'">
         <div class="column q-gutter-y-md">
           <div class="text-center q-pt-lg">
-            <h5 class="text-primary q-mb-none" style="font-weight: bold; font-family: Poppins;">
+            <h5 class="q-mb-none" style="font-weight: bold; font-family: Poppins; color: rgb(255, 208, 0);;">
               Esqueceu sua senha?
             </h5>
             <p class="text-grey-7 q-mt-sm" style="font-size: 17px;">
@@ -37,8 +38,8 @@
             </p>
           </div>
 
-          <q-form class="q-gutter-y-md q-px-lg">
-            <q-input v-model="email" type="email" label="Digite seu e-mail" outlined
+          <q-form class="q-gutter-y-md q-px-lg ">
+            <q-input filled color="black" v-model="email" type="email" label="Digite seu e-mail" outlined
               :rules="[val => !!val || 'Email é obrigatório']">
               <template v-slot:append>
                 <q-icon name="mail" />
@@ -69,11 +70,11 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import isMobile from 'src/utils/isMobile';
-import image from 'assets/password-recovery.png'
+import image from 'assets/LogoBrancasemfundo.png'
 import GradBtn from 'src/components/MobileButton/GradBtn.vue';
 
 const router = useRouter()
-const email = ref('')
+const email = ref<any>('')
 </script>
 
 <style lang="scss" scoped>

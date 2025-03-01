@@ -5,10 +5,11 @@
     <div class="login-container">
       <div class="text-center q-mb-lg">
         <div v-if="tab === 'login'" class="text-center q-pt-lg q-mb-lg">
-          <h5 class="text-primary q-mb-none" style="
+          <h5 class="q-mb-none" style="
               font-weight: bold; 
               font-family: Poppins;
               font-size: 28px;
+              color: rgb(255, 208, 0);;
             ">
             Bem vindo de volta
           </h5>
@@ -18,10 +19,11 @@
         </div>
 
         <div v-if="tab === 'register'" class="text-center q-pt-lg q-mb-lg">
-          <h5 class="text-primary q-mb-none" style="
+          <h5 class="q-mb-none" style="
               font-weight: bold; 
               font-family: Poppins;
               font-size: 33px;
+              color:rgb(255, 208, 0);
             ">
             Seja bem vindo
           </h5>
@@ -32,7 +34,7 @@
 
         <!-- Login/Register tabs -->
         <div class="row justify-center">
-          <q-tabs v-model="tab" class="text-grey q-mb-sm" active-color="grey-7" indicator-color="primary" dense>
+          <q-tabs v-model="tab" class="text-grey q-mb-sm" active-color="grey-7" indicator-color="black" dense>
             <q-tab name="login" label="Entrar" style="
                 width: 110px; 
                 font-family: Poppins;
@@ -131,13 +133,13 @@ import GradBtn from 'src/components/MobileButton/GradBtn.vue';
 const emit = defineEmits(['onLogin', 'onRegister'])
 
 const router = useRouter()
-const tab = ref('login')
+const tab = ref<any>('login')
 const isPwd = ref(true)
-const loginForm = ref({
+const loginForm = ref<any>({
   email: '',
   password: ''
 })
-const registerForm = ref({
+const registerForm = ref<any>({
   name: '',
   email: '',
   tel: '',

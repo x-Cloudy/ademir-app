@@ -11,7 +11,7 @@
           dense 
           label="Pesquisar usuário" 
           outlined 
-          v-model="search" 
+          v-model="search as string" 
           type="text"
           />
         <q-btn icon="search" dense size="md" class="search-btn"/>
@@ -70,8 +70,8 @@ import notify from 'src/utils/Notify';
 type Col = { cols: { value: unknown; name: string; label: string }[] }
 const cols = (props: Col) => props.cols
 
-const search = ref('')
-const editForm = ref({
+const search = ref<string>('')
+const editForm = ref<any>({
   name: '',
   email: '',
   tel: '',
