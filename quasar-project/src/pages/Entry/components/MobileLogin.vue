@@ -128,7 +128,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import GradBtn from 'src/components/MobileButton/GradBtn.vue';
+import GradBtn from 'src/components/Buttons/GradBtn.vue';
 
 const emit = defineEmits(['onLogin', 'onRegister'])
 

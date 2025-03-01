@@ -131,7 +131,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import GradBtn from 'src/components/MobileButton/GradBtn.vue';
+import GradBtn from 'src/components/Buttons/GradBtn.vue';
 import image from 'assets/LogoBrancasemfundo.png'
 import { useRouter } from 'vue-router';
 

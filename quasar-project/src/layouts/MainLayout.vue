@@ -1,8 +1,7 @@
 <template>
-  <q-layout view="lHh Lpr lFf" class="layout">
+  <q-layout class="layout">
     <SideBar />
-    <q-page-container>
-
+    <div>
       <q-card class="top-menu">
         <div class="flex items-center justify-center" style="margin: 0;">
           <p class="text-white q-mr-sm q-mt-md">Nome</p>
@@ -16,7 +15,7 @@
       </q-card>
 
       <router-view />
-    </q-page-container>
+    </div>
   </q-layout>
 </template>
 
@@ -30,8 +29,9 @@ const router = useRouter()
 
 <style scoped lang="scss">
 .layout {
-  background: #eceff1;
   padding-left: 250px;
+  padding-top: 1rem;
+  height: 100%;
 }
 
 .top-menu {
@@ -40,7 +40,7 @@ const router = useRouter()
   justify-content: end;
   background-color: rgb(43, 42, 42);
   height: 70px;
-  margin: 1rem;
   padding: 1rem;
+  margin: 0 1rem;
 }
 </style>
