@@ -12,15 +12,28 @@
 
           <q-form @submit="onSubmit">
             <q-input outlined color="black" v-model="teste" class="bg-white q-mb-md" label="Carteira Descentralizada" />
-            <q-btn style="height: 50px; font-weight: 600; font-size: 16px; font-family: Poppins;" class="bg-warning" type="submit">Adicionar Carteira</q-btn>
+            <q-btn style="height: 40px; font-weight: 600; font-size: 16px; font-family: Poppins;" class="bg-warning"
+              type="submit">Adicionar Carteira</q-btn>
           </q-form>
         </div>
       </div>
     </q-card>
 
     <q-card class="q-pa-sm column" style="width: 30%; height: 100%; min-height: 87vh; justify-content: space-between;">
-      <q-table :title="`Usuários Convidados (${rows.length})`" :rows="rows" :columns="columns" hide-pagination :pagination="{ rowsPerPage: 0 }"
-        style="height: 50%; max-height: 550px;">
+      <q-table :title="`Usuários Convidados (${rows.length})`" :rows="rows" :columns="columns" hide-pagination
+        :pagination="{ rowsPerPage: 0 }" style="height: 50%; max-height: 550px;">
+        <template v-slot:header="props">
+          <q-tr :props="props">
+            <q-th v-for="col in cols(props)" :key="col.name" :props="props" class="text-white"
+              style="background-color: rgb(43, 42, 42); border-radius: 5px;">
+              {{
+                col.label
+              }}
+            </q-th>
+          </q-tr>
+        </template>
+
+
         <template v-slot:body-cell-status="props">
           <q-td class="flex justify-end items-center">
             <q-icon name="circle" :color="props.row.status ? 'teal-4' : 'red-5'" />
@@ -34,7 +47,8 @@
           <p class="q-pa-sm">
             Convide apenas pessoas que possuem a mesma quantia que você.
           </p>
-          <q-input filled outlined bg-color="white" v-model="teste" color="black" class="q-mb-md q-px-sm" label="Email" />
+          <q-input filled outlined bg-color="white" v-model="teste" color="black" class="q-mb-md q-px-sm"
+            label="Email" />
 
           <GradBtn :title="'Convidar'" />
         </div>
@@ -48,6 +62,9 @@ import ActivationBtn from 'src/components/Buttons/ActivationBtn.vue';
 import GradBtn from 'src/components/Buttons/GradBtn.vue';
 import { columns } from './ColumnSchema';
 import { ref } from 'vue';
+
+type Col = { cols: { value: unknown; name: string; label: string }[] }
+const cols = (props: Col) => props.cols
 
 const onSubmit = () => {
   console.log('fdff')
