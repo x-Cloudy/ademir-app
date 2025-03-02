@@ -1,5 +1,6 @@
 <template>
   <q-btn 
+    :disable="props.disable"
     @click="emit('btn-click', $event)"
     class="button"    
     :type="props.type"
@@ -13,7 +14,8 @@
 const props = defineProps({
   title: String,
   type: String,
-  icon: String
+  icon: String,
+  disable: Boolean
 })
 
 const emit = defineEmits(['btn-click'])
@@ -26,7 +28,7 @@ const emit = defineEmits(['btn-click'])
   justify-content: center;
   flex-wrap: nowrap;
   width: 100%;
-  border-radius: 10px;
+  border-radius: 5px;
   height: 50px;
   background: linear-gradient(120deg, #000000 5%, #6b6b6b 100%);
   color: rgb(255, 208, 0);

@@ -1,5 +1,5 @@
 <template>
-  <q-page style="display: flex; align-items: center;" class="q-mx-md column">
+  <div style="display: flex; align-items: center;" class="q-mx-md column">
     <div class="q-my-lg" style="margin-bottom: 5rem;">
       <h2 class="main-title" style="
         font-family: arial black;
@@ -83,7 +83,7 @@
         Porque quem tem um não tem nenhum, mas quem tem dois tem um e quem tem três tem dois ou um.
       </h5>
     </div>
-  </q-page>
+  </div>
 </template>
 
 <style scoped>

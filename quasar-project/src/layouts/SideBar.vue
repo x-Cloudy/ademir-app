@@ -4,7 +4,7 @@
         <q-img class="q-mx-auto block q-mb-md q-mt-md" :src="logo" />
       </div>
 
-      <q-scholl-area class="q-gutter-md">
+      <div class="q-gutter-md">
         <div :class="{ active: currentRoute === '/home' }" class="menu-item" @click="activeMenu = '/home'">
           <router-link to="/home" class="link q-pa-md" :class="{ linkActive: currentRoute === '/home' }">
             <q-icon name="home" size="30px" class="q-mr-sm" />
@@ -23,7 +23,7 @@
             Gráfico
           </router-link>
         </div>
-      </q-scholl-area>
+      </div>
     </div>
 </template>
 

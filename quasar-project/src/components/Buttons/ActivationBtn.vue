@@ -1,7 +1,7 @@
 <template>
-  <div class="column" style="min-width: 400px; width: 50%; height: 100%;">
+  <div class="column" style="width: 50%; height: 100%;">
     <q-card class="flex items-end q-mb-md"
-      style="background-color: lightgrey; width: 100%; border-radius: 5px; max-width: 600px; min-height: 100px; height: auto;">
+      style="background-color: lightgrey; width: 100%; border-radius: 5px; min-height: 100px; height: auto;">
       <div class="q-ml-md flex items-center" style="justify-content: space-between; width: 100%;">
         <q-img :src="coper_medal" height="100px" width="100px" class="q-my-md" />
 
@@ -21,7 +21,7 @@
     </q-card>
 
     <q-card class="flex items-end q-mb-md"
-      style="background-color: lightgrey; width: 100%; border-radius: 5px; max-width: 600px; min-height: 100px; height: auto;">
+      style="background-color: lightgrey; width: 100%; border-radius: 5px; min-height: 100px; height: auto;">
       <div class="q-ml-md flex items-center" style="justify-content: space-between; width: 100%;">
         <q-img :src="silver_medal" height="100px" width="100px" class="q-my-md" />
 
@@ -41,10 +41,10 @@
         </div>
       </div>
 
-      <GradBtn :title="'Ativar'" />
+      <GradBtn :title="'Ativar'" :disable="true" />
     </q-card>
     <q-card class="flex items-end q-mb-md"
-      style="background-color: lightgrey; width: 100%; border-radius: 5px; max-width: 600px; min-height: 100px; height: auto;">
+      style="background-color: lightgrey; width: 100%; border-radius: 5px; min-height: 100px; height: auto;">
       <div class="q-ml-md flex items-center" style="justify-content: space-between; width: 100%;">
         <q-img :src="gold_medal" height="100px" width="100px" class="q-my-md" />
 
@@ -64,7 +64,7 @@
         </div>
       </div>
 
-      <GradBtn :title="'Ativar'" />
+      <GradBtn :title="'Ativar'" :disable="true" />
     </q-card>
   </div>
 
@@ -76,10 +76,3 @@ import coper_medal from 'assets/coperMedalSemFundo.png'
 import silver_medal from 'assets/silverMedalSemFundo.png'
 import gold_medal from 'assets/goldMedalSemFundo.png'
 </script>
-
-
-<style scoped>
-p {
-  text-wrap: nowrap;
-}
-</style>

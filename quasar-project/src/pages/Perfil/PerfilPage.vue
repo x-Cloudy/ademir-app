@@ -1,36 +1,51 @@
 <template>
-  <div class="q-pa-md flex no-wrap" style="width: 100%; height: 91vh">
-    <q-card class="q-pa-md flex no-wrap" style="width: 70%; height: 100%; margin-right: 1rem;">
-      <div class="q-pa-sm flex" style="width: 100%; height: 100%; border-radius: 5px;">
+  <div class="q-pa-md flex no-wrap" style="width: 100%; height: auto">
+    <q-card class="q-pa-md flex no-wrap" style="width: 70%; height: 100%; margin-right: 1rem; min-height: 87vh;">
+      <div class="q-pa-sm flex no-wrap" style="width: 100%; height: 100%; border-radius: 5px;">
         <ActivationBtn />
 
-        <div style="width: 48%; background-color: lightgrey; padding: 1rem; border-radius: 5px; margin-left: 1rem;">
-          <q-input filled outlined v-model="teste" class="bg-white q-mb-md" label="Nome" disable />
-          <q-input filled outlined v-model="teste" class="bg-white q-mb-md" label="Email" disable />
-          <q-input filled outlined v-model="teste" class="bg-white q-mb-md" label="Wpp" disable />
+        <div style="width: 48%; padding: 0 1rem; border-radius: 5px; margin-left: 1rem;">
+          <label style="font-size: 20px;">Meu Dados</label>
+          <q-input filled v-model="teste" class="bg-white q-mb-md" label="Nome" disable />
+          <q-input filled v-model="teste" class="bg-white q-mb-md" label="Email" disable />
+          <q-input filled v-model="teste" class="bg-white q-mb-md" label="Wpp" disable />
 
           <q-form @submit="onSubmit">
-            <q-input filled outlined v-model="teste" class="bg-white q-mb-md" label="Carteira" />
-            <q-btn class="bg-warning" type="submit">Adicionar Carteira</q-btn>
+            <q-input outlined color="black" v-model="teste" class="bg-white q-mb-md" label="Carteira Descentralizada" />
+            <q-btn style="height: 50px;" class="bg-warning" type="submit">Adicionar Carteira</q-btn>
           </q-form>
         </div>
       </div>
     </q-card>
 
-    <q-card class="q-pa-sm" style="width: 30%; height: 100%;">
-      <q-table :title="`Usuários Convidados (${rows.length})`" :rows="rows" :columns="columns" hide-pagination>
+    <q-card class="q-pa-sm column" style="width: 30%; height: 100%; min-height: 87vh; justify-content: space-between;">
+      <q-table :title="`Usuários Convidados (${rows.length})`" :rows="rows" :columns="columns" hide-pagination :pagination="{ rowsPerPage: 0 }"
+        style="height: 50%; max-height: 550px;">
         <template v-slot:body-cell-status="props">
           <q-td class="flex justify-end items-center">
             <q-icon name="circle" :color="props.row.status ? 'teal-4' : 'red-5'" />
           </q-td>
         </template>
       </q-table>
+
+      <div style="width: 100%; height: 50%; border-radius: 5px;">
+        <label style="font-size: 20px;">Convidar</label>
+        <div style="background-color: lightgrey; border-radius: 5px;">
+          <p class="q-pa-sm">
+            Convide apenas pessoas que possuem a mesma quantia que você.
+          </p>
+          <q-input filled outlined bg-color="white" v-model="teste" color="black" class="q-mb-md q-px-sm" label="Email" />
+
+          <GradBtn :title="'Convidar'" />
+        </div>
+      </div>
     </q-card>
   </div>
 </template>
 
 <script setup lang="ts">
 import ActivationBtn from 'src/components/Buttons/ActivationBtn.vue';
+import GradBtn from 'src/components/Buttons/GradBtn.vue';
 import { columns } from './ColumnSchema';
 import { ref } from 'vue';
 
@@ -64,6 +79,36 @@ const rows = [
     id: 5,
     nome: "Carlos Mendes",
     status: false
-  }
+  },
+  {
+    id: 6,
+    nome: "Carlos Mendes",
+    status: false
+  },
+  {
+    id: 7,
+    nome: "Carlos Mendes",
+    status: false
+  },
+  {
+    id: 8,
+    nome: "Carlos Mendes",
+    status: false
+  },
+  {
+    id: 9,
+    nome: "Carlos Mendes",
+    status: false
+  },
+  {
+    id: 10,
+    nome: "Carlos Mendes",
+    status: false
+  },
+  {
+    id: 11,
+    nome: "Carlos Mendes",
+    status: false
+  },
 ]
 </script>
