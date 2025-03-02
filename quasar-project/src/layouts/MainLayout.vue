@@ -1,7 +1,7 @@
 <template>
   <q-layout class="layout">
     <SideBar />
-    <div>
+    <div style="height: 100%;">
       <q-card class="top-menu">
         <div class="flex items-center justify-center" style="margin: 0;">
           <p class="text-white q-mr-sm q-mt-md">Nome</p>
@@ -30,8 +30,10 @@ const router = useRouter()
 <style scoped lang="scss">
 .layout {
   padding-left: 250px;
+  width: auto;
+  min-height: 100vh !important;
   padding-top: 1rem;
-  height: 100%;
+  background: linear-gradient(0deg, rgb(255, 255, 255) 0%, rgba(236,232,192,1) 65%, rgba(209,209,209,1) 100%);
 }
 
 .top-menu {

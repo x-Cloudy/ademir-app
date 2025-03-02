@@ -1,7 +1,7 @@
 <template>
   <div class="q-px-md flex justify-center">
     <q-card 
-      style="width: 100%; height: 65px; margin-bottom: 1rem; justify-content: space-between; background-color: rgb(43, 42, 42);" 
+      style="width: 100%; height: 70px; margin-bottom: 1rem; justify-content: space-between; background-color: rgb(43, 42, 42);" 
       class="q-pa-sm flex items-center text-white q-mt-md">
       <h6  
         style="margin: 0; font-weight: 600; text-transform: uppercase; margin-left: 1rem;" class="text-warning"

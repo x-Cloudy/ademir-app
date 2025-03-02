@@ -84,6 +84,10 @@
       </h5>
     </div>
   </div>
+
+  <q-page-sticky position="bottom-right" :offset="[30, 30]">
+      <q-btn fab icon="chat" style="color: black; background-color: #F2C037;"/>
+  </q-page-sticky>
 </template>
 
 <style scoped>

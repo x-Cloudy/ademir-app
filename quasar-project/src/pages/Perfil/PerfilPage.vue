@@ -12,7 +12,7 @@
 
           <q-form @submit="onSubmit">
             <q-input outlined color="black" v-model="teste" class="bg-white q-mb-md" label="Carteira Descentralizada" />
-            <q-btn style="height: 50px;" class="bg-warning" type="submit">Adicionar Carteira</q-btn>
+            <q-btn style="height: 50px; font-weight: 600; font-size: 16px; font-family: Poppins;" class="bg-warning" type="submit">Adicionar Carteira</q-btn>
           </q-form>
         </div>
       </div>
@@ -112,3 +112,9 @@ const rows = [
   },
 ]
 </script>
+
+<style scoped>
+p {
+  font-family: Poppins;
+}
+</style>

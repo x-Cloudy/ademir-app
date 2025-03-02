@@ -1,30 +1,18 @@
 <template>
   <div class="sidebar">
-      <div class="q-mt-md q-mb-lg">
-        <q-img class="q-mx-auto block q-mb-md q-mt-md" :src="logo" />
-      </div>
+    <div class="q-mt-md q-mb-lg">
+      <q-img class="q-mx-auto block q-mb-md q-mt-md" :src="logo" />
+    </div>
 
-      <div class="q-gutter-md">
-        <div :class="{ active: currentRoute === '/home' }" class="menu-item" @click="activeMenu = '/home'">
-          <router-link to="/home" class="link q-pa-md" :class="{ linkActive: currentRoute === '/home' }">
-            <q-icon name="home" size="30px" class="q-mr-sm" />
-            Home
-          </router-link>
-        </div>
-        <div :class="{ active: currentRoute === '/usuarios' }" class="menu-item" @click="activeMenu = '/usuarios'">
-          <router-link to="/usuarios" class="link q-pa-md" :class="{ linkActive: currentRoute === '/usuarios' }">
-            <q-icon name="people" size="30px" class="q-mr-sm" />
-            Usuarios
-          </router-link>
-        </div>
-        <div :class="{ active: currentRoute === '/grafico' }" class="menu-item" @click="activeMenu = '/grafico'">
-          <router-link to="/grafico" class="link q-pa-md" :class="{ linkActive: currentRoute === '/grafico' }">
-            <q-icon name="stock" size="30px" class="q-mr-sm" />
-            Gráfico
-          </router-link>
-        </div>
+    <div v-for="(item, index) of menus" :key="index">
+      <div :class="{ active: currentRoute === item.path }" class="menu-item" @click="activeMenu = item.path">
+        <router-link :to="item.path" class="link q-pa-md" :class="{ linkActive: currentRoute === item.path }">
+          <q-icon :name="item.icon" size="25px" class="q-mr-sm" />
+          {{ item.name }}
+        </router-link>
       </div>
     </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -35,6 +23,33 @@ import { useRoute } from 'vue-router';
 const route = useRoute()
 const activeMenu = ref('home')
 const currentRoute = computed(() => route.path)
+const menus = [
+  {
+    name: 'Home',
+    path: '/home',
+    icon: 'home'
+  },
+  {
+    name: 'Ranking',
+    path: '/ranking',
+    icon: 'leaderboard'
+  },
+  {
+    name: 'Usuários',
+    path: '/usuarios',
+    icon: 'people'
+  },
+  {
+    name: 'Gráfico',
+    path: '/grafico',
+    icon: 'stock'
+  },
+  {
+    name: 'Opções',
+    path: '/options',
+    icon: 'settings'
+  },
+]
 </script>
 
 <style scoped lang="scss">
@@ -62,6 +77,7 @@ const currentRoute = computed(() => route.path)
   height: 45px;
   text-decoration: none;
   border-radius: 5px;
+  margin-bottom: 1rem;
 }
 
 .active {
