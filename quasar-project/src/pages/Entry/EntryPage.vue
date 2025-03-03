@@ -4,14 +4,10 @@
     @onRegister="onRegister"
     />
 
-  <DesktopLogin v-else 
-    @onLogin="onSubmit"
-    @onRegister="onRegister"
-  />
+  <DesktopLogin v-else />
 </template>
 
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
 import MobileLogin from './components/MobileLogin.vue'
 import DesktopLogin from './components/DesktopLogin.vue'
 import isMobile from 'src/utils/isMobile'

@@ -7,10 +7,10 @@
         border-radius: 0;
       ">
         <div class="column items-center justify-center full-height q-pa-md">
-          <h5 class="text-weight-semibold text-grey-8" 
+          <h5 class="text-weight-semibold" 
             style="text-align: center; font-family: Poppins; color: darkgrey !important;">
             Tenha a sua <br />
-            <span style="font-size: 25px; font-weight: bold; color: white;">
+            <span class="text-warning" style="font-size: 25px; font-weight: bold;">
               Liberdade financeira
             </span>
           </h5>
@@ -30,7 +30,7 @@
       <div :class="isMobile() ? '' : 'col-6 q-pa-md bg-grey-3'">
         <div class="column q-gutter-y-md">
           <div class="text-center q-pt-lg">
-            <h5 class="q-mb-none" style="font-weight: bold; font-family: Poppins; color: rgb(255, 208, 0);;">
+            <h5 class="q-mb-none text-dark" style="font-weight: bold; font-family: Poppins;">
               Esqueceu sua senha?
             </h5>
             <p class="text-grey-7 q-mt-sm" style="font-size: 17px;">
@@ -71,7 +71,7 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import isMobile from 'src/utils/isMobile';
 import image from 'assets/LogoBrancasemfundo.png'
-import GradBtn from 'src/components/MobileButton/GradBtn.vue';
+import GradBtn from 'src/components/Buttons/GradBtn.vue';
 
 const router = useRouter()
 const email = ref<any>('')
