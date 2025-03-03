@@ -57,14 +57,14 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
+import { useRoute } from 'vue-router';
 import GradBtn from 'src/components/Buttons/GradBtn.vue';
 
 const emit = defineEmits(['tab'])
-const props = defineProps({
-  id: String
-})
 
-const hasId = computed(() => typeof props.id === 'string' && props.id.length > 0 ? props.id : null)
+const hasId = computed(() => typeof route.params.id === 'string' && route.params.id.length > 0 ? route.params.id : '')
+
+const route = useRoute()
 const isPwd = ref(true)
 const registerForm = ref<any>({
   name: '',

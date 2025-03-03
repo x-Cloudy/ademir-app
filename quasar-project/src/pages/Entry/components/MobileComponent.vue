@@ -5,11 +5,10 @@
     <div class="login-container">
       <div class="text-center q-mb-lg">
         <div v-if="tab === 'login'" class="text-center q-pt-lg q-mb-lg">
-          <h5 class="q-mb-none" style="
+          <h5 class="q-mb-none text-dark" style="
               font-weight: bold; 
               font-family: Poppins;
               font-size: 28px;
-              color: rgb(255, 208, 0);;
             ">
             Bem vindo de volta
           </h5>
@@ -19,11 +18,10 @@
         </div>
 
         <div v-if="tab === 'register'" class="text-center q-pt-lg q-mb-lg">
-          <h5 class="q-mb-none" style="
+          <h5 class="q-mb-none text-dark" style="
               font-weight: bold; 
               font-family: Poppins;
               font-size: 33px;
-              color:rgb(255, 208, 0);
             ">
             Seja bem vindo
           </h5>
@@ -64,7 +62,7 @@
             </q-input>
 
             <div class="q-mt-lg">
-              <GradBtn :title="'login'" :type="'button'" @btn-click="emit('onLogin', loginForm)" />
+              <GradBtn :title="'login'" :type="'button'" @btn-click="onSubmit" />
             </div>
 
             <div class="text-center q-mt-md">
@@ -81,44 +79,7 @@
         </q-tab-panel>
 
         <q-tab-panel name="register">
-          <q-form>
-            <q-input v-model="registerForm.name" type="text" label="Nome" outlined
-              :rules="[val => !!val || 'Nome é obrigatório']">
-              <template v-slot:append>
-                <q-icon name="person" color="grey-6" size="xs" class="q-mt-sm" />
-              </template>
-            </q-input>
-            <q-input v-model="registerForm.email" type="email" label="Email" outlined
-              :rules="[val => !!val || 'Email é obrigatório']">
-              <template v-slot:append>
-                <q-icon name="mail" color="grey-6" size="xs" class="q-mt-sm" />
-              </template>
-            </q-input>
-            <q-input v-model="registerForm.tel" type="tel" label="Telefone" outlined
-              :rules="[val => !!val || 'Telefone é obrigatório']">
-              <template v-slot:append>
-                <q-icon name="phone" color="grey-6" size="xs" class="q-mt-sm" />
-              </template>
-            </q-input>
-            <q-input v-model="registerForm.password" type="password" label="Senha" outlined
-              :rules="[val => !!val || 'Senha é obrigatório']">
-              <template v-slot:append>
-                <q-icon name="password" color="grey-6" size="xs" class="q-mt-sm" />
-              </template>
-            </q-input>
-
-            <div class="q-mt-lg">
-              <GradBtn :title="'Registrar'" :type="'button'" @btn-click="emit('onRegister', registerForm)" />
-            </div>
-
-            <div class="text-center q-mt-md">
-              <div class="text-grey-7 q-mt-md" style="margin-bottom: 150px;">
-                Já tem uma conta?
-                <q-btn flat color="primary" label="Login" class="text-weight-medium q-px-xs" size="md" no-caps
-                  @click="tab = 'login'" padding="none" />
-              </div>
-            </div>
-          </q-form>
+          <MobileRegisterComponent @tab="(value) => tab = value"/>
         </q-tab-panel>
       </q-tab-panels>
     </div>
@@ -129,8 +90,7 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import GradBtn from 'src/components/Buttons/GradBtn.vue';
-
-const emit = defineEmits(['onLogin', 'onRegister'])
+import MobileRegisterComponent from 'src/components/Register/MobileRegisterComponent.vue';
 
 const router = useRouter()
 const tab = ref<any>('login')
@@ -139,12 +99,10 @@ const loginForm = ref<any>({
   email: '',
   password: ''
 })
-const registerForm = ref<any>({
-  name: '',
-  email: '',
-  tel: '',
-  password: ''
-})
+
+const onSubmit = (value: any) => {
+  console.log('Login attempt:', loginForm.value)
+}
 
 </script>
 

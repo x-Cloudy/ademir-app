@@ -53,7 +53,7 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import EntryCard from 'src/components/EntryCard.vue';
 import GradBtn from 'src/components/Buttons/GradBtn.vue';
-import RegisterComponent from 'src/components/RegisterComponent.vue';
+import RegisterComponent from 'src/components/Register/RegisterComponent.vue';
 
 const router = useRouter()
 const tab = ref('login')
