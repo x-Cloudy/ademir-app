@@ -70,9 +70,7 @@ const onRegister = () => {
 
 
 onMounted(() => {
-  console.log("montei", hasId)
-  if (hasId) {
-    console.log('ddd', hasId.value)
+  if (hasId.value) {
     registerForm.value.indication = hasId.value
   }
 })

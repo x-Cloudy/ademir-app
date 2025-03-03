@@ -75,8 +75,8 @@ const registerForm = ref<any>({
 })
 
 
-const onRegister = (value: any) => {
-  console.log('register attempt', value)
+const onRegister = () => {
+  console.log('register attempt', registerForm.value)
 }
 
 onMounted(() => {

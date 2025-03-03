@@ -64,7 +64,7 @@ const loginForm = ref<any>({
 })
 
 const onSubmit = (value: any) => {
-  console.log('Login attempt:', value)
+  console.log('Login attempt:', loginForm.value)
 }
 </script>
 
