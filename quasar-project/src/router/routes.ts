@@ -39,7 +39,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/grafico',
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/Users/UsersPage.vue') }],
+    children: [{ path: '', component: () => import('pages/Pyramid/PyramidPage.vue') }],
   },
   {
     path: '/options',
