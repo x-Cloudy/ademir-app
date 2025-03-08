@@ -11,7 +11,7 @@ type ResponseAuthToken = {
 
 export class AuthService {
   async login(credentials: AuthLoginForm) {
-    const url = '/api/auth/login'
+    const url = '/login'
 
     const response = await api.post<ResponseAuthToken>(url, credentials)
     const data = response.data
@@ -27,7 +27,6 @@ export class AuthService {
       Authorization: `${token.type} ${token.token}`
     } as any
   }
-
 
   async updateProfile(data: AuthUser) {
     return await api.put('/api/user', data)
@@ -92,6 +91,11 @@ export class AuthService {
   async resetPassword(password: string, token: string, code: string) {
     const url = '/api/auth/reset/password-by-token'
     return await api.post(url, { password, token, code })
+  }
+
+  async register(payload: any) {
+    const response = await api.post('/user', payload)
+    console.log('service res', response)
   }
 
   clearAuth() {

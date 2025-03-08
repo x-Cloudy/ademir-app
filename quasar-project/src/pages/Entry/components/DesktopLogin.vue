@@ -41,7 +41,7 @@
         </q-form>
       </div>
 
-      <div v-if="tab === 'register'" class="column q-gutter-y-md">
+      <div v-if="tab === 'register'" class="column q-gutter-y-sm">
         <RegisterComponent @tab="(value) => tab = value" />
       </div>
     </div>

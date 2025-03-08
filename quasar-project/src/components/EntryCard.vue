@@ -35,7 +35,8 @@ import image from 'assets/LogoBrancasemfundo.png'
   width: 900px;
   max-width: 90vw;
   border-radius: 8px;
-  height: 650px;
+  height: auto;
+  min-height: 650px;
   overflow: hidden;
 }
 

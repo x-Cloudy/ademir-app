@@ -3,7 +3,7 @@
     <h5 class="q-mb-none q-mt-none text-dark" style="font-weight: bold; font-family: Poppins;">
       Seja bem vindo
     </h5>
-    <p class="text-grey-7 q-mt-sm" style="font-size: 17px;">
+    <p class="text-grey-7 q-mt-none" style="font-size: 17px;">
       Comece sua jornada conosco. Juntos, vamos <br /> mais longe
     </p>
   </div>
@@ -23,7 +23,7 @@
       </template>
     </q-input>
 
-    <q-input color="black" filled v-model="registerForm.tel" type="tel" label="Telefone" outlined
+    <q-input color="black" filled v-model="registerForm.whatsapp" type="tel" label="Telefone" outlined
       :rules="[val => !!val || 'Telefone é obrigatório']">
       <template v-slot:append>
         <q-icon name="phone" />
@@ -34,6 +34,13 @@
       outlined :rules="[val => !!val || 'Senha é obrigatória']">
       <template v-slot:append>
         <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer" @click="isPwd = !isPwd" />
+      </template>
+    </q-input>
+
+    <q-input color="black" filled v-model="registerForm.wallet" :type="'text'" label="Carteira"
+      outlined :rules="[val => !!val || 'Carteira é obrigatória']">
+      <template v-slot:append>
+        <q-icon name="wallet" />
       </template>
     </q-input>
 
@@ -58,9 +65,11 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
+import { useAuthStore } from 'src/stores/authStore';
 import GradBtn from 'src/components/Buttons/GradBtn.vue';
 
 const emit = defineEmits(['tab'])
+const authStore = useAuthStore()
 
 const hasId = computed(() => typeof route.params.id === 'string' && route.params.id.length > 0 ? route.params.id : '')
 
@@ -69,14 +78,16 @@ const isPwd = ref(true)
 const registerForm = ref<any>({
   name: '',
   email: '',
-  tel: '',
+  whatsapp: '',
   password: '',
-  indication: ''
+  indication: '',
+  wallet: ''
 })
 
 
-const onRegister = () => {
+const onRegister = async () => {
   console.log('register attempt', registerForm.value)
+  await authStore.register(registerForm.value)
 }
 
 onMounted(() => {
