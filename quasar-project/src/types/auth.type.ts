@@ -20,7 +20,6 @@ export interface UpdateAuthUser extends AuthUser {
 }
 
 export type AuthToken = {
-  type: string
   token: string
 }
 

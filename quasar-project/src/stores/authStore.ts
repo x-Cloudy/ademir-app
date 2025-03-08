@@ -50,9 +50,9 @@ export const useAuthStore = defineStore('auth', {
       this.loading = true
       this.failUserPassword = false
       try {
-        const result = await authService.login(data)
+        const result = await authService.login(data);
         const payload = result.data
-        const token = { token: payload.access_token, type: payload.token_type }
+        const token = { token: payload.token }
 
         this.token = token
         LocalStorage.set(TOKEN_STORAGE_KEY, this.token)
@@ -74,7 +74,7 @@ export const useAuthStore = defineStore('auth', {
     }) {
       const payload = data
       const token = { token: payload.access_token, type: payload.token_type }
-      authService.setAuth({ token: data.access_token, type: data.token_type })
+      authService.setAuth({ token: data.access_token })
       this.token = token
       LocalStorage.set(TOKEN_STORAGE_KEY, this.token)
       await this.getUserInfo()

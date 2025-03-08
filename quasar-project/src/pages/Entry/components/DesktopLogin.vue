@@ -51,10 +51,12 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { useAuthStore } from 'src/stores/authStore';
 import EntryCard from 'src/components/EntryCard.vue';
 import GradBtn from 'src/components/Buttons/GradBtn.vue';
 import RegisterComponent from 'src/components/Register/RegisterComponent.vue';
 
+const authStore = useAuthStore()
 const router = useRouter()
 const tab = ref('login')
 const isPwd = ref(true)
@@ -63,8 +65,9 @@ const loginForm = ref<any>({
   password: ''
 })
 
-const onSubmit = (value: any) => {
+const onSubmit = async (value: any) => {
   console.log('Login attempt:', loginForm.value)
+  await authStore.login(loginForm.value)
 }
 </script>
 

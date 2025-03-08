@@ -5,17 +5,17 @@ import { TOKEN_STORAGE_KEY, USER_STORAGE_KEY  } from 'src/stores/authStore'
 import { LocalStorage } from 'quasar'
 
 type ResponseAuthToken = {
-  access_token: string
-  token_type: string
+  token: string;
 }
 
 export class AuthService {
   async login(credentials: AuthLoginForm) {
     const url = '/login'
 
-    const response = await api.post<ResponseAuthToken>(url, credentials)
+    const response = await api.post<ResponseAuthToken>(url, credentials);
+    console.log('res', response)
     const data = response.data
-    this.setAuth({ token: data.access_token, type: data.token_type })
+    this.setAuth({ token: data.token })
     return response
   }
 
@@ -24,18 +24,18 @@ export class AuthService {
 
     api.defaults.headers = {
       ...headers,
-      Authorization: `${token.type} ${token.token}`
+      Authorization: `Bearer ${token.token}`
     } as any
   }
 
   async updateProfile(data: AuthUser) {
-    return await api.put('/api/user', data)
+    return await api.put('/user', data)
   }
 
   async getUserInfo(): Promise<AuthUser> {
-    const url = '/api/auth/me'
+    const url = '/me'
     try {
-      const response = await api.post<AuthUser>(url)
+      const response = await api.get<AuthUser>(url)
 
       return response.data
     } catch (error) {
@@ -61,7 +61,6 @@ export class AuthService {
 
     if (!isValidLoginToken(localToken)) {
       void this.clearAuth()
-
       return false
     }
 
