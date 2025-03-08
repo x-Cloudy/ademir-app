@@ -1,22 +1,52 @@
 import type { AuthLoginForm, AuthToken, AuthUser } from '../types'
 import { api } from 'boot/axios'
 import { isValidLoginToken } from 'src/utils/auth-helper'
-import { TOKEN_STORAGE_KEY, USER_STORAGE_KEY  } from 'src/stores/authStore'
+import { TOKEN_STORAGE_KEY, USER_STORAGE_KEY } from 'src/stores/authStore'
 import { LocalStorage } from 'quasar'
+import notify from 'src/utils/Notify'
 
 type ResponseAuthToken = {
   token: string;
 }
 
 export class AuthService {
+  async register(payload: any) {
+    try {
+      const response = await api.post('/user', payload)
+      notify({
+        type: 'positive',
+        msg: 'Você está logado'
+      })
+    } catch (error) {
+      notify({
+        type: 'positive',
+        msg: 'Você está logado'
+      })
+    }
+  }
+
   async login(credentials: AuthLoginForm) {
     const url = '/login'
 
-    const response = await api.post<ResponseAuthToken>(url, credentials);
-    console.log('res', response)
-    const data = response.data
-    this.setAuth({ token: data.token })
-    return response
+    try {
+      const response = await api.post<ResponseAuthToken>(url, credentials);
+      const data = response.data
+      this.setAuth({ token: data.token })
+      notify({
+        type: 'positive',
+        msg: 'Você está logado'
+      })
+
+      return response
+    } catch (error: any) {
+      notify({
+        type: 'negative',
+        msg: 'Falha no login'
+      })
+
+      return error.data
+    }
+
   }
 
   setAuth(token: AuthToken) {
@@ -92,10 +122,6 @@ export class AuthService {
     return await api.post(url, { password, token, code })
   }
 
-  async register(payload: any) {
-    const response = await api.post('/user', payload)
-    console.log('service res', response)
-  }
 
   clearAuth() {
     return {}
