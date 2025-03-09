@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 100%;">
+  <div v-if="hasTop" style="width: 100%;">
     <div style="width: 100%;" class="q-px-md">
       <q-card class="bg-dark q-my-md q-px-md flex items-center justify-between" style="height: 70px; width: 100%;">
         <h6 style="margin: 0; font-weight: 600; text-transform: uppercase; margin-left: 1rem;" class="text-warning">
@@ -61,11 +61,33 @@
     </q-page-sticky>
 
   </div>
+
+  <div style="width: 100%; height: 100%;" class="q-px-md q-mt-md">
+    <q-card class="bg-dark q-pa-lg" style="width: 100%; height: 87vh;">
+      <div class="flex column justify-center items-center" style="width: 100%;">
+        <h4 class="text-white" style="font-weight: 600;">
+          Ainda não temos usuários no ranking
+        </h4>
+      </div>
+    </q-card>
+  </div>
 </template>
 
 
 <script setup lang="ts">
-import GradBtn from 'src/components/Buttons/GradBtn.vue';
+import { onMounted, ref } from 'vue';
+import { api } from 'src/boot/axios';
+
+const hasTop = ref<boolean>(true)
+
+onMounted(async () => {
+  try {
+    const response = await api.get('/top10')
+    console.log('top10 response', response)
+  } catch (error) {
+    hasTop.value = false;
+  }
+})
 
 const top_rank = [
   {

@@ -1,22 +1,22 @@
 <template>
   <div class="q-px-md flex justify-center">
-    <q-card 
-      style="width: 100%; height: 70px; margin-bottom: 1rem; justify-content: space-between; background-color: rgb(43, 42, 42);" 
+    <q-card
+      style="width: 100%; height: 70px; margin-bottom: 1rem; justify-content: space-between; background-color: rgb(43, 42, 42);"
       class="q-pa-sm flex items-center text-white q-mt-md">
-      <h6  
+      <h6
         style="margin: 0; font-weight: 600; text-transform: uppercase; margin-left: 1rem;" class="text-warning"
       >Editar e remover usuarios
       </h6>
 
       <div class="flex">
         <q-input
-          color="warning" 
+          color="warning"
           label-color="black"
           class="q-pl-xs"
           style="background-color: white; border-radius: 3px;"
           dense
-          label="Pesquisar usuário" 
-          v-model="search as string" 
+          label="Pesquisar usuário"
+          v-model="search as string"
           type="text"
           />
         <q-btn icon="search" flat dense size="md" class="q-ml-sm bg-warning text-black"/>
@@ -37,12 +37,12 @@
 
       <template v-slot:body-cell-actions="props">
         <q-td :props="props" style="display: flex; justify-content: center;">
-          <q-btn 
+          <q-btn
             @click="showEdit = true"
-            icon="edit" 
-            dense 
+            icon="edit"
+            dense
             class="bg-grey-8 text-white q-mr-sm action-btn" />
-          <q-btn icon="delete" dense class="bg-red-10 text-white action-btn" 
+          <q-btn icon="delete" dense class="bg-red-10 text-white action-btn"
             @click="notify({
               type: 'positive',
               msg: 'Usuário excluído'
@@ -55,9 +55,9 @@
       <q-card style="width: 1000px; height: auto;" class="q-pa-lg q-gutter-sm">
         <q-input v-model="editForm.email" type="text" label="Nome" outlined />
         <q-input v-model="editForm.email" type="email" label="Email" outlined />
-        <q-input v-model="editForm.email" type="tel" label="cel" outlined /> 
+        <q-input v-model="editForm.email" type="tel" label="cel" outlined />
 
-        <q-card-section style="display: flex; justify-content: end;" 
+        <q-card-section style="display: flex; justify-content: end;"
           class="q-gutter-md q-pr-none">
           <q-btn color="green">Salvar</q-btn>
           <q-btn color="red" @click="showEdit = false">Cancelar</q-btn>
@@ -68,7 +68,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import { api } from 'src/boot/axios';
 import tableColumn from './components/tableColumns';
 import notify from 'src/utils/Notify';
 
@@ -83,6 +84,14 @@ const editForm = ref<any>({
 })
 const showEdit = ref(false)
 
+onMounted(async () => {
+  try {
+    const response = await api.get("/all-users")
+    console.log('res', response)
+  } catch (error) {
+    console.log(error)
+  }
+})
 const mock = [
   {
     id: 1,
@@ -103,7 +112,6 @@ const mock = [
     wallet: 'AdsdxxSDXsdafesff98908324fsdf'
   }
 ] as any
-
 </script>
 
 <style scoped>
