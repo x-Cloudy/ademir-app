@@ -6,12 +6,12 @@
 
         <div style="width: 48%; padding: 0 1rem; border-radius: 5px; margin-left: 1rem;">
           <label style="font-size: 20px;">Meu Dados</label>
-          <q-input filled v-model="teste" class="bg-white q-mb-md" label="Nome" disable />
-          <q-input filled v-model="teste" class="bg-white q-mb-md" label="Email" disable />
-          <q-input filled v-model="teste" class="bg-white q-mb-md" label="Wpp" disable />
+          <q-input filled v-model="user.name" class="bg-white q-mb-md" label="Nome" disable />
+          <q-input filled v-model="user.email" class="bg-white q-mb-md" label="Email" disable />
+          <q-input filled v-model="user.whatsapp" class="bg-white q-mb-md" label="Wpp" disable />
 
           <q-form @submit="onSubmit">
-            <q-input outlined color="black" v-model="teste" class="bg-white q-mb-md" label="Carteira Descentralizada" />
+            <q-input outlined color="black" v-model="user.wallet" class="bg-white q-mb-md" label="Carteira Descentralizada" />
             <q-btn style="height: 40px; font-weight: 600; font-size: 16px; font-family: Poppins;" class="bg-warning"
               type="submit">Adicionar Carteira</q-btn>
           </q-form>
@@ -47,7 +47,7 @@
           <p class="q-pa-sm">
             Convide apenas pessoas que possuem a mesma quantia que você.
           </p>
-          <q-input filled outlined bg-color="white" v-model="teste" color="black" class="q-mb-md q-px-sm"
+          <q-input filled outlined bg-color="white" v-model="invite" color="black" class="q-mb-md q-px-sm"
             label="Email" />
 
           <GradBtn :title="'Convidar'" />
@@ -60,8 +60,9 @@
 <script setup lang="ts">
 import ActivationBtn from 'src/components/Buttons/ActivationBtn.vue';
 import GradBtn from 'src/components/Buttons/GradBtn.vue';
+import { useAuthStore } from 'src/stores/authStore';
 import { columns } from './ColumnSchema';
-import { ref } from 'vue';
+import { onBeforeMount, ref } from 'vue';
 
 type Col = { cols: { value: unknown; name: string; label: string }[] }
 const cols = (props: Col) => props.cols
@@ -70,7 +71,8 @@ const onSubmit = () => {
   console.log('fdff')
 }
 
-const teste = ref<any>('teste')
+const authStore = useAuthStore()
+const user = ref<any>()
 const rows = [
   {
     id: 1,
@@ -128,6 +130,14 @@ const rows = [
     status: false
   },
 ]
+const invite = ref<string>('')
+
+onBeforeMount(() => {
+  console.log(authStore.user)
+  if (authStore.isLogged) {
+    user.value = authStore.user
+  }
+})
 </script>
 
 <style scoped>

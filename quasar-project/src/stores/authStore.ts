@@ -1,6 +1,7 @@
 import { defineStore, acceptHMRUpdate } from 'pinia';
 import type { AuthLoginForm, AuthToken, AuthUser, Role, UpdateAuthUser } from '../types'
 import { AuthService } from '../services/auth.service'
+import notify from 'src/utils/Notify';
 import type { AxiosResponse } from 'axios';
 import { api } from 'boot/axios'
 import { LocalStorage, Notify } from 'quasar'
@@ -42,7 +43,20 @@ export const useAuthStore = defineStore('auth', {
 
   actions: {
     async register(form: any) {
-      await authService.register(form)
+      const status = await authService.register(form)
+      if (status === 200) {
+        notify({
+          type: 'positive',
+          msg: 'Conta criada com sucesso'
+        })
+        return true;
+      } else {
+        notify({
+          type: 'negative',
+          msg: 'Erro ao criar conta'
+        })
+        return false;
+      }
     },
 
     async login(data: AuthLoginForm): Promise<number> {

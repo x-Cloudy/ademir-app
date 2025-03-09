@@ -80,7 +80,12 @@ const registerForm = ref<any>({
   wallet: ''
 })
 const onRegister = async () => {
-  await authStore.register(registerForm.value)
+  const status = await authStore.register(registerForm.value)
+  if (status) {
+    setTimeout(() => {
+      document.location.reload()
+    }, 1000)
+  }
 }
 
 onMounted(() => {
