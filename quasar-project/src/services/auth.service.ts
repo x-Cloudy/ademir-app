@@ -2,9 +2,10 @@ import type { AuthLoginForm, AuthToken, AuthUser } from '../types'
 import { api } from 'boot/axios'
 import { isValidLoginToken } from 'src/utils/auth-helper'
 import { TOKEN_STORAGE_KEY, USER_STORAGE_KEY } from 'src/stores/authStore'
+import { useRouter } from 'vue-router'
 import { LocalStorage } from 'quasar'
 import notify from 'src/utils/Notify'
-
+const router = useRouter()
 type ResponseAuthToken = {
   token: string;
 }
@@ -16,12 +17,13 @@ export class AuthService {
       await api.post('/user', payload)
       notify({
         type: 'positive',
-        msg: 'Você está logado'
+        msg: 'Conta criada com sucesso'
       })
-    } catch (error) {
+      await router.push("/")
+    } catch (error: any) {
       notify({
-        type: 'positive',
-        msg: 'Você está logado'
+        type: 'negative',
+        msg: `Erro: ${error.response.data.error}`
       })
     }
   }

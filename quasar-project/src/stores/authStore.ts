@@ -42,8 +42,7 @@ export const useAuthStore = defineStore('auth', {
 
   actions: {
     async register(form: any) {
-      const response = await authService.register(form)
-      console.log('response store', response)
+      await authService.register(form)
     },
 
     async login(data: AuthLoginForm): Promise<number> {

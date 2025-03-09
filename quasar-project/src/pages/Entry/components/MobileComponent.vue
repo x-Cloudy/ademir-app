@@ -6,7 +6,7 @@
       <div class="text-center q-mb-lg">
         <div v-if="tab === 'login'" class="text-center q-pt-lg q-mb-lg">
           <h5 class="q-mb-none text-dark" style="
-              font-weight: bold; 
+              font-weight: bold;
               font-family: Poppins;
               font-size: 28px;
             ">
@@ -19,7 +19,7 @@
 
         <div v-if="tab === 'register'" class="text-center q-pt-lg q-mb-lg">
           <h5 class="q-mb-none text-dark" style="
-              font-weight: bold; 
+              font-weight: bold;
               font-family: Poppins;
               font-size: 33px;
             ">
@@ -34,7 +34,7 @@
         <div class="row justify-center">
           <q-tabs v-model="tab" class="text-grey q-mb-sm" active-color="grey-7" indicator-color="black" dense>
             <q-tab name="login" label="Entrar" style="
-                width: 110px; 
+                width: 110px;
                 font-family: Poppins;
                 " />
             <q-tab name="register" label="Cadastrar" style="
@@ -89,9 +89,11 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { useAuthStore } from 'src/stores/authStore';
 import GradBtn from 'src/components/Buttons/GradBtn.vue';
 import MobileRegisterComponent from 'src/components/Register/MobileRegisterComponent.vue';
 
+const authStore = useAuthStore()
 const router = useRouter()
 const tab = ref<any>('login')
 const isPwd = ref(true)
@@ -100,8 +102,13 @@ const loginForm = ref<any>({
   password: ''
 })
 
-const onSubmit = (value: any) => {
-  console.log('Login attempt:', loginForm.value)
+const onSubmit = async () => {
+  const status = await authStore.login(loginForm.value);
+  if (status === 200) {
+    setTimeout(() => {
+      void router.push("/home")
+    }, 1000)
+  }
 }
 
 </script>

@@ -86,7 +86,6 @@ const registerForm = ref<any>({
 
 
 const onRegister = async () => {
-  console.log('register attempt', registerForm.value)
   await authStore.register(registerForm.value)
 }
 
