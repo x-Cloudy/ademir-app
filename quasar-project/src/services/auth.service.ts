@@ -10,9 +10,10 @@ type ResponseAuthToken = {
 }
 
 export class AuthService {
+
   async register(payload: any) {
     try {
-      const response = await api.post('/user', payload)
+      await api.post('/user', payload)
       notify({
         type: 'positive',
         msg: 'Você está logado'
@@ -31,6 +32,7 @@ export class AuthService {
     try {
       const response = await api.post<ResponseAuthToken>(url, credentials);
       const data = response.data
+
       this.setAuth({ token: data.token })
       notify({
         type: 'positive',
@@ -46,7 +48,6 @@ export class AuthService {
 
       return error.data
     }
-
   }
 
   setAuth(token: AuthToken) {
@@ -66,7 +67,6 @@ export class AuthService {
     const url = '/me'
     try {
       const response = await api.get<AuthUser>(url)
-
       return response.data
     } catch (error) {
       this.clearAuth()

@@ -51,8 +51,7 @@ export const useAuthStore = defineStore('auth', {
       this.failUserPassword = false
       try {
         const result = await authService.login(data);
-        const payload = result.data
-        const token = { token: payload.token }
+        const token = { token: result.data.token }
 
         this.token = token
         LocalStorage.set(TOKEN_STORAGE_KEY, this.token)
@@ -93,16 +92,16 @@ export const useAuthStore = defineStore('auth', {
     },
 
     async getUserInfo(): Promise<void> {
-      // if (!this.token) return
-      // if (this.user && this.user.id) return
+      if (!this.token) return
+      if (this.user && this.user.id) return
 
       const result = await authService.getUserInfo();
       this.user = result
       LocalStorage.set(USER_STORAGE_KEY, this.user)
 
-      if (!result.id) {
-        this.clearAuth()
-      }
+      // if (!result.id) {
+      //   this.clearAuth()
+      // }
     },
 
     async loadAuth() {

@@ -15,7 +15,7 @@ const routes: RouteRecordRaw[] = [
     path: '/recuperar-senha',
     component: () => import('layouts/ContainerLayout.vue'),
     children: [{ path: '', component: () => import('pages/PasswordRecovery/RecoveryPage.vue') }],
-  },        
+  },
   {
     path: '/home',
     component: () => import('layouts/MainLayout.vue'),
@@ -45,6 +45,7 @@ const routes: RouteRecordRaw[] = [
     path: '/options',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/Options/OptionsPage.vue') }],
+    meta: { requiresAuth: true },
   },
 
   // Always leave this as last one,
