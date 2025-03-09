@@ -12,6 +12,13 @@
         </router-link>
       </div>
     </div>
+
+    <div class="logout">
+      <q-btn @click="logout" class="flex justify-start text-white" flat>
+        <q-icon name="logout" size="23px" class="q-mr-sm" />
+        Sair
+      </q-btn>
+    </div>
   </div>
 </template>
 
@@ -19,9 +26,11 @@
 import logo from 'assets/LogoBrancasemfundo.png'
 import { computed, ref } from 'vue';
 import { useRoute } from 'vue-router';
+import { useAuthStore } from 'src/stores/authStore';
 
 const route = useRoute()
 const activeMenu = ref('home')
+const authStore = useAuthStore()
 const currentRoute = computed(() => route.path)
 const menus = [
   {
@@ -50,6 +59,10 @@ const menus = [
     icon: 'settings'
   },
 ]
+
+const logout = () => {
+  authStore.logout()
+}
 </script>
 
 <style scoped lang="scss">
@@ -93,5 +106,14 @@ const menus = [
   text-decoration: none;
   color: white;
   font-weight: 500;
+}
+
+.logout {
+  padding: 1rem 2rem;
+  width: 100%;
+  height: 100px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
 }
 </style>

@@ -9,11 +9,12 @@
 
     <HeaderCard :title="'VIDEOS'" style="height: 75%; margin-top: 1rem;">
       <div style="overflow-y: scroll;">
-        <div v-for="(item, index) of videos" :key="index">
+        <div class="flex q-mb-md" v-for="(item, index) of videos" :key="index">
           <iframe width="350" height="150" :src="`https://www.youtube.com/embed/${item.url}?si=vGK9wXF7Sqxrhc8s`"
             title="YouTube video player" frameborder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             referrerpolicy="strict-origin-when-cross-origin"></iframe>
+            <q-btn icon="close" dense color="red" />
         </div>
       </div>
     </HeaderCard>

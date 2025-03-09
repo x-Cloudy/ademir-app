@@ -4,24 +4,18 @@ import { isValidLoginToken } from 'src/utils/auth-helper'
 import { TOKEN_STORAGE_KEY, USER_STORAGE_KEY } from 'src/stores/authStore'
 import { LocalStorage } from 'quasar'
 import notify from 'src/utils/Notify'
-
 type ResponseAuthToken = {
   token: string;
 }
 
 export class AuthService {
+
   async register(payload: any) {
     try {
-      const response = await api.post('/user', payload)
-      notify({
-        type: 'positive',
-        msg: 'Você está logado'
-      })
-    } catch (error) {
-      notify({
-        type: 'positive',
-        msg: 'Você está logado'
-      })
+      const response = await api.post('/user', payload);
+      return response.status
+    } catch (error: any) {
+      return error.status
     }
   }
 
@@ -31,12 +25,8 @@ export class AuthService {
     try {
       const response = await api.post<ResponseAuthToken>(url, credentials);
       const data = response.data
-      this.setAuth({ token: data.token })
-      notify({
-        type: 'positive',
-        msg: 'Você está logado'
-      })
 
+      this.setAuth({ token: data.token })
       return response
     } catch (error: any) {
       notify({
@@ -46,7 +36,6 @@ export class AuthService {
 
       return error.data
     }
-
   }
 
   setAuth(token: AuthToken) {
@@ -66,7 +55,6 @@ export class AuthService {
     const url = '/me'
     try {
       const response = await api.get<AuthUser>(url)
-
       return response.data
     } catch (error) {
       this.clearAuth()
@@ -74,15 +62,8 @@ export class AuthService {
     }
   }
 
-  async logout() {
-    try {
-      const url = '/api/auth/logout'
-      await api.post(url)
-    } catch (error) {
-      console.log(error)
-    } finally {
-      this.clearAuth()
-    }
+  logout() {
+    this.clearAuth()
   }
 
   async loadAuth() {

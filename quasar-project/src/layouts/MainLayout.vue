@@ -4,10 +4,10 @@
     <div style="height: 100%;">
       <q-card class="top-menu">
         <div class="flex items-center justify-center" style="margin: 0;">
-          <p class="text-white q-mr-sm q-mt-md">Nome</p>
-          <q-btn 
+          <p class="text-white q-mr-sm q-mt-md">{{ authStore.user.name }}</p>
+          <q-btn
             @click="router.push('/perfil')"
-            class="bg-warning" 
+            class="bg-warning"
             style="height: 50px; width: 50px; border-radius: 50%; margin: 0;">
             <q-icon name="diamond" size="md" />
           </q-btn>
@@ -22,8 +22,10 @@
 <script setup lang="ts">
 import SideBar from './SideBar.vue';
 import { useRouter } from 'vue-router';
+import { useAuthStore } from 'src/stores/authStore';
 
 const router = useRouter()
+const authStore = useAuthStore()
 
 </script>
 

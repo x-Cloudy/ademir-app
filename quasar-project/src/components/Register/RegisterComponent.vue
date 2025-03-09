@@ -56,7 +56,14 @@
     <div class="text-center q-gutter-y-sm q-mt-md">
       <p class="text-grey-7 q-mb-none">
         Já tem uma conta?
-        <q-btn flat color="primary" label="Entrar" no-caps class="q-px-sm" padding="none" @click="emit('tab', 'login')" />
+        <q-btn flat color="primary" label="Entrar" no-caps class="q-px-sm" padding="none"
+          @click="() => {
+            if (isRegisterPage || hasId) {
+              router.push('/');
+              return
+            }
+            emit('tab', 'login')
+            }" />
       </p>
     </div>
   </q-form>
@@ -64,7 +71,7 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useAuthStore } from 'src/stores/authStore';
 import GradBtn from 'src/components/Buttons/GradBtn.vue';
 
@@ -72,8 +79,10 @@ const emit = defineEmits(['tab'])
 const authStore = useAuthStore()
 
 const hasId = computed(() => typeof route.params.id === 'string' && route.params.id.length > 0 ? route.params.id : '')
+const isRegisterPage = computed(() => route.path === '/register')
 
 const route = useRoute()
+const router = useRouter()
 const isPwd = ref(true)
 const registerForm = ref<any>({
   name: '',
@@ -84,10 +93,13 @@ const registerForm = ref<any>({
   wallet: ''
 })
 
-
 const onRegister = async () => {
-  console.log('register attempt', registerForm.value)
-  await authStore.register(registerForm.value)
+  const status = await authStore.register(registerForm.value)
+  if (status) {
+    setTimeout(() => {
+      document.location.reload()
+    }, 1000)
+  }
 }
 
 onMounted(() => {

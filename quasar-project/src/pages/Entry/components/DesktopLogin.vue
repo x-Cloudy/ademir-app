@@ -26,7 +26,7 @@
             </template>
           </q-input>
 
-          <GradBtn :title="'Entrar'" :type="'button'" @btn-click="onSubmit" />
+          <GradBtn :title="'Entrar'" :type="'button'" @btn-click="onSubmit" :loading="authStore.loading"/>
 
           <div class="text-center q-gutter-y-sm">
             <q-btn color="primary" flat label="Esqueci a senha" class="full-width" no-caps
@@ -65,9 +65,13 @@ const loginForm = ref<any>({
   password: ''
 })
 
-const onSubmit = async (value: any) => {
-  console.log('Login attempt:', loginForm.value)
-  await authStore.login(loginForm.value)
+const onSubmit = async () => {
+  const status = await authStore.login(loginForm.value);
+  if (status === 200) {
+    setTimeout(() => {
+      void router.push("/home")
+    }, 1000)
+  }
 }
 </script>
 

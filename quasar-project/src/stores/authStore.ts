@@ -1,6 +1,7 @@
 import { defineStore, acceptHMRUpdate } from 'pinia';
 import type { AuthLoginForm, AuthToken, AuthUser, Role, UpdateAuthUser } from '../types'
 import { AuthService } from '../services/auth.service'
+import notify from 'src/utils/Notify';
 import type { AxiosResponse } from 'axios';
 import { api } from 'boot/axios'
 import { LocalStorage, Notify } from 'quasar'
@@ -42,8 +43,20 @@ export const useAuthStore = defineStore('auth', {
 
   actions: {
     async register(form: any) {
-      const response = await authService.register(form)
-      console.log('response store', response)
+      const status = await authService.register(form)
+      if (status === 200) {
+        notify({
+          type: 'positive',
+          msg: 'Conta criada com sucesso'
+        })
+        return true;
+      } else {
+        notify({
+          type: 'negative',
+          msg: 'Erro ao criar conta'
+        })
+        return false;
+      }
     },
 
     async login(data: AuthLoginForm): Promise<number> {
@@ -51,8 +64,7 @@ export const useAuthStore = defineStore('auth', {
       this.failUserPassword = false
       try {
         const result = await authService.login(data);
-        const payload = result.data
-        const token = { token: payload.token }
+        const token = { token: result.data.token }
 
         this.token = token
         LocalStorage.set(TOKEN_STORAGE_KEY, this.token)
@@ -80,9 +92,11 @@ export const useAuthStore = defineStore('auth', {
       await this.getUserInfo()
     },
 
-    async logout() {
+    logout() {
       this.clearAuth()
-      await authService.logout()
+      authService.logout()
+
+      document.location.reload()
     },
 
     async me(): Promise<void> {
@@ -93,16 +107,16 @@ export const useAuthStore = defineStore('auth', {
     },
 
     async getUserInfo(): Promise<void> {
-      // if (!this.token) return
-      // if (this.user && this.user.id) return
+      if (!this.token) return
+      if (this.user && this.user.id) return
 
       const result = await authService.getUserInfo();
       this.user = result
       LocalStorage.set(USER_STORAGE_KEY, this.user)
 
-      if (!result.id) {
-        this.clearAuth()
-      }
+      // if (!result.id) {
+      //   this.clearAuth()
+      // }
     },
 
     async loadAuth() {
