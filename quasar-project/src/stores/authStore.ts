@@ -79,9 +79,11 @@ export const useAuthStore = defineStore('auth', {
       await this.getUserInfo()
     },
 
-    async logout() {
+    logout() {
       this.clearAuth()
-      await authService.logout()
+      authService.logout()
+
+      document.location.reload()
     },
 
     async me(): Promise<void> {

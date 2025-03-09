@@ -20,26 +20,31 @@ const routes: RouteRecordRaw[] = [
     path: '/home',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/homePage.vue') }],
+    meta: { requiresAuth: true },
   },
   {
     path: '/ranking',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/Ranking/RankingPage.vue') }],
+    meta: { requiresAuth: true },
   },
   {
     path: '/perfil',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/Perfil/PerfilPage.vue') }],
+    meta: { requiresAuth: true },
   },
   {
     path: '/usuarios',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/Users/UsersPage.vue') }],
+    meta: { requiresAuth: true },
   },
   {
     path: '/grafico',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/Pyramid/PyramidPage.vue') }],
+    meta: { requiresAuth: true },
   },
   {
     path: '/options',

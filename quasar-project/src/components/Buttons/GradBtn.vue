@@ -1,8 +1,9 @@
 <template>
-  <q-btn 
+  <q-btn
+    :loading="props.loading"
     :disable="props.disable"
     @click="emit('btn-click', $event)"
-    class="button"    
+    class="button"
     :type="props.type"
     >
     {{ props.title }}
@@ -15,7 +16,8 @@ const props = defineProps({
   title: String,
   type: String,
   icon: String,
-  disable: Boolean
+  disable: Boolean,
+  loading: Boolean
 })
 
 const emit = defineEmits(['btn-click'])

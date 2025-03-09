@@ -34,11 +34,6 @@ export class AuthService {
       const data = response.data
 
       this.setAuth({ token: data.token })
-      notify({
-        type: 'positive',
-        msg: 'Você está logado'
-      })
-
       return response
     } catch (error: any) {
       notify({
@@ -74,15 +69,8 @@ export class AuthService {
     }
   }
 
-  async logout() {
-    try {
-      const url = '/api/auth/logout'
-      await api.post(url)
-    } catch (error) {
-      console.log(error)
-    } finally {
-      this.clearAuth()
-    }
+  logout() {
+    this.clearAuth()
   }
 
   async loadAuth() {
