@@ -26,17 +26,33 @@ model User {
   MatrizGold   MatrizGold[]
 
   @@map("users")
+
   Indicates Indicates[]
+  IndicateNominee IndicateNominee[] @relation("IndicatedUser")
 }
 
 model Indicates {
-  id        Int    @id @default(autoincrement())
-  userId    Int
-  indicate  User    @relation(fields: [userId], references: [id])
-  count     Int
-  nominees  String[]
+  id         Int               @id @default(autoincrement())
+  userId     Int
+  indicate   User              @relation(fields: [userId], references: [id])
+  count      Int
+  nominees   String[]
+  
+  indicateNominees IndicateNominee[] @relation("IndicatesToIndicateNominee")
 
   @@map("indicates")
+}
+
+model IndicateNominee {
+  id          Int      @id @default(autoincrement())
+  indicatesId Int
+  indicateeId Int
+  insertedAt  DateTime @default(now())
+
+  indicates   Indicates @relation(fields: [indicatesId], references: [id], name: "IndicatesToIndicateNominee")
+  indicatee   User      @relation(fields: [indicateeId], references: [id], name: "IndicatedUser")
+
+  @@map("indicate_nominee")
 }
 
 model cache {

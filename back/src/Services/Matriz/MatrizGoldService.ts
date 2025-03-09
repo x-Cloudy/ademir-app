@@ -1,6 +1,5 @@
 import { response } from "express";
 import prismaClient from "../../prisma";
-import prisma from "../../prisma";
 
 export class MatrizGoldService {
     async execute(indicatorId: string, indicateId: string) {
@@ -8,48 +7,37 @@ export class MatrizGoldService {
         const indicate = parseInt(indicateId, 10);
 
         try {
-            const count = await prisma.matrizGold.count();
+            // Contar total de registros na matriz para definir a ordem
+            const count = await prismaClient.matrizGold.count();
             const nextOrder = count + 1;
 
-            await prisma.matrizGold.create({
+            // Criar o registro na matriz gold
+            await prismaClient.matrizGold.create({
                 data: {
-                    user: {
-                        connect: { id: indicate },
-                    },
+                    user: { connect: { id: indicate } },
                     order: nextOrder,
                 },
             });
 
+            // Atualizar o status do usuário para ativo
             await prismaClient.user.update({
-                where: {
-                    id: indicate,
-                },
+                where: { id: indicate },
+                data: { status: true },
+            });
+
+            // Criar a nova indicação na tabela IndicateNominee
+            await prismaClient.indicateNominee.create({
                 data: {
-                    status: true,
+                    indicatesId: indicator,
+                    indicateeId: indicate,
                 },
             });
 
-            const data = Date.now();
-
-            await prismaClient.indicates.update({
-                where: {
-                    id: indicator,
-                },
-                data: {
-                    nominees: {
-                        push: `${indicateId} + gold + ${data}`,
-                    },
-                    count: {
-                        increment: 1,
-                    },
-                },
-            });
+            return response.status(201).json({ message: "Usuário adicionado com sucesso na matriz gold" });
 
         } catch (error) {
             console.error(error);
-            return response.status(500).json({ error: 'Erro ao processar a requisição' });
+            return response.status(500).json({ error: "Erro ao processar a requisição" });
         }
-
-        return response.status(201).json('Usuário adicionado com sucesso na matriz gold');
     }
 }

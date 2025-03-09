@@ -1,7 +1,6 @@
 import { Router, Request, Response } from "express";
 import { CreateUserController } from "./Controllers/User/CreateUserController";
 import { isAuthenticated } from "./middlewares/isAuthenticated";
-import { DetailUserController } from "./Controllers/User/DetailUserController";
 import { RemoveUserController } from "./Controllers/User/RemoveUserController";
 import { PasswordResetUseCase } from "./Config/mail/token";
 import { MailService } from "./Config/mail/MailService";
@@ -15,6 +14,8 @@ import { AddUserInCooperController } from "./Controllers/Matriz/AddUserInCooperC
 import { AddUserInSilverController } from "./Controllers/Matriz/AddUserInSilverController";
 import { AddUserInGoldController } from "./Controllers/Matriz/AddUserInGoldController";
 import { TopAllIndicatesController } from "./Controllers/Matriz/TopAllIndicatesController";
+import { MeController } from "./Controllers/User/MeController";
+import { IndicateNomineeController } from "./Controllers/Matriz/IndicateNomieeController";
 
 const router = Router();
 const resetUseCase = new PasswordResetUseCase();
@@ -28,28 +29,31 @@ const matrizGold = new AddUserInGoldController();
 const matrizSilver = new AddUserInSilverController();
 const matrizCooper = new AddUserInCooperController();
 const topAll = new TopAllIndicatesController();
+const meController = new MeController();
+const indicateNomineeController = new IndicateNomineeController();
 
 // User Routes
 router.post('/user', new CreateUserController().handle);
-router.get('/user', isAuthenticated, new DetailUserController().handle);
 router.put('/user/:id', isAuthenticated, updateUser.handle);
+router.get("/me", isAuthenticated, meController.handle);
 router.delete('/user/:id', isAuthenticated, new RemoveUserController().handle);
 router.post("/password-reset", (req, res) => passwordResetController.requestReset(req, res));
 router.post("/login", login.handle);
 router.get("/all-users", isAuthenticated, new AllUserController().handle);
-router.get("/verify-user-matriz/:id", (req, res) => verifyUserInMatriz.execute(req, res));
+router.get("/verify-user-matriz/:id",isAuthenticated, (req, res) => verifyUserInMatriz.execute(req, res));
 
-// Code Routes
-router.get("/generateCode/:userId", (req, res) => generateCode.generateInviteCode(req, res));
+//Code Routes
+router.get("/generateCode/:userId",isAuthenticated, (req, res) => generateCode.generateInviteCode(req, res));
 
 //alocation in matriz
-router.post("/add-user-in-cooper/:indicator/:indicate", (req, res) => matrizCooper.handle(req, res));
-router.post("/add-user-in-silver/:indicator/:indicate", (req, res) => matrizSilver.handle(req, res));
-router.post("/add-user-in-gold/:indicator/:indicate", (req, res) => matrizGold.handle(req, res));
+router.post("/add-user-in-cooper/:indicator/:indicate",isAuthenticated, (req, res) => matrizCooper.handle(req, res));
+router.post("/add-user-in-silver/:indicator/:indicate",isAuthenticated, (req, res) => matrizSilver.handle(req, res));
+router.post("/add-user-in-gold/:indicator/:indicate",isAuthenticated, (req, res) => matrizGold.handle(req, res));
+router.get("/indicate-nominees", isAuthenticated, (req, res) => indicateNomineeController.getByDateRange(req, res));
 
 //rating routes
-router.get("/top10", (req, res) => topAll.top10());
-router.get("/top3", (req, res) => topAll.top3());
-router.get("/top1", (req, res) => topAll.top1());
+router.get("/top10",isAuthenticated, (req, res) => topAll.top10());
+router.get("/top3",isAuthenticated, (req, res) => topAll.top3());
+router.get("/top1",isAuthenticated, (req, res) => topAll.top1());
 
 export { router };

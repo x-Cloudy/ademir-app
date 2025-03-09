@@ -1,5 +1,5 @@
 import cron from 'node-cron';
-import  prisma  from "../prisma"; // Certifique-se de que está correto
+import  prisma  from "../prisma";
 
 export class VerifyMatriz {
     async reorganizarCooper() {
@@ -15,7 +15,6 @@ export class VerifyMatriz {
                 data: { order: i + 1 }
             });
         }
-
     }
     async reorganizarSilver() {
         console.log('Reorganizando IDs...');
@@ -30,7 +29,6 @@ export class VerifyMatriz {
                 data: { order: i + 1 }
             });
         }
-
     }
     async reorganizarGold() {
         console.log('Reorganizando IDs...');
@@ -45,7 +43,6 @@ export class VerifyMatriz {
                 data: { order: i + 1 }
             });
         }
-
     }
 }
 
