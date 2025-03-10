@@ -17,6 +17,7 @@ import { TopAllIndicatesController } from "./Controllers/Matriz/TopAllIndicatesC
 import { MeController } from "./Controllers/User/MeController";
 import { IndicateNomineeController } from "./Controllers/Matriz/IndicateNomieeController";
 import { Search50MatrizController } from "./Controllers/Matriz/Search50MatrizController";
+import { MatrizController } from "./Controllers/User/MatrizController";
 
 const router = Router();
 const resetUseCase = new PasswordResetUseCase();
@@ -33,6 +34,7 @@ const topAll = new TopAllIndicatesController();
 const meController = new MeController();
 const indicateNomineeController = new IndicateNomineeController();
 const matriz50 = new Search50MatrizController();
+const matrizController = new MatrizController();
 
 // User Routes
 router.post('/user', new CreateUserController().handle);
@@ -58,5 +60,6 @@ router.get("/top10",isAuthenticated, (req, res) => topAll.top10());
 router.get("/top3",isAuthenticated, (req, res) => topAll.top3());
 router.get("/top1",isAuthenticated, (req, res) => topAll.top1());
 router.get("/matriz-cooper/:userId", isAuthenticated, (req, res) => matriz50.getNextOrders(req, res));
+router.get("/matriz/indicados/:userId", matrizController.getIndicatedUsers);
 
 export { router };
