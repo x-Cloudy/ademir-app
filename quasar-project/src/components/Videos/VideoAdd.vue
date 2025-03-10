@@ -2,7 +2,8 @@
   <div class="flex column q-mr-md" style="width: 400px; height: 100%;">
     <HeaderCard :title="'ADICIONAR VIDEOS'">
       <q-input color="black" bg-color="white" class="full-width" outlined label="URL DO YOUTUBE" v-model="form" />
-      <q-btn class="q-mt-sm full-width text-black" style="font-weight: 600;" color="warning">
+      <q-btn @click="handleSave"
+      class="q-mt-sm full-width text-black" style="font-weight: 600;" color="warning">
         Salvar
       </q-btn>
     </HeaderCard>
@@ -22,29 +23,24 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import HeaderCard from '../HeaderCard/HeaderCard.vue';
+import { api } from 'src/boot/axios';
 
 const form = ref<any>('')
+const videos = ref<any>([])
 
-const videos = ref([
-  {
-    id: 1,
-    url: 'yvWTNh185gw'
-  },
-  {
-    id: 2,
-    url: 'ao4ro-8igAQ'
-  },
-  {
-    id: 3,
-    url: 'yvWTNh185gw'
-  },
-  {
-    id: 4,
-    url: 'yvWTNh185gw'
-  },
-])
+const handleSave = () => {
+  console.log(form.value.split('=')[1])
+}
+
+onMounted(async () => {
+  const response = await api.get('/table-text')
+  console.log(response)
+  if (response.status === 200) {
+    videos.value = response.data
+  }
+})
 </script>
 
 <style scoped>
