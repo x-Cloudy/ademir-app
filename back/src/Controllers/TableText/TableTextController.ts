@@ -24,10 +24,9 @@ export class TableTextController {
 
     async get(request: Request, response: Response): Promise<Response> {
         try {
-            const id = request.params.id;
 
             const tableTextService = new TableTextService();
-            const tableText = await tableTextService.executeGet(id);
+            const tableText = await tableTextService.executeGet;
 
             if (!tableText) {
                 return response.status(404).json({

@@ -12,11 +12,7 @@ export class TableTextService {
     }
 
     async executeGet(id: string) {
-        const tabletext = await prismaClient.tableText.findUnique({
-            where: {
-                id: parseInt(id),
-            }
-        });
+        const tabletext = await prismaClient.tableText.findMany({});
         return tabletext;
     }
 
