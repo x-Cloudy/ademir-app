@@ -18,6 +18,7 @@ import { MeController } from "./Controllers/User/MeController";
 import { IndicateNomineeController } from "./Controllers/Matriz/IndicateNomieeController";
 import { Search50MatrizController } from "./Controllers/Matriz/Search50MatrizController";
 import { MatrizController } from "./Controllers/User/MatrizController";
+import { TableTextController } from "./Controllers/TableText/TableTextController";
 
 const router = Router();
 const resetUseCase = new PasswordResetUseCase();
@@ -35,6 +36,7 @@ const meController = new MeController();
 const indicateNomineeController = new IndicateNomineeController();
 const matriz50 = new Search50MatrizController();
 const matrizController = new MatrizController();
+const text = new TableTextController();
 
 // User Routes
 router.post('/user', new CreateUserController().handle);
@@ -61,5 +63,10 @@ router.get("/top3",isAuthenticated, (req, res) => topAll.top3());
 router.get("/top1",isAuthenticated, (req, res) => topAll.top1());
 router.get("/matriz-cooper/:userId", isAuthenticated, (req, res) => matriz50.getNextOrders(req, res));
 router.get("/matriz/indicados/:userId", matrizController.getIndicatedUsers);
+
+//table text
+router.post("/table-text",isAuthenticated, (req, res) => text.create(req, res));
+router.get("/table-text/:id",isAuthenticated, (req, res) => text.get(req, res));
+router.delete("/table-text/:id",isAuthenticated, (req, res) => text.delete(req, res));
 
 export { router };
