@@ -1,6 +1,5 @@
 <template>
   <div class="tree">
-    <!-- Só desenha a <ul> se existir a raiz da árvore -->
     <ul v-if="treeRoot">
       <TreeNode :node="treeRoot" />
     </ul>
@@ -155,8 +154,8 @@ watch(() => [props.userIds, props.depth], () => {
   border: 1px solid #ccc;
   padding: .5em 1em;
   display: inline-block;
-  border-radius: 50%;
-  width: 50px;
+  border-radius: 10px;
+  width: 100px;
   height: 50px;      /* deixa o nó arredondado */
   min-width: 2em;
   min-height: 2em;

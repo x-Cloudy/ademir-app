@@ -1,11 +1,12 @@
 <template>
   <li>
     <!-- Nó atual -->
-    <div>
+    <div :style="{ backgroundImage: `url(${Logo})`}"
+    style="background-position: center center; background-size: cover; background-repeat: no-repeat; background-color: rgb(42, 42, 42);">
       <!-- Exibe a fração (n/d) -->
-      {{ node.fraction.n }}/{{ node.fraction.d }}
+      <!-- {{ node.fraction.n }}/{{ node.fraction.d }} -->
       <!-- Exibe o ID do usuário, se houver -->
-      <span v-if="node.userId">{{ node.userId }}</span>
+      <p style="transform: translate(0, 40px); font-weight: 600;" v-if="node.userId">{{ node.userId.nome }}</p>
     </div>
 
     <!-- Filhos (esquerdo e direito) -->
@@ -18,6 +19,7 @@
 
 <script setup lang="ts">
 import { defineProps } from 'vue'
+import Logo from 'assets/LogoDourada.png'
 
 const props = defineProps({
   node: {
