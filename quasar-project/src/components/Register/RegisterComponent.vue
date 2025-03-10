@@ -51,6 +51,17 @@
       </template>
     </q-input>
 
+    <q-select filled outlined multiple
+      label="Plataforma"
+      color="black"
+      class="q-mb-md"
+      v-model="registerForm.options"
+      :options="[
+        'Invistribe',
+        'Cripto'
+      ]
+    "></q-select>
+
     <GradBtn :title="'Registrar'" :type="'button'" @btn-click="onRegister" />
 
     <div class="text-center q-gutter-y-sm q-mt-md">
@@ -90,7 +101,8 @@ const registerForm = ref<any>({
   whatsapp: '',
   password: '',
   indication: '',
-  wallet: ''
+  wallet: '',
+  options: []
 })
 
 const onRegister = async () => {

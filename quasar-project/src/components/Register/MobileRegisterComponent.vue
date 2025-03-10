@@ -34,6 +34,16 @@
         <q-icon name="phone" color="grey-6" size="xs" class="q-mt-sm" />
       </template>
     </q-input>
+    <q-select filled outlined multiple
+      label="Plataforma"
+      color="black"
+      class="q-mt-md"
+      v-model="registerForm.options"
+      :options="[
+        'Invistribe',
+        'Cripto'
+      ]
+    "></q-select>
 
 
     <div class="q-mt-lg">
