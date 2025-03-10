@@ -15,6 +15,7 @@ export class MeService {
                 name: true, 
                 email: true, 
                 whatsapp: true,
+                wallet: true,
                 active: true,
                 status: true
             },

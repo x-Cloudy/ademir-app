@@ -3,27 +3,19 @@
     <q-card
       style="width: 100%; height: 70px; margin-bottom: 1rem; justify-content: space-between; background-color: rgb(43, 42, 42);"
       class="q-pa-sm flex items-center text-white q-mt-md">
-      <h6
-        style="margin: 0; font-weight: 600; text-transform: uppercase; margin-left: 1rem;" class="text-warning"
-      >Editar e remover usuarios
+      <h6 style="margin: 0; font-weight: 600; text-transform: uppercase; margin-left: 1rem;" class="text-warning">Editar
+        e remover usuarios
       </h6>
 
       <div class="flex">
-        <q-input
-          color="warning"
-          label-color="black"
-          class="q-pl-xs"
-          style="background-color: white; border-radius: 3px;"
-          dense
-          label="Pesquisar usuário"
-          v-model="search as string"
-          type="text"
-          />
-        <q-btn icon="search" flat dense size="md" class="q-ml-sm bg-warning text-black"/>
+        <q-input color="warning" label-color="black" class="q-pl-xs"
+          style="background-color: white; border-radius: 3px;" dense label="Pesquisar usuário" v-model="search"
+          type="text" />
+        <q-btn icon="search" flat dense size="md" class="q-ml-sm bg-warning text-black" />
       </div>
     </q-card>
 
-    <q-table :rows="mock" :columns="tableColumn" style="width: 100%;">
+    <q-table :rows="users" :columns="tableColumn" style="width: 100%;">
       <template v-slot:header="props">
         <q-tr :props="props">
           <q-th v-for="col in cols(props)" :key="col.name" :props="props" class="text-white"
@@ -37,16 +29,9 @@
 
       <template v-slot:body-cell-actions="props">
         <q-td :props="props" style="display: flex; justify-content: center;">
-          <q-btn
-            @click="showEdit = true"
-            icon="edit"
-            dense
-            class="bg-grey-8 text-white q-mr-sm action-btn" />
-          <q-btn icon="delete" dense class="bg-red-10 text-white action-btn"
-            @click="notify({
-              type: 'positive',
-              msg: 'Usuário excluído'
-            })" />
+          <q-btn @click="showEdit = true" icon="edit" dense class="bg-grey-8 text-white q-mr-sm action-btn" />
+
+          <q-btn icon="delete" dense class="bg-red-10 text-white action-btn" @click="handleDelete(props.row.id)" />
         </q-td>
       </template>
     </q-table>
@@ -57,8 +42,7 @@
         <q-input v-model="editForm.email" type="email" label="Email" outlined />
         <q-input v-model="editForm.email" type="tel" label="cel" outlined />
 
-        <q-card-section style="display: flex; justify-content: end;"
-          class="q-gutter-md q-pr-none">
+        <q-card-section style="display: flex; justify-content: end;" class="q-gutter-md q-pr-none">
           <q-btn color="green">Salvar</q-btn>
           <q-btn color="red" @click="showEdit = false">Cancelar</q-btn>
         </q-card-section>
@@ -68,7 +52,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onBeforeMount } from 'vue';
 import { api } from 'src/boot/axios';
 import tableColumn from './components/tableColumns';
 import notify from 'src/utils/Notify';
@@ -83,15 +67,37 @@ const editForm = ref<any>({
   tel: '',
 })
 const showEdit = ref(false)
+const users = ref([])
 
-onMounted(async () => {
+const handleDelete = async (id: number) => {
   try {
-    const response = await api.get("/all-users")
-    console.log('res', response)
+    await api.delete(`/user/${id}`)
+    notify({
+      type: 'positive',
+      msg: 'Usuário excluído'
+    })
+    await getUser()
+  } catch (error) {
+    notify({
+      type: 'negative',
+      msg: 'Erro ao excluir usuário'
+    })
+  }
+}
+
+const getUser = async () => {
+  const response = await api.get("/all-users")
+  users.value = response.data
+}
+
+onBeforeMount(async () => {
+  try {
+    await getUser()
   } catch (error) {
     console.log(error)
   }
 })
+
 const mock = [
   {
     id: 1,
@@ -124,5 +130,4 @@ const mock = [
   height: 25px;
   font-size: 10px;
 }
-
 </style>

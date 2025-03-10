@@ -16,7 +16,7 @@ const tableColumn = [
   {
     name: "cel",
     label: "Wpp",
-    field: "wpp",
+    field: "whatsapp",
     sortable: false,
     align: 'left' as any,
   },
@@ -35,4 +35,4 @@ const tableColumn = [
   }
 ]
 
-export default tableColumn 
+export default tableColumn
