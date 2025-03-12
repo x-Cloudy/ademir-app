@@ -1,5 +1,5 @@
 <template>
-  <div v-if="hasTop" style="width: 100%;">
+  <div  style="width: 100%;">
     <div style="width: 100%;" class="q-px-md">
       <q-card class="bg-dark q-my-md q-px-md flex items-center justify-between" style="height: 70px; width: 100%;">
         <h6 style="margin: 0; font-weight: 600; text-transform: uppercase; margin-left: 1rem;" class="text-warning">
@@ -62,7 +62,7 @@
 
   </div>
 
-  <div style="width: 100%; height: 100%;" class="q-px-md q-mt-md">
+  <!-- <div style="width: 100%; height: 100%;" class="q-px-md q-mt-md">
     <q-card class="bg-dark q-pa-lg" style="width: 100%; height: 87vh;">
       <div class="flex column justify-center items-center" style="width: 100%;">
         <h4 class="text-white" style="font-weight: 600;">
@@ -70,7 +70,7 @@
         </h4>
       </div>
     </q-card>
-  </div>
+  </div> -->
 </template>
 
 

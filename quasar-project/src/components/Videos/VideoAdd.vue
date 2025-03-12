@@ -30,16 +30,22 @@ import { api } from 'src/boot/axios';
 const form = ref<any>('')
 const videos = ref<any>([])
 
-const handleSave = () => {
+const handleSave = async () => {
   console.log(form.value.split('=')[1])
+  await api.post(form.value.split('=')[1]);
+  await getVideos();
 }
 
-onMounted(async () => {
+const getVideos = async () => {
   const response = await api.get('/table-text')
   console.log(response)
   if (response.status === 200) {
     videos.value = response.data
   }
+}
+
+onMounted(async () => {
+  await getVideos()
 })
 </script>
 
