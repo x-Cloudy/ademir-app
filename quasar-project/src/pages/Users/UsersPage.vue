@@ -3,8 +3,8 @@
     <q-card
       style="width: 100%; height: 70px; margin-bottom: 1rem; justify-content: space-between; background-color: rgb(43, 42, 42);"
       class="q-pa-sm flex items-center text-white q-mt-md">
-      <h6 style="margin: 0; font-weight: 600; text-transform: uppercase; margin-left: 1rem;" class="text-warning">Editar
-        e remover usuarios
+      <h6 style="margin: 0; font-weight: 600; text-transform: uppercase; margin-left: 1rem;" class="text-warning">
+        Editar e remover usuarios
       </h6>
 
       <div class="flex">
@@ -29,7 +29,11 @@
 
       <template v-slot:body-cell-actions="props">
         <q-td :props="props" style="display: flex; justify-content: center;">
-          <q-btn @click="showEdit = true" icon="edit" dense class="bg-grey-8 text-white q-mr-sm action-btn" />
+          <q-btn @click="() => {
+            editForm.user = props.row
+            editForm.id = props.row.id
+            showEdit = true;
+          }" icon="edit" dense class="bg-grey-8 text-white q-mr-sm action-btn" />
 
           <q-btn icon="delete" dense class="bg-red-10 text-white action-btn" @click="handleDelete(props.row.id)" />
         </q-td>
@@ -38,12 +42,13 @@
 
     <q-dialog v-model="showEdit">
       <q-card style="width: 1000px; height: auto;" class="q-pa-lg q-gutter-sm">
-        <q-input v-model="editForm.email" type="text" label="Nome" outlined />
-        <q-input v-model="editForm.email" type="email" label="Email" outlined />
-        <q-input v-model="editForm.email" type="tel" label="cel" outlined />
+        <q-input v-model="editForm.user.name" type="text" label="Nome" outlined />
+        <q-input v-model="editForm.user.email" type="email" label="Email" outlined />
+        <q-input v-model="editForm.user.whatsapp" type="tel" label="Whatsapp" outlined />
+        <q-input v-model="editForm.user.wallet" type="tel" label="Carteira" outlined />
 
         <q-card-section style="display: flex; justify-content: end;" class="q-gutter-md q-pr-none">
-          <q-btn color="green">Salvar</q-btn>
+          <q-btn color="green" @click="handleEdit">Salvar</q-btn>
           <q-btn color="red" @click="showEdit = false">Cancelar</q-btn>
         </q-card-section>
       </q-card>
@@ -62,12 +67,33 @@ const cols = (props: Col) => props.cols
 
 const search = ref<string>('')
 const editForm = ref<any>({
-  name: '',
-  email: '',
-  tel: '',
+  user: {
+    name: '',
+    email: '',
+    whatsapp: '',
+    wallet: ''
+  },
+  id: ''
 })
 const showEdit = ref(false)
 const users = ref([])
+
+const handleEdit = async () => {
+  try {
+    await api.put(`/user/${editForm.value.id}`, editForm.value.user);
+    notify({
+      type: 'positive',
+      msg: 'Usuário editado com sucesso'
+    })
+    showEdit.value = false
+  } catch (error) {
+    console.log(error)
+    notify({
+      type: 'negative',
+      msg: 'Erro ao editar usuário'
+    })
+  }
+}
 
 const handleDelete = async (id: number) => {
   try {
