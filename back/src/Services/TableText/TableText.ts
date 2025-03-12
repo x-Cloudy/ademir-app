@@ -1,7 +1,7 @@
 import prismaClient from "../../prisma";
 
 export class TableTextService {
-    async execute(text : string) {
+    async execute(text : any) {
         const tabletext = await prismaClient.tableText.create({
             data: {
                 text: text,
@@ -11,7 +11,7 @@ export class TableTextService {
         return tabletext;
     }
 
-    async executeGet(id: string) {
+    async executeGet() {
         const tabletext = await prismaClient.tableText.findMany({});
         return tabletext;
     }

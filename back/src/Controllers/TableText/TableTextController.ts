@@ -5,7 +5,7 @@ export class TableTextController {
 
     async create(request: Request, response: Response): Promise<Response> {
         try {
-            const text = request.body;
+            const { text } = request.body;
 
             const tableTextService = new TableTextService();
             const tableText = await tableTextService.execute(text);
@@ -22,47 +22,39 @@ export class TableTextController {
         }
     }
 
-    async get(request: Request, response: Response): Promise<Response> {
+    async get(response: Response): Promise<Response> {
         try {
-
             const tableTextService = new TableTextService();
-            const tableText = await tableTextService.executeGet;
-
-            if (!tableText) {
-                return response.status(404).json({
-                    message: "Texto não encontrado"
-                });
-            }
+            const tableTexts = await tableTextService.executeGet(); // Chamando o método
 
             return response.status(200).json({
-                message: "Texto encontrado com sucesso",
-                data: tableText
+                data: tableTexts
             });
         } catch (error) {
             return response.status(500).json({
-                message: "Erro ao obter o texto",
+                message: "Erro ao buscar textos",
                 error: error.message
             });
         }
     }
 
+    // No TableTextController
     async delete(request: Request, response: Response): Promise<Response> {
         try {
-            const id = request.params.id;
+            const { id } = request.params;
 
             const tableTextService = new TableTextService();
-            const success = await tableTextService.executeDelete(id);
-
-            if (!success) {
-                return response.status(404).json({
-                    message: "Texto não encontrado ou não pode ser deletado"
-                });
-            }
+            await tableTextService.executeDelete(id);
 
             return response.status(200).json({
                 message: "Texto deletado com sucesso"
             });
         } catch (error) {
+            if (error.code === 'P2025') {
+                return response.status(404).json({
+                    message: "Texto não encontrado"
+                });
+            }
             return response.status(500).json({
                 message: "Erro ao deletar o texto",
                 error: error.message
