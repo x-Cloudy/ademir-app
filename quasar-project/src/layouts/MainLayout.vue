@@ -1,8 +1,12 @@
 <template>
-  <q-layout class="layout">
-    <SideBar />
+  <q-layout class="layout" :style="{paddingLeft: isMobile() ? '0px' : '250px'}">
+    <SideBar v-if="!isMobile()" />
     <div style="height: 100%;">
-      <q-card class="top-menu">
+      <q-card class="top-menu" :style="{justifyContent: isMobile() ? 'space-between' : 'end'}">
+        <q-btn v-if="isMobile()" flat class="text-white">
+          <q-icon name="menu"></q-icon>
+        </q-btn>
+
         <div class="flex items-center justify-center" style="margin: 0;">
           <p class="text-white q-mr-sm q-mt-md">{{ authStore.user.name }}</p>
           <q-btn
@@ -23,6 +27,7 @@
 import SideBar from './SideBar.vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from 'src/stores/authStore';
+import isMobile from 'src/utils/isMobile';
 
 const router = useRouter()
 const authStore = useAuthStore()
@@ -31,7 +36,6 @@ const authStore = useAuthStore()
 
 <style scoped lang="scss">
 .layout {
-  padding-left: 250px;
   width: auto;
   min-height: 100vh !important;
   padding-top: 1rem;
@@ -41,7 +45,6 @@ const authStore = useAuthStore()
 .top-menu {
   display: flex;
   align-items: center;
-  justify-content: end;
   background-color: rgb(43, 42, 42);
   height: 70px;
   padding: 1rem;
