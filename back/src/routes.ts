@@ -66,7 +66,7 @@ router.get("/matriz/indicados/:userId", matrizController.getIndicatedUsers);
 
 //table text
 router.post("/table-text",isAuthenticated, (req, res) => text.create(req, res));
-router.get("/table-text/:id",isAuthenticated, (req, res) => text.get(req, res));
+router.get("/table-text",isAuthenticated, (req, res) => text.get(res ));
 router.delete("/table-text/:id",isAuthenticated, (req, res) => text.delete(req, res));
 
 export { router };
