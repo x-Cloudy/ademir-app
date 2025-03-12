@@ -15,7 +15,7 @@
             title="YouTube video player" frameborder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             referrerpolicy="strict-origin-when-cross-origin"></iframe>
-            <q-btn icon="close" dense color="red" />
+            <q-btn @click="handleDelete(item)" icon="close" dense color="red" />
         </div>
       </div>
     </HeaderCard>
@@ -32,16 +32,26 @@ const videos = ref<any>([])
 
 const handleSave = async () => {
   console.log(form.value.split('=')[1])
-  await api.post(form.value.split('=')[1]);
-  await getVideos();
+  try {
+    await api.post('/table-text', form.value.split('=')[1]);
+    await getVideos();
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 const getVideos = async () => {
   const response = await api.get('/table-text')
-  console.log(response)
+  console.log('res', response)
   if (response.status === 200) {
     videos.value = response.data
   }
+}
+
+const handleDelete = (id: any) => {
+  console.log('dd', id)
+  const response = await api.delete(`/table-text/${id}`)
+  console.log('res del', response)
 }
 
 onMounted(async () => {
