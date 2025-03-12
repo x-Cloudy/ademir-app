@@ -1,7 +1,7 @@
 <template>
   <div  style="width: 100%;">
     <div style="width: 100%;" class="q-px-md">
-      <q-card class="bg-dark q-my-md q-px-md flex items-center justify-between" style="height: 70px; width: 100%;">
+      <q-card class="bg-dark q-my-md q-pa-md flex items-center justify-between" style="min-height: 70px; height: auto; width: 100%;">
         <h6 style="margin: 0; font-weight: 600; text-transform: uppercase; margin-left: 1rem;" class="text-warning">
           rank de usuário
         </h6>
@@ -15,15 +15,16 @@
     </div>
 
     <div style="width: 100%; height: 100%;" class="q-px-md">
-      <q-card class="bg-dark q-pa-lg" style="width: 100%;">
+      <div class="bg-dark q-pa-lg" style="width: 100%;" >
         <div class="flex column justify-center items-center" style="width: 100%;">
-          <div style="width: 600px; margin-bottom: 4rem;" class="column justify-center items-center q-mb-lg">
-            <div class="top-rank-circle gold">
+
+          <div style=" margin-bottom: 4rem;" :style="{scale: isMobile() ? '0.9' : 1}" class="column justify-center items-center q-mb-lg">
+            <div class="top-rank-circle gold" :style="{marginBottom: isMobile() ? '2rem' : ''}">
               <div class="name-tag">{{ top_rank[0].nome.split(' ')[0] }}</div>
               <p class="tag-count">{{ top_rank[0].invites }}</p>
             </div>
             <div class="flex">
-              <div style="margin-right: 180px;" class="top-rank-circle silver">
+              <div :style="{marginRight: isMobile() ? '40px' : '180px'}" class="top-rank-circle silver">
                 <div class="name-tag">{{ top_rank[1].nome.split(' ')[0] }}</div>
                 <p class="tag-count">{{ top_rank[1].invites }}</p>
               </div>
@@ -34,7 +35,7 @@
             </div>
           </div>
 
-          <div v-for="(item, index) of users" :key="index" style="width: 700px; height: auto;" class="columns">
+          <div v-for="(item, index) of users" :key="index" style="width: 100%; max-width: 700px; min-width: 300px; height: auto;" class="columns">
 
             <div class="flex no-wrap justify-center items-center q-mt-md" style="width: 100%; height: 40px;">
 
@@ -53,7 +54,7 @@
 
           </div>
         </div>
-      </q-card>
+      </div>
     </div>
 
     <q-page-sticky position="bottom-right" :offset="[30, 30]">
@@ -77,6 +78,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { api } from 'src/boot/axios';
+import isMobile from 'src/utils/isMobile';
 
 const hasTop = ref<boolean>(true)
 
@@ -220,7 +222,7 @@ const users = [
 
 .list-item {
   height: 100%;
-  width: 80%;
+  width: 100%;
   border-radius: 20px;
   font-family: Poppins;
   font-size: 18px;
