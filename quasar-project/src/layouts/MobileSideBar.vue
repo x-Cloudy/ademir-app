@@ -1,39 +1,31 @@
 <template>
-  <div class="sidebar">
-    <div class="q-mt-md q-mb-lg">
-      <q-img class="q-mx-auto block q-mb-md q-mt-md" :src="logo" />
+  <div v-for="(item, index) of menus" :key="index">
+    <div :class="{ active: currentRoute === item.path }" class="menu-item" @click="activeMenu = item.path">
+      <router-link :to="item.path" class="link q-pa-md" :class="{ linkActive: currentRoute === item.path }">
+        <q-icon :name="item.icon" size="25px" class="q-mr-sm" />
+        {{ item.name }}
+      </router-link>
     </div>
+  </div>
 
-    <div v-for="(item, index) of menus" :key="index">
-      <div :class="{ active: currentRoute === item.path }" class="menu-item" @click="activeMenu = item.path">
-        <router-link :to="item.path" class="link q-pa-md" :class="{ linkActive: currentRoute === item.path }">
-          <q-icon :name="item.icon" size="25px" class="q-mr-sm" />
-          {{ item.name }}
-        </router-link>
-      </div>
-    </div>
-
-    <div class="logout">
-      <q-btn @click="logout" class="flex justify-start text-white" flat>
-        <q-icon name="logout" size="23px" class="q-mr-sm" />
-        Sair
-      </q-btn>
-    </div>
+  <div class="logout">
+    <q-btn @click="logout" class="flex justify-start text-white" flat>
+      <q-icon name="logout" size="30px" class="q-mr-sm" />
+      <span style="font-size: 20px;">Sair</span>
+    </q-btn>
   </div>
 </template>
 
 <script setup lang="ts">
-import logo from 'assets/LogoBrancasemfundo.png'
+import menus from 'src/utils/menus';
+import { useAuthStore } from 'src/stores/authStore';
 import { computed, ref } from 'vue';
 import { useRoute } from 'vue-router';
-import { useAuthStore } from 'src/stores/authStore';
-import menus from 'src/utils/menus';
 
 const route = useRoute()
-const activeMenu = ref('home')
 const authStore = useAuthStore()
 const currentRoute = computed(() => route.path)
-
+const activeMenu = ref('home')
 
 const logout = () => {
   authStore.logout()
@@ -62,7 +54,7 @@ const logout = () => {
   display: flex;
   justify-content: start;
   align-items: center;
-  height: 45px;
+  height: 55px;
   text-decoration: none;
   border-radius: 5px;
   margin-bottom: 1rem;
@@ -81,10 +73,11 @@ const logout = () => {
   text-decoration: none;
   color: white;
   font-weight: 500;
+  font-size: 20px;
 }
 
 .logout {
-  padding: 1rem 2rem;
+  padding: 1rem 1rem;
   width: 100%;
   height: 100px;
   position: absolute;
