@@ -1,13 +1,13 @@
 <template>
   <div class="q-px-md flex justify-center">
     <q-card
-      style="width: 100%; height: 70px; margin-bottom: 1rem; justify-content: space-between; background-color: rgb(43, 42, 42);"
+      style="width: 100%; min-height: 70px; margin-bottom: 1rem; justify-content: space-between; background-color: rgb(43, 42, 42);"
       class="q-pa-sm flex items-center text-white q-mt-md">
       <h6 style="margin: 0; font-weight: 600; text-transform: uppercase; margin-left: 1rem;" class="text-warning">
         Editar e remover usuarios
       </h6>
 
-      <div class="flex">
+      <div class="flex q-ml-md">
         <q-input color="warning" label-color="black" class="q-pl-xs"
           style="background-color: white; border-radius: 3px;" dense label="Pesquisar usuário" v-model="search"
           type="text" />
@@ -35,10 +35,22 @@
             showEdit = true;
           }" icon="edit" dense class="bg-grey-8 text-white q-mr-sm action-btn" />
 
-          <q-btn icon="delete" dense class="bg-red-10 text-white action-btn" @click="handleDelete(props.row.id)" />
+          <q-btn icon="delete" dense class="bg-red-10 text-white action-btn" @click="() => {
+            deleteId = props.row.id;
+            deleteDialog = true;
+          }" />
         </q-td>
       </template>
     </q-table>
+    <q-dialog v-model="deleteDialog">
+      <q-card style="width: 1000px; height: auto;" class="q-pa-lg ">
+        <q-card-section style="display: flex; justify-content: center; align-items: center;" class=" q-pr-none q-gutter-x-md">
+          <p style="margin: 0;" class="flex items-center">Deseja deletar usuário?</p>
+          <q-btn color="green" @click="handleDelete(deleteId)">Deletear</q-btn>
+          <q-btn color="red" @click="deleteDialog = false">Cancelar</q-btn>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
 
     <q-dialog v-model="showEdit">
       <q-card style="width: 1000px; height: auto;" class="q-pa-lg q-gutter-sm">
@@ -65,6 +77,8 @@ import notify from 'src/utils/Notify';
 type Col = { cols: { value: unknown; name: string; label: string }[] }
 const cols = (props: Col) => props.cols
 
+const deleteId = ref<number>(0)
+const deleteDialog = ref(false)
 const search = ref<string>('')
 const editForm = ref<any>({
   user: {
@@ -103,6 +117,7 @@ const handleDelete = async (id: number) => {
       msg: 'Usuário excluído'
     })
     await getUser()
+    deleteDialog.value = false;
   } catch (error) {
     notify({
       type: 'negative',
