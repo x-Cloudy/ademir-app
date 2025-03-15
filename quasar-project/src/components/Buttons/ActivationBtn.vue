@@ -1,11 +1,11 @@
 <template>
-  <div class="column q-mr-lg" style="width: 40%; height: 100%;">
-    <q-card class="flex items-end q-mb-md"
-      style="background-color: lightgrey; width: 100%; border-radius: 5px; min-height: 100px; height: auto;">
+  <div class="column q-mr-lg" :style="isMobile() ? {width: '100%'} : {width: '40%'}"
+    style="height: 100%;">
+    <q-card class="flex items-end q-mb-md card-custom">
       <div class="q-ml-md flex items-center" style="justify-content: space-between; width: 100%;">
         <q-img :src="coper_medal" height="100px" width="100px" class="q-my-md" />
 
-        <div class="column" style="width: 50%;">
+        <div class="column" :style="isMobile() ? {width: '100%'} : {width: '50%'}">
           <h6 style="margin: 0;">Requisitos:</h6>
           <div class="flex items-center">
             <p class="p-custom" style="margin: 0;">Possuir 30$</p>
@@ -20,12 +20,11 @@
       <GradBtn :title="'Ativar'" />
     </q-card>
 
-    <q-card class="flex items-end q-mb-md"
-      style="background-color: lightgrey; width: 100%; border-radius: 5px; min-height: 100px; height: auto;">
+    <q-card class="flex items-end q-mb-md card-custom">
       <div class="q-ml-md flex items-center" style="justify-content: space-between; width: 100%;">
         <q-img :src="silver_medal" height="100px" width="100px" class="q-my-md" />
 
-        <div class="column" style="width: 50%;">
+        <div class="column" :style="isMobile() ? {width: '100%'} : {width: '50%'}">
           <h6 style="margin: 0;">Requisitos:</h6>
           <div class="flex items-center">
             <p class="p-custom" style="margin: 0;">Possuir 150$</p>
@@ -43,12 +42,11 @@
 
       <GradBtn :title="'Ativar'" :disable="true" />
     </q-card>
-    <q-card class="flex items-end q-mb-md"
-      style="background-color: lightgrey; width: 100%; border-radius: 5px; min-height: 100px; height: auto;">
+    <q-card class="flex items-end q-mb-md card-custom">
       <div class="q-ml-md flex items-center" style="justify-content: space-between; width: 100%;">
         <q-img :src="gold_medal" height="100px" width="100px" class="q-my-md" />
 
-        <div class="column" style="width: 50%;">
+        <div class="column" :style="isMobile() ? {width: '100%'} : {width: '50%'}">
           <h6 style="margin: 0;">Requisitos:</h6>
           <div class="flex items-center">
             <p class="p-custom" style="margin: 0;">Possuir 1500$</p>
@@ -75,6 +73,7 @@ import GradBtn from 'src/components/Buttons/GradBtn.vue';
 import coper_medal from 'assets/coperMedalSemFundo.png'
 import silver_medal from 'assets/silverMedalSemFundo.png'
 import gold_medal from 'assets/goldMedalSemFundo.png'
+import isMobile from 'src/utils/isMobile';
 </script>
 
 <style scoped>
@@ -82,5 +81,14 @@ import gold_medal from 'assets/goldMedalSemFundo.png'
   font-weight: 600;
   font-family: Poppins;
   color: rgb(46, 46, 46);
+}
+
+.card-custom {
+  background-color: lightgrey;
+  width: 100%;
+  min-width: 125px;
+  border-radius: 5px;
+  min-height: 100px;
+  height: auto;
 }
 </style>
