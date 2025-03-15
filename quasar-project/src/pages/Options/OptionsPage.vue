@@ -19,6 +19,8 @@
       </div>
     </q-card>
   </div>
+
+  <RestrictPage v-else />
 </template>
 
 <script setup lang="ts">
@@ -28,6 +30,7 @@ import Toggle from 'src/components/Buttons/ToggleBtn.vue';
 import { ref } from 'vue';
 import isMobile from 'src/utils/isMobile';
 import { hasAccess } from 'src/utils/can-access';
+import RestrictPage from 'src/components/RestrictPage/RestrictPage.vue';
 
 const options = ref({
   paymentWallet: false

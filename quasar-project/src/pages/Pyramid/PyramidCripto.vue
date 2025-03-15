@@ -1,5 +1,5 @@
 <template>
-  <div v-if="hasAccess(['Invistribe', 'admin'])" id="app">
+  <div v-if="hasAccess(['Cripto', 'admin'])" id="app">
     <UserPyramid :userIds="users"
     :depth="3"/>
   </div>

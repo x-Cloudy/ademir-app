@@ -74,6 +74,8 @@
       </q-card>
     </q-dialog>
   </div>
+
+  <RestrictPage v-else />
 </template>
 
 <script setup lang="ts">
@@ -83,6 +85,7 @@ import tableColumn from './components/tableColumns';
 import notify from 'src/utils/Notify';
 import { role } from 'src/utils/roles';
 import { hasAccess } from 'src/utils/can-access';
+import RestrictPage from 'src/components/RestrictPage/RestrictPage.vue';
 
 type Col = { cols: { value: unknown; name: string; label: string }[] }
 const cols = (props: Col) => props.cols

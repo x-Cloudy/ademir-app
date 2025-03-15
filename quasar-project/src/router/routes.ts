@@ -32,7 +32,7 @@ const routes: RouteRecordRaw[] = [
     path: '/perfil',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/Perfil/PerfilPage.vue') }],
-    meta: { requiresAuth: true },
+    meta: { requiresAuth: true, },
   },
   {
     path: '/usuarios',
@@ -43,7 +43,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/grafico',
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/Pyramid/PyramidPage.vue') }],
+    children: [{ path: '', component: () => import('pages/Pyramid/PyramidCripto.vue') }],
     meta: { requiresAuth: true },
   },
   {
