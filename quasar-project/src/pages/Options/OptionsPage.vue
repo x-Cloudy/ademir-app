@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 100%; height: auto;" class="q-px-md">
+  <div v-if="hasAccess(['admin'])" style="width: 100%; height: auto;" class="q-px-md">
     <q-card class="bg-white q-pa-lg q-mt-md flex no-wrap" :class="isMobile() ? 'column' : ''" style="width: 100%; height: auto;">
       <VideoAdd />
 
@@ -25,8 +25,9 @@
 import VideoAdd from 'src/components/Videos/VideoAdd.vue';
 import HeaderCard from 'src/components/HeaderCard/HeaderCard.vue';
 import Toggle from 'src/components/Buttons/ToggleBtn.vue';
-import { ref, watch } from 'vue';
+import { ref } from 'vue';
 import isMobile from 'src/utils/isMobile';
+import { hasAccess } from 'src/utils/can-access';
 
 const options = ref({
   paymentWallet: false

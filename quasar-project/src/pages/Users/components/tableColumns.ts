@@ -28,9 +28,9 @@ const tableColumn = [
     align: 'left' as any,
   },
   {
-    name: "inscrição",
+    name: "indication",
     label: "inscrição",
-    field: "role",
+    field: "roles",
     sortable: false,
     align: 'left' as any,
   },

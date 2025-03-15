@@ -1,5 +1,5 @@
 <template>
-  <div class="q-px-md flex justify-center">
+  <div v-if="hasAccess(['admin'])" class="q-px-md flex justify-center">
     <q-card
       style="width: 100%; min-height: 70px; margin-bottom: 1rem; justify-content: space-between; background-color: rgb(43, 42, 42);"
       class="q-pa-sm flex items-center text-white q-mt-md">
@@ -41,6 +41,13 @@
           }" />
         </q-td>
       </template>
+
+      <template v-slot:body-cell-indication="props">
+        <q-td :props="props">
+          <q-select color="black" dropdown-icon="none" dense filled outlined v-model="props.row.roles" multiple />
+        </q-td>
+      </template>
+
     </q-table>
     <q-dialog v-model="deleteDialog">
       <q-card style="width: 1000px; height: auto;" class="q-pa-lg ">
@@ -58,6 +65,7 @@
         <q-input v-model="editForm.user.email" type="email" label="Email" outlined />
         <q-input v-model="editForm.user.whatsapp" type="tel" label="Whatsapp" outlined />
         <q-input v-model="editForm.user.wallet" type="tel" label="Carteira" outlined />
+        <q-select color="black" multiple v-model="editForm.user.roles" :options="role" type="tel" label="Carteira" outlined />
 
         <q-card-section style="display: flex; justify-content: end;" class="q-gutter-md q-pr-none">
           <q-btn color="green" @click="handleEdit">Salvar</q-btn>
@@ -73,6 +81,8 @@ import { ref, onBeforeMount } from 'vue';
 import { api } from 'src/boot/axios';
 import tableColumn from './components/tableColumns';
 import notify from 'src/utils/Notify';
+import { role } from 'src/utils/roles';
+import { hasAccess } from 'src/utils/can-access';
 
 type Col = { cols: { value: unknown; name: string; label: string }[] }
 const cols = (props: Col) => props.cols
@@ -85,7 +95,8 @@ const editForm = ref<any>({
     name: '',
     email: '',
     whatsapp: '',
-    wallet: ''
+    wallet: '',
+    roles: []
   },
   id: ''
 })

@@ -5,8 +5,10 @@
     </div>
 
     <div v-for="(item, index) of menus" :key="index">
-      <div :class="{ active: currentRoute === item.path }" class="menu-item" @click="activeMenu = item.path">
-        <router-link :to="item.path" class="link q-pa-md" :class="{ linkActive: currentRoute === item.path }">
+      <div v-if="hasAccess(item.roles)" :class="{ active: currentRoute === item.path }" class="menu-item"
+        @click="activeMenu = item.path">
+        <router-link :to="item.path" class="link q-pa-md"
+          :class="{ linkActive: currentRoute === item.path }">
           <q-icon :name="item.icon" size="25px" class="q-mr-sm" />
           {{ item.name }}
         </router-link>
@@ -27,13 +29,13 @@ import logo from 'assets/LogoBrancasemfundo.png'
 import { computed, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { useAuthStore } from 'src/stores/authStore';
+import { hasAccess } from 'src/utils/can-access';
 import menus from 'src/utils/menus';
 
 const route = useRoute()
 const activeMenu = ref('home')
 const authStore = useAuthStore()
 const currentRoute = computed(() => route.path)
-
 
 const logout = () => {
   authStore.logout()
