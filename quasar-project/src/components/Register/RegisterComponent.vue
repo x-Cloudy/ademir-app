@@ -55,7 +55,7 @@
       label="Plataforma"
       color="black"
       class="q-mb-md"
-      v-model="registerForm.options"
+      v-model="registerForm.roles"
       :options="[
         'Invistribe',
         'Cripto'
@@ -102,7 +102,7 @@ const registerForm = ref<any>({
   password: '',
   indication: '',
   wallet: '',
-  options: []
+  roles: []
 })
 
 const onRegister = async () => {

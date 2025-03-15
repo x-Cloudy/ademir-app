@@ -8,20 +8,21 @@ datasource db {
 }
 
 model User {
-  id        Int    @id @default(autoincrement())
-  name      String
-  email     String   @unique
-  password  String
-  wallet    String?
-  whatsapp  String
-  active    Boolean   @default(true)
-  status    Boolean   @default(false)
-  matriz    String[]
-  role      String[]
-  plataform String[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime?
-  deletedAt DateTime?
+  id         Int    @id @default(autoincrement())
+  name       String
+  email      String   @unique
+  password   String
+  wallet     String?
+  whatsapp   String
+  active     Boolean   @default(true)
+  status     Boolean   @default(false)
+  matriz     String[]
+  roles      String[]
+  indication String?
+  plataform  String[]
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime?
+  deletedAt  DateTime?
 
   MatrizCooper MatrizCooper[]
   MatrizSilver MatrizSilver[]

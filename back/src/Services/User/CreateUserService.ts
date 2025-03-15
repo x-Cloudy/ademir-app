@@ -3,7 +3,8 @@ import { hash } from "bcryptjs";
 import { UserRequest } from "../../models/User/UserRequest"
 
 class CreateUserService {
-  async execute({ name, email, password, wallet, whatsapp }: UserRequest) {
+  async execute({ name, email, password, wallet, whatsapp, indication,
+    roles }: UserRequest) {
     if (!name) {
       throw new Error("O campo nome é obrigatorio");
     }
@@ -40,6 +41,8 @@ class CreateUserService {
         password: passwordHash,
         wallet: wallet,
         whatsapp: whatsapp,
+        roles: roles,
+        indication: indication,
         active: true
       },
       select: {
