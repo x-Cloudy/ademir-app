@@ -28,6 +28,13 @@ const tableColumn = [
     align: 'left' as any,
   },
   {
+    name: "inscrição",
+    label: "inscrição",
+    field: "role",
+    sortable: false,
+    align: 'left' as any,
+  },
+  {
     name: 'actions',
     label: 'Acões',
     field: 'id',

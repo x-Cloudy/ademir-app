@@ -15,7 +15,12 @@ const menus = [
     icon: 'people'
   },
   {
-    name: 'Gráfico',
+    name: 'Matriz InvisTribe',
+    path: '/matriz-invis',
+    icon: 'stock'
+  },
+  {
+    name: 'Matriz Cripto',
     path: '/grafico',
     icon: 'stock'
   },

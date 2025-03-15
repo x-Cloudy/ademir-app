@@ -47,6 +47,12 @@ const routes: RouteRecordRaw[] = [
     meta: { requiresAuth: true },
   },
   {
+    path: '/matriz-invis',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/Pyramid/PyramidPage.vue') }],
+    meta: { requiresAuth: true },
+  },
+  {
     path: '/options',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/Options/OptionsPage.vue') }],
