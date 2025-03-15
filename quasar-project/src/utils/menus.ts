@@ -5,7 +5,7 @@ const menus = [
     name: 'Home',
     path: '/home',
     icon: 'home',
-    roles: ['admin', 'Invistribe'] as Role[]
+    roles: ['admin', 'Invistribe', 'Cripto'] as Role[]
   },
   {
     name: 'Ranking',
@@ -27,7 +27,7 @@ const menus = [
   },
   {
     name: 'Matriz Cripto',
-    path: '/grafico',
+    path: '/matriz-cripto',
     icon: 'stock',
     roles: ['admin', 'Cripto'] as Role[]
   },

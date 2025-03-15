@@ -41,7 +41,7 @@ const routes: RouteRecordRaw[] = [
     meta: { requiresAuth: true },
   },
   {
-    path: '/grafico',
+    path: '/matriz-cripto',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/Pyramid/PyramidCripto.vue') }],
     meta: { requiresAuth: true },

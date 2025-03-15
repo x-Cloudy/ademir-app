@@ -10,9 +10,6 @@
 import { ref, watch, defineProps } from 'vue'
 import TreeNode from './TreeNode.vue'
 
-// Propriedades recebidas:
-// - userIds: array de IDs para atribuir aos nós
-// - depth: profundidade da árvore
 const props = defineProps({
   userIds: {
     type: Array,
