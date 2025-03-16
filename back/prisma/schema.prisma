@@ -30,14 +30,17 @@ model User {
 
   Indicates Indicates[]
   IndicateNominee IndicateNominee[] @relation("IndicatedUser")
+  binaryTree BinaryTree? @relation("SponsorUser", fields: [binaryTreeid], references: [id])
+  binaryTreeid Int?
+  BinaryTree BinaryTree[] 
 }
 
 model Indicates {
-  id         Int               @id @default(autoincrement())
-  userId     Int
-  indicate   User              @relation(fields: [userId], references: [id])
-  count      Int
-  nominees   String[]
+  id       Int    @id @default(autoincrement())
+  userId   Int    @unique
+  indicate User   @relation(fields: [userId], references: [id])
+  count    Int
+  nominees String[]
   
   indicateNominees IndicateNominee[] @relation("IndicatesToIndicateNominee")
 
@@ -157,5 +160,30 @@ model tableText {
   id        Int    @id @default(autoincrement())
   text      String? @db.Text
 }
+
+model BinaryTree {
+  id          Int      @id @default(autoincrement())
+  userId      Int      @unique
+  user        User     @relation(fields: [userId], references: [id])
+
+  sponsorId   Int?     
+  sponsor     BinaryTree? @relation("SponsorUser", fields: [sponsorId], references: [id])
+  sponsored   BinaryTree[] @relation("SponsorUser")
+
+  leftChildId Int?     
+  leftChild   BinaryTree? @relation("LeftChild", fields: [leftChildId], references: [id])
+  leftChildren BinaryTree[] @relation("LeftChild")
+
+  rightChildId Int?    
+  rightChild  BinaryTree? @relation("RightChild", fields: [rightChildId], references: [id])
+  rightChildren BinaryTree[] @relation("RightChild")
+
+  createdAt   DateTime @default(now())
+
+  @@map("binary_tree")
+  User User[] @relation("SponsorUser")
+}
+
+
 
 

@@ -19,6 +19,7 @@ import { IndicateNomineeController } from "./Controllers/Matriz/IndicateNomieeCo
 import { Search50MatrizController } from "./Controllers/Matriz/Search50MatrizController";
 import { MatrizController } from "./Controllers/User/MatrizController";
 import { TableTextController } from "./Controllers/TableText/TableTextController";
+import { BinaryTreeController } from "./Controllers/BinaryThree/BinaryThreeController";
 
 const router = Router();
 const resetUseCase = new PasswordResetUseCase();
@@ -37,6 +38,7 @@ const indicateNomineeController = new IndicateNomineeController();
 const matriz50 = new Search50MatrizController();
 const matrizController = new MatrizController();
 const text = new TableTextController();
+const tree = new BinaryTreeController();
 
 // User Routes
 router.post('/user', new CreateUserController().handle);
@@ -68,5 +70,11 @@ router.get("/matriz/indicados/:userId", matrizController.getIndicatedUsers);
 router.post("/table-text",isAuthenticated, (req, res) => text.create(req, res));
 router.get("/table-text",isAuthenticated, (req, res) => text.get(res ));
 router.delete("/table-text/:id",isAuthenticated, (req, res) => text.delete(req, res));
+
+//binaryTree routes
+
+router.post("/binary-tree/add",isAuthenticated, (req, res) => tree.addUser(req, res));
+router.get("/binary-tree/:userId",isAuthenticated, (req, res) => tree.getUserTree(req, res));
+router.get("/binary-tree/position/:userId",isAuthenticated, (req, res) => tree.getUserPosition(req, res));
 
 export { router };

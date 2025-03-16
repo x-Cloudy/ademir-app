@@ -5,8 +5,12 @@ import swaggerUi from "swagger-ui-express";
 import path from "path";
 import swaggerDocument from "../swagger.json";
 import { router } from './routes';
+import { GetAllUser } from "./Job/GetAllUser";
+import { VerifyMatriz } from "./Job/VerifyMatriz";
 
 const app = express();
+new GetAllUser();
+new VerifyMatriz();
 const port = 3333;
 app.use(express.json());
 app.use(cors());
