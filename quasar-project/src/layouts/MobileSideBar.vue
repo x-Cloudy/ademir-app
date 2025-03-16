@@ -1,6 +1,6 @@
 <template>
   <div v-for="(item, index) of menus" :key="index">
-    <div :class="{ active: currentRoute === item.path }" class="menu-item" @click="activeMenu = item.path">
+    <div v-if="hasAccess(item.roles)" :class="{ active: currentRoute === item.path }" class="menu-item" @click="activeMenu = item.path">
       <router-link :to="item.path" class="link q-pa-md" :class="{ linkActive: currentRoute === item.path }">
         <q-icon :name="item.icon" size="25px" class="q-mr-sm" />
         {{ item.name }}
@@ -21,6 +21,7 @@ import menus from 'src/utils/menus';
 import { useAuthStore } from 'src/stores/authStore';
 import { computed, ref } from 'vue';
 import { useRoute } from 'vue-router';
+import { hasAccess } from 'src/utils/can-access';
 
 const route = useRoute()
 const authStore = useAuthStore()

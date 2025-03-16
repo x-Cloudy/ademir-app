@@ -31,14 +31,14 @@
     </q-input>
     <q-input v-model="registerForm.indication" type="tel" label="Código de convite" outlined>
       <template v-slot:append>
-        <q-icon name="phone" color="grey-6" size="xs" class="q-mt-sm" />
+        <q-icon name="code" color="grey-6" size="xs" class="q-mt-sm" />
       </template>
     </q-input>
     <q-select filled outlined multiple
       label="Plataforma"
       color="black"
       class="q-mt-md"
-      v-model="registerForm.options"
+      v-model="registerForm.roles"
       :options="[
         'Invistribe',
         'Cripto'
@@ -87,8 +87,10 @@ const registerForm = ref<any>({
   whatsapp: '',
   password: '',
   indication: '',
-  wallet: ''
+  wallet: '',
+  roles: []
 })
+
 const onRegister = async () => {
   const status = await authStore.register(registerForm.value)
   if (status) {
