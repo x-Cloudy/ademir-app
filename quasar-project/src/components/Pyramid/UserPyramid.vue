@@ -1,5 +1,5 @@
 <template>
-  <div class="tree">
+  <div class="tree" ref="treeContainer">
     <ul v-if="treeRoot">
       <TreeNode :node="treeRoot" />
     </ul>
@@ -7,7 +7,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, defineProps } from 'vue'
+import { ref, watch, defineProps, onMounted, nextTick } from 'vue'
 import TreeNode from './TreeNode.vue'
 
 const props = defineProps({
@@ -20,6 +20,8 @@ const props = defineProps({
     default: 3
   }
 })
+
+const treeContainer = ref<HTMLElement | null>(null);
 
 // Função que gera recursivamente a árvore de Stern-Brocot
 function generateSternBrocotTree(depth: any, leftBound = { n: 0, d: 1 }, rightBound = { n: 1, d: 0 }) {
@@ -64,6 +66,14 @@ function buildTree() {
   assignUserIds(treeRoot.value, props.userIds)
 }
 
+onMounted(async () => {
+  await nextTick(() => {
+    if (treeContainer.value) {
+      treeContainer.value.scrollLeft = (treeContainer.value.scrollWidth - treeContainer.value.clientWidth) / 2;
+    }
+  });
+});
+
 // Observa mudanças em userIds e depth, e reconstrói a árvore
 watch(() => [props.userIds, props.depth], () => {
   buildTree()
@@ -75,13 +85,21 @@ watch(() => [props.userIds, props.depth], () => {
 .tree {
   margin: 0;
   padding: 0;
+  overflow-x: scroll;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.tree::-webkit-scrollbar {
+  display: none; /* Chrome, Safari e Edge */
 }
 
 /* O <ul> principal que contém a árvore */
 .tree ul {
   position: relative;
   padding: 1em 0;
-  white-space: nowrap;     /* impede que quebre as linhas facilmente */
+  white-space: nowrap;
+  /* impede que quebre as linhas facilmente */
   margin: 0 auto;
   text-align: center;
 }
@@ -153,7 +171,8 @@ watch(() => [props.userIds, props.depth], () => {
   display: inline-block;
   border-radius: 10px;
   width: 100px;
-  height: 50px;      /* deixa o nó arredondado */
+  height: 50px;
+  /* deixa o nó arredondado */
   min-width: 2em;
   min-height: 2em;
   line-height: 2em;

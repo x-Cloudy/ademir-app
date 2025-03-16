@@ -18,7 +18,7 @@
         <q-icon name="phone" color="grey-6" size="xs" class="q-mt-sm" />
       </template>
     </q-input>
-    <q-input v-model="registerForm.password" type="password" label="Senha" outlined
+    <q-input v-model="registerForm.password" type="text" label="Senha" outlined
       :rules="[val => !!val || 'Senha é obrigatório']">
       <template v-slot:append>
         <q-icon name="password" color="grey-6" size="xs" class="q-mt-sm" />
