@@ -1,6 +1,6 @@
 <template>
-  <div style="width: 100%; height: 100%;" class="q-px-md">
-    <q-card class="bg-white q-pa-lg q-mt-md flex no-wrap" style="width: 100%; height: 840px;">
+  <div v-if="hasAccess(['admin'])" style="width: 100%; height: auto;" class="q-px-md">
+    <q-card class="bg-white q-pa-lg q-mt-md flex no-wrap" :class="isMobile() ? 'column' : ''" style="width: 100%; height: auto;">
       <VideoAdd />
 
       <div style="width: 100%; height: 100%;">
@@ -19,13 +19,18 @@
       </div>
     </q-card>
   </div>
+
+  <RestrictPage v-else />
 </template>
 
 <script setup lang="ts">
 import VideoAdd from 'src/components/Videos/VideoAdd.vue';
 import HeaderCard from 'src/components/HeaderCard/HeaderCard.vue';
 import Toggle from 'src/components/Buttons/ToggleBtn.vue';
-import { ref, watch } from 'vue';
+import { ref } from 'vue';
+import isMobile from 'src/utils/isMobile';
+import { hasAccess } from 'src/utils/can-access';
+import RestrictPage from 'src/components/RestrictPage/RestrictPage.vue';
 
 const options = ref({
   paymentWallet: false

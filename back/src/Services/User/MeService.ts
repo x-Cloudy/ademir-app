@@ -17,6 +17,7 @@ export class MeService {
                 whatsapp: true,
                 wallet: true,
                 active: true,
+                roles: true,
                 status: true
             },
         });

@@ -1,10 +1,14 @@
 <template>
-  <div class="q-pa-md flex no-wrap" style="width: 100%; height: auto">
-    <q-card class="q-pa-md flex no-wrap" style="width: 70%; height: 100%; margin-right: 1rem; min-height: 87vh;">
-      <div class="q-pa-sm flex no-wrap" style="width: 100%; height: 100%; border-radius: 5px;">
+  <div :class="isMobile() ? 'column' : ''" class="q-pa-md flex no-wrap" style="width: 100%; height: auto">
+    <q-card class="q-pa-md flex no-wrap"
+    :style="isMobile() ? {width: '100%'} : {width: '70%'}"
+    style="height: 100%; margin-right: 1rem; min-height: 87vh;">
+      <div class="q-pa-sm flex no-wrap" :class="isMobile() ? 'column reverse' : ''" style="width: 100%; height: 100%; border-radius: 5px;">
         <ActivationBtn />
 
-        <div style="width: 48%; padding: 0 1rem; border-radius: 5px; margin-left: 1rem;">
+        <div :style="isMobile() ? {width: '100%', marginBottom: '2rem'} :
+          {width: '48%', marginLeft: '1rem'}"
+          style="padding: 0 1rem; border-radius: 5px;">
           <label style="font-size: 20px;">Meu Dados</label>
           <q-input filled v-model="user.name" class="bg-white q-mb-md" label="Nome" disable />
           <q-input filled v-model="user.email" class="bg-white q-mb-md" label="Email" disable />
@@ -12,14 +16,16 @@
 
           <q-form @submit="onSubmit">
             <q-input outlined color="black" v-model="user.wallet" class="bg-white q-mb-md" label="Carteira Descentralizada" />
-            <q-btn style="height: 40px; font-weight: 600; font-size: 16px; font-family: Poppins;" class="bg-warning"
+            <q-btn style="height: auto; font-weight: 600; font-size: 14px; font-family: Poppins;" class="bg-warning"
               type="submit">Adicionar Carteira</q-btn>
           </q-form>
         </div>
       </div>
     </q-card>
 
-    <q-card class="q-pa-sm column" style="width: 30%; height: 100%; min-height: 87vh; justify-content: space-between;">
+    <q-card class="q-pa-sm column"
+    :style="isMobile() ? {width: '100%', marginTop: '1rem'} : {width: '30%'}"
+    style="height: 100%; min-height: 87vh; justify-content: space-between;">
       <q-table :title="`Usuários Convidados (${rows.length})`" :rows="rows" :columns="columns" hide-pagination
         :pagination="{ rowsPerPage: 0 }" style="height: 50%; max-height: 550px;">
         <template v-slot:header="props">
@@ -63,6 +69,7 @@ import GradBtn from 'src/components/Buttons/GradBtn.vue';
 import { useAuthStore } from 'src/stores/authStore';
 import { columns } from './ColumnSchema';
 import { onBeforeMount, ref } from 'vue';
+import isMobile from 'src/utils/isMobile';
 
 type Col = { cols: { value: unknown; name: string; label: string }[] }
 const cols = (props: Col) => props.cols

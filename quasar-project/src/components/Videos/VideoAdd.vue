@@ -1,21 +1,20 @@
 <template>
-  <div class="flex column q-mr-md" style="width: 400px; height: 100%;">
+  <div class="flex column q-mb-md" :class="isMobile() ? '' : 'q-mr-md'" style="min-width: 300px; height: 100%;">
     <HeaderCard :title="'ADICIONAR VIDEOS'">
       <q-input color="black" bg-color="white" class="full-width" outlined label="URL DO YOUTUBE" v-model="form" />
-      <q-btn @click="handleSave"
-      class="q-mt-sm full-width text-black" style="font-weight: 600;" color="warning">
+      <q-btn @click="handleSave" class="q-mt-sm full-width text-black" style="font-weight: 600;" color="warning">
         Salvar
       </q-btn>
     </HeaderCard>
 
-    <HeaderCard :title="'VIDEOS'" style="height: 75%; margin-top: 1rem;">
+    <HeaderCard :title="'VIDEOS'" style="height: auto; min-height: 400px; margin-top: 1rem;">
       <div style="overflow-y: scroll;">
         <div class="flex q-mb-md" v-for="(item, index) of videos" :key="index">
-          <iframe width="350" height="150" :src="`https://www.youtube.com/embed/${item.url}?si=vGK9wXF7Sqxrhc8s`"
+          <iframe width="350" height="150" :src="`https://www.youtube.com/embed/${item.text}?si=vGK9wXF7Sqxrhc8s`"
             title="YouTube video player" frameborder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             referrerpolicy="strict-origin-when-cross-origin"></iframe>
-            <q-btn icon="close" dense color="red" />
+          <q-btn @click="handleDelete(item.id)" icon="close" dense color="red" />
         </div>
       </div>
     </HeaderCard>
@@ -25,21 +24,41 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import HeaderCard from '../HeaderCard/HeaderCard.vue';
+import isMobile from 'src/utils/isMobile';
 import { api } from 'src/boot/axios';
 
 const form = ref<any>('')
 const videos = ref<any>([])
 
-const handleSave = () => {
-  console.log(form.value.split('=')[1])
+const handleSave = async () => {
+  try {
+    await api.post('/table-text', {
+      text: form.value.split('=')[1]
+    });
+    await getVideos();
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const getVideos = async () => {
+  const response = await api.get('/table-text')
+  if (response.status === 200) {
+    videos.value = response.data.data
+  }
+}
+
+const handleDelete = async (id: any) => {
+  try {
+    await api.delete(`/table-text/${id}`)
+    await getVideos()
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 onMounted(async () => {
-  const response = await api.get('/table-text')
-  console.log(response)
-  if (response.status === 200) {
-    videos.value = response.data
-  }
+  await getVideos()
 })
 </script>
 
