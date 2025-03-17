@@ -1,59 +1,86 @@
-import prismaClient from '../../prisma';
+import prismaClient from "../../prisma";
 import { hash } from "bcryptjs";
-import { UserRequest } from "../../models/User/UserRequest"
+import { UserRequest } from "../../models/User/UserRequest";
+import { GenerateCodeService } from "../code/GenerateCodeService";
+import { BinaryTreeService } from "../BinaryTree/BinaryTreeService";
 
 class CreateUserService {
-  async execute({ name, email, password, wallet, whatsapp, indication,
-    roles }: UserRequest) {
-    if (!name) {
-      throw new Error("O campo nome é obrigatorio");
-    }
-    if (!email) {
-      throw new Error("O campo email é obrigatorio");
-    }
-    if (!password) {
-      throw new Error("A senha não pode ser vazia");
-    }
-    if (!wallet) {
-      throw new Error("O campo wallet é obrigatorio");
-    }
-    if (!whatsapp) {
-      throw new Error("O campo whatsapp é obrigatorio");
-    }
-
+  async execute({ name, email, password, wallet, whatsapp, indication, roles, code }: UserRequest) {
+    if (!name) throw new Error("O campo nome é obrigatório.");
+    if (!email) throw new Error("O campo email é obrigatório.");
+    if (!password) throw new Error("A senha não pode ser vazia.");
+    if (!wallet) throw new Error("O campo wallet é obrigatório.");
+    if (!whatsapp) throw new Error("O campo whatsapp é obrigatório.");
+    if (!roles || roles.length === 0) throw new Error("O campo roles é obrigatório.");
 
     const userAlreadyExists = await prismaClient.user.findFirst({
-      where: {
-        email: email,
-      },
+      where: { email },
     });
 
     if (userAlreadyExists) {
-      throw new Error("Email already exists");
+      throw new Error("Email já cadastrado.");
     }
 
     const passwordHash = await hash(password, 8);
 
-    const user = prismaClient.user.create({
+    // Criar usuário sem definir `sidePreference`
+    const user = await prismaClient.user.create({
       data: {
-        name: name,
-        email: email,
+        name,
+        email,
         password: passwordHash,
-        wallet: wallet,
-        whatsapp: whatsapp,
-        roles: roles,
-        indication: indication,
-        active: true
+        wallet,
+        whatsapp,
+        roles,
+        indication,
+        active: true, // Sempre ativo ao ser criado
       },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-      },
+      select: { id: true, name: true, email: true },
     });
+
+    enum Roles {
+      Admin = "Admin",
+      User = "User",
+      Moderator = "Moderator",
+      Invistribe = "Invistribe",
+    }
+    
+
+    // Processar código de indicação, se existir
+    if (code) {
+      const decoded = GenerateCodeService.decodeInviteCode(code);
+      const sponsorId = Number(decoded);
+
+      if (isNaN(sponsorId)) {
+        throw new Error("Código de convite inválido.");
+      }
+
+      const sponsorUser = await prismaClient.user.findFirst({
+        where: { id: sponsorId },
+        select: { id: true, sidePreference: true },
+      });
+
+      if (!sponsorUser) {
+        throw new Error("Usuário patrocinador não encontrado.");
+      }
+
+      // Se a role incluir "Invistribe", adiciona na matriz
+      if ((roles as any).includes("Invistribe")) {
+        await prismaClient.indicateNominee.create({
+          data: {
+            indicatesId: sponsorUser.id,
+            indicateeId: user.id,
+          },
+        });
+    } else {
+        // Caso contrário, adiciona na árvore binária usando o lado do patrocinador
+        const binaryTreeService = new BinaryTreeService();
+        await binaryTreeService.addUserToTree(user.id, sponsorUser.id, sponsorUser.sidePreference);
+      }
+    }
 
     return user;
   }
 }
 
-export { CreateUserService }
+export { CreateUserService };
