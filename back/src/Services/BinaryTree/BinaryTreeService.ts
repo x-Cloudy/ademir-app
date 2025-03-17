@@ -3,7 +3,8 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export class BinaryTreeService {
-  async addUserToTree(userId: number, sponsorId?: number, position?: "left" | "right") {
+  async addUserToTree(userId: number, sponsorId?: number, position?: string) {
+    position = position === "left" || position === "right" ? position : null;
     userId = parseInt(String(userId));
     sponsorId = sponsorId ? parseInt(String(sponsorId)) : undefined;
 
