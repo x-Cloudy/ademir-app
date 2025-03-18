@@ -8,13 +8,12 @@ export class BinaryTreeService {
     userId = parseInt(String(userId));
     sponsorId = sponsorId ? parseInt(String(sponsorId)) : undefined;
 
-    // Verifica se o usuário já está na árvore
     const existingNode = await prisma.binaryTree.findUnique({ where: { userId } });
     if (existingNode) {
       throw new Error("Usuário já está na árvore.");
     }
 
-    // Se for o primeiro usuário da árvore, adiciona sem patrocinador
+
     const isFirstUser = await prisma.binaryTree.count() === 0;
     if (isFirstUser) {
       const rootNode = await prisma.binaryTree.create({
@@ -28,7 +27,6 @@ export class BinaryTreeService {
       return rootNode;
     }
 
-    // Se não for o primeiro usuário, precisa de um patrocinador
     if (!sponsorId) {
       throw new Error("Patrocinador é obrigatório para adicionar novos usuários.");
     }
@@ -38,7 +36,6 @@ export class BinaryTreeService {
       throw new Error("Patrocinador não encontrado.");
     }
 
-    // Verifica se a posição desejada está ocupada
     if (position === "left" && sponsorNode.leftChildId) {
       throw new Error("Posição à esquerda já ocupada.");
     }
@@ -46,7 +43,6 @@ export class BinaryTreeService {
       throw new Error("Posição à direita já ocupada.");
     }
 
-    // Cria o novo nó na árvore
     const newNode = await prisma.binaryTree.create({
       data: {
         userId,
@@ -56,7 +52,6 @@ export class BinaryTreeService {
       },
     });
 
-    // Atualiza o patrocinador para apontar para o novo nó
     await prisma.binaryTree.update({
       where: { userId: sponsorId },
       data: {
