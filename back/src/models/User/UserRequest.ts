@@ -9,4 +9,5 @@ export interface UserRequest {
   whatsapp: string;
   indication?: string;
   roles: Roles[];
+  code: string;
 }

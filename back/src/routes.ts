@@ -20,6 +20,7 @@ import { Search50MatrizController } from "./Controllers/Matriz/Search50MatrizCon
 import { MatrizController } from "./Controllers/User/MatrizController";
 import { TableTextController } from "./Controllers/TableText/TableTextController";
 import { BinaryTreeController } from "./Controllers/BinaryThree/BinaryThreeController";
+import { ChangePositionController } from "./Controllers/User/ChangePositionController";
 
 const router = Router();
 const resetUseCase = new PasswordResetUseCase();
@@ -39,6 +40,7 @@ const matriz50 = new Search50MatrizController();
 const matrizController = new MatrizController();
 const text = new TableTextController();
 const tree = new BinaryTreeController();
+const sideController = new ChangePositionController();
 
 // User Routes
 router.post('/user', new CreateUserController().handle);
@@ -49,9 +51,11 @@ router.post("/password-reset", (req, res) => passwordResetController.requestRese
 router.post("/login", login.handle);
 router.get("/all-users", isAuthenticated, new AllUserController().handle);
 router.get("/verify-user-matriz/:id",isAuthenticated, (req, res) => verifyUserInMatriz.execute(req, res));
+router.post('change-side/:id',isAuthenticated, (req, res) => sideController.handle(req, res));
 
 //Code Routes
 router.get("/generateCode/:userId",isAuthenticated, (req, res) => generateCode.generateInviteCode(req, res));
+router.get("/decodeCode/:inviteCode",isAuthenticated, (req, res) => generateCode.decodeInviteCode(req, res));
 
 //alocation in matriz
 router.post("/add-user-in-cooper/:indicator/:indicate",isAuthenticated, (req, res) => matrizCooper.handle(req, res));
@@ -76,5 +80,7 @@ router.delete("/table-text/:id",isAuthenticated, (req, res) => text.delete(req, 
 router.post("/binary-tree/add",isAuthenticated, (req, res) => tree.addUser(req, res));
 router.get("/binary-tree/:userId",isAuthenticated, (req, res) => tree.getUserTree(req, res));
 router.get("/binary-tree/position/:userId",isAuthenticated, (req, res) => tree.getUserPosition(req, res));
+router.get("/tree/:userId", (req, res) => tree.getTree(req, res));
+router.get("/binary-tree", tree.getEntireTree);
 
 export { router };

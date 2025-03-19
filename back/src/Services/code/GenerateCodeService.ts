@@ -1,15 +1,21 @@
 export class GenerateCodeService {
+    static decodeInviteCode(code: string) {
+      throw new Error('Method not implemented.');
+    }
+    private readonly secretKey = 's3cr3t';
 
     public generateInviteCode(userId: string): string {
-        const randomCode = Math.floor(userId.length * 10000 / 2);
-        const inviteCode = `${randomCode}${userId.length}`;
-        return inviteCode;
+        const encoded = Buffer.from(`${userId}-${this.secretKey}`).toString('base64');
+        return encoded.replace(/=/g, '');
     }
 
     public decodeInviteCode(code: string): string {
-        const userIdLength = parseInt(code.charAt(code.length - 1), 10);
-        const randomCode = parseInt(code.slice(0, -1), 10);
-        const originalUserId = Math.round(randomCode * 2 / userIdLength);
-        return originalUserId.toString();
+        try {
+            const decoded = Buffer.from(code, 'base64').toString('utf-8');
+            const [userId] = decoded.split('-');
+            return userId;
+        } catch (error) {
+            throw new Error('Código de convite inválido');
+        }
     }
 }
