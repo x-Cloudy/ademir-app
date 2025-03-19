@@ -23,9 +23,7 @@ const props = defineProps({
 
 const treeContainer = ref<HTMLElement | null>(null);
 
-// Função que gera recursivamente a árvore de Stern-Brocot
 function generateSternBrocotTree(depth: any, leftBound = { n: 0, d: 1 }, rightBound = { n: 1, d: 0 }) {
-  // Mediante (soma dos numeradores e soma dos denominadores)
   const mediant = { n: leftBound.n + rightBound.n, d: leftBound.d + rightBound.d }
 
   const node = {
@@ -81,7 +79,6 @@ watch(() => [props.userIds, props.depth], () => {
 </script>
 
 <style>
-/* Estilos para desenhar a árvore com linhas entre os nós */
 .tree {
   margin: 0;
   padding: 0;
@@ -91,27 +88,23 @@ watch(() => [props.userIds, props.depth], () => {
 }
 
 .tree::-webkit-scrollbar {
-  display: none; /* Chrome, Safari e Edge */
+  display: none;
 }
 
-/* O <ul> principal que contém a árvore */
 .tree ul {
   position: relative;
   padding: 1em 0;
   white-space: nowrap;
-  /* impede que quebre as linhas facilmente */
   margin: 0 auto;
   text-align: center;
 }
 
-/* Correção para evitar problemas de float */
 .tree ul::after {
   content: '';
   display: table;
   clear: both;
 }
 
-/* Cada li representa um nó e seus filhos */
 .tree li {
   display: inline-block;
   vertical-align: top;
@@ -120,18 +113,6 @@ watch(() => [props.userIds, props.depth], () => {
   position: relative;
   padding: 1em .5em 0 .5em;
 }
-
-/* Linhas que conectam o pai aos filhos (esquerdo e direito) */
-/* .tree li::before,
-.tree li::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  right: 50%;
-  border-top: 1px solid #ccc;
-  width: 50%;
-  height: 1em;
-} */
 
 .tree li::after {
   right: auto;

@@ -38,7 +38,7 @@
     </q-input>
 
     <q-input color="black" filled v-model="registerForm.wallet" :type="'text'" label="Carteira"
-      outlined :rules="[val => !!val || 'Carteira é obrigatória']">
+      outlined class="q-mb-md">
       <template v-slot:append>
         <q-icon name="wallet" />
       </template>

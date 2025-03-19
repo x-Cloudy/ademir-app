@@ -19,6 +19,15 @@
             <q-btn style="height: auto; font-weight: 600; font-size: 14px; font-family: Poppins;" class="bg-warning"
               type="submit">Adicionar Carteira</q-btn>
           </q-form>
+
+          <div class="q-mt-lg flex items-center justify-center">
+            <div class="flex no-wrap items-center justify-center">
+              <p style="margin: 0; font-weight: bold;">Esquerda</p>
+              <ToggleBtn @click="(value: any) => console.log(value())"/>
+              <p style="margin: 0; font-weight: bold;">Direita</p>
+            </div>
+          </div>
+
         </div>
       </div>
     </q-card>
@@ -70,6 +79,7 @@ import { useAuthStore } from 'src/stores/authStore';
 import { columns } from './ColumnSchema';
 import { onBeforeMount, ref } from 'vue';
 import isMobile from 'src/utils/isMobile';
+import ToggleBtn from 'src/components/Buttons/ToggleBtn.vue';
 
 type Col = { cols: { value: unknown; name: string; label: string }[] }
 const cols = (props: Col) => props.cols
