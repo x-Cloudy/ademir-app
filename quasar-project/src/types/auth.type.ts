@@ -12,6 +12,7 @@ export interface AuthUser {
   roles?: Role[]
   collaborator_id?: number,
   client?: AuthClient
+  sidePreference: string;
 }
 
 export interface UpdateAuthUser extends AuthUser {

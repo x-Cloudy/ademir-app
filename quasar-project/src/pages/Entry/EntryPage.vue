@@ -8,17 +8,20 @@ import MobileComponent from './components/MobileComponent.vue'
 import DesktopLogin from './components/DesktopLogin.vue'
 import isMobile from 'src/utils/isMobile'
 import { useAuthStore } from 'src/stores/authStore'
-import { onMounted } from 'vue'
+import { watch } from 'vue'
 import { useRouter } from 'vue-router'
 
 const authStore = useAuthStore()
 const router = useRouter()
 
-onMounted(async () => {
-  if (authStore.isLogged) {
-    await router.push("/home")
+watch(
+  () => authStore.isLogged,
+  async (value) => {
+    if (value) {
+      await router.push("/home")
+    }
   }
-})
+)
 </script>
 
 <style lang="scss" scoped>
@@ -29,5 +32,4 @@ onMounted(async () => {
   height: 650px;
   overflow: hidden;
 }
-
 </style>

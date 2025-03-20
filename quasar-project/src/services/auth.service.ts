@@ -76,14 +76,10 @@ export class AuthService {
     }
 
     void this.setAuth(localToken)
-    let user: AuthUser
+    let user = '' as any
     const token = localToken
 
-    if (localUser) {
-      user = localUser as AuthUser
-    } else {
-      user = await this.getUserInfo()
-    }
+    user = await this.getUserInfo()
 
     return { user, token }
   }
