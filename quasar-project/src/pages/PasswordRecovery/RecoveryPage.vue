@@ -28,7 +28,83 @@
 
       <!-- Right side with login form -->
       <div :class="isMobile() ? '' : 'col-6 q-pa-md bg-grey-3'">
-        <div class="column q-gutter-y-md">
+
+        <div v-if="email_sended">
+          <div class="text-center q-pt-lg">
+            <h5 class="q-mb-none text-dark" style="font-weight: bold; font-family: Poppins;">
+              Esqueceu sua senha?
+            </h5>
+            <p class="text-grey-7 q-mt-sm" style="font-size: 17px;">
+              Ensira o código <br /> que envinhamos para o seu email
+            </p>
+          </div>
+
+          <q-form class="q-gutter-y-md q-px-lg ">
+            <q-input class="q-mt-md" filled color="black" v-model="code" type="email" label="Digite o código recebido" outlined
+              :rules="[val => !!val || 'Código é obrigatório']">
+              <template v-slot:append>
+                <q-icon name="password" />
+              </template>
+            </q-input>
+
+            <GradBtn
+              :title="'Enviar'"
+              :type="'button'"
+              @btn-click="verify_code"
+            />
+
+            <div class="text-center q-gutter-y-sm">
+              <p class="text-grey-7 q-mb-none">
+                Voltar para login
+                <q-btn flat color="primary" label="Entrar" no-caps class="q-px-sm" padding="none"
+                  @click="router.push('/')" />
+              </p>
+            </div>
+          </q-form>
+        </div>
+
+        <div v-else-if="code_verified" class="column q-gutter-y-md">
+          <div class="text-center q-pt-lg">
+            <h5 class="q-mb-none text-dark" style="font-weight: bold; font-family: Poppins;">
+              Recuperar senha
+            </h5>
+            <p class="text-grey-7 q-mt-sm" style="font-size: 17px;">
+              Insira sua nova senha
+            </p>
+          </div>
+
+          <q-form class="q-gutter-y-md q-px-lg ">
+            <q-input filled color="black" v-model="new_password.password" type="text" label="Digite sua nova senha" outlined
+              :rules="[val => !!val || 'Senha é obrigatório']">
+              <template v-slot:append>
+                <q-icon name="password" />
+              </template>
+            </q-input>
+
+            <q-input filled color="black" v-model="new_password.same_password" type="text" label="Digite a senha novamente" outlined
+              :rules="[val => !!val || 'Senha é obrigatório']">
+              <template v-slot:append>
+                <q-icon name="password" />
+              </template>
+            </q-input>
+
+            <GradBtn
+              :title="'Enviar'"
+              :type="'button'"
+              @btn-click="change_password"
+            />
+
+            <div class="text-center q-gutter-y-sm">
+              <p class="text-grey-7 q-mb-none">
+                Voltar para login
+                <q-btn flat color="primary" label="Entrar" no-caps class="q-px-sm" padding="none"
+                  @click="router.push('/')" />
+              </p>
+            </div>
+          </q-form>
+        </div>
+
+        <div v-else class="column q-gutter-y-md">
           <div class="text-center q-pt-lg">
             <h5 class="q-mb-none text-dark" style="font-weight: bold; font-family: Poppins;">
               Esqueceu sua senha?
@@ -73,18 +149,83 @@ import { useRouter } from 'vue-router';
 import isMobile from 'src/utils/isMobile';
 import image from 'assets/LogoBrancasemfundo.png'
 import GradBtn from 'src/components/Buttons/GradBtn.vue';
+import notify from 'src/utils/Notify';
 
 const router = useRouter()
+const user_id = ref<any>('')
 const email = ref('')
+const code = ref('')
+const new_password = ref({
+  password: '',
+  same_password: ''
+})
+const email_sended = ref(false)
+const code_verified = ref(false)
+
+const change_password = async () => {
+  try {
+    const response = await api.put(`/user/${user_id.value}`, {
+      password: new_password.value.password
+    })
+    if (response.status === 200) {
+      code_verified.value = true;
+      email_sended.value = false;
+      notify({
+        type: 'positive',
+        msg: 'Código confirmado'
+      })
+    }
+  } catch (error) {
+    notify({
+        type: 'negative',
+        msg: 'Erro ao confirmar código'
+      })
+  }
+}
+
+const verify_code = async () => {
+  try {
+    const response = await api.post('/verify-code', {
+      code: code.value,
+      email: email.value
+    })
+    console.log(response)
+    if (response.status === 200) {
+      code_verified.value = true;
+      email_sended.value = false;
+
+      user_id.value = response.data.id
+      notify({
+        type: 'positive',
+        msg: 'Código confirmado'
+      })
+    }
+  } catch (error) {
+    notify({
+        type: 'negative',
+        msg: 'Erro ao confirmar código'
+      })
+  }
+}
 
 const handleReset = async () => {
   try {
     const response = await api.post('/password-reset', {
       email: email.value
     })
-    console.log('res', response)
-  } catch (error) {
-    console.log(error)
+    if (response.status === 200) {
+      email_sended.value = true;
+      notify({
+        type: 'positive',
+        msg: 'Email de verificação enviado'
+      })
+    }
+  } catch (error: any) {
+    console.log(error.response)
+    notify({
+        type: 'negative',
+        msg: `${error.response.data.error}`
+      })
   }
 }
 </script>

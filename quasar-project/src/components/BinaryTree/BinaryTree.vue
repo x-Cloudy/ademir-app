@@ -8,7 +8,7 @@ import { defineComponent, onMounted, ref } from "vue";
 
 export default defineComponent({
   props: {
-    treeData: Object, // A árvore binária como um objeto JSON
+    treeData: Object,
   },
   setup(props) {
     const treeContainer = ref(null);
@@ -62,7 +62,10 @@ export default defineComponent({
         .style("fill", (d) => d.data.sidePreference === "left" ? "#000000" : "#000000") // Azul para esquerda, vermelho para direita
         .style("stroke", "#000")  // Borda preta
         .style("stroke-width", "2px")
-        .style("filter", "drop-shadow(2px 4px 6px rgba(0,0,0,0.3))"); // Sombra para um efeito 3D
+        .style("filter", "drop-shadow(2px 4px 6px rgba(0,0,0,0.3))")
+        .on("click", (event, d) => {
+          console.log(event, d)
+        });
 
 
       svg
@@ -74,9 +77,13 @@ export default defineComponent({
         .attr("y", (d) => d.y + 5)
         .attr("text-anchor", "middle") // Centraliza o texto
         .style("font-size", "14px")
+        .style("text-transform", "Capitalize")
         .style("font-family", "Arial, sans-serif")
         .style("fill", "#F2C037") // Texto branco para contraste
-        .text((d) => d.data.name);
+        .text((d) => d.data.name)
+        .on("click", (event, d) => {
+          console.log(event, d)
+        });
     }
 
     return { treeContainer };
