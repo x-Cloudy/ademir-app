@@ -3,7 +3,7 @@ import  prisma  from "../prisma";
 
 export class VerifyMatriz {
     async reorganizarCooper() {
-
+        console.log('Reorganizando IDs...');
 
         const registros = await prisma.matrizCooper.findMany({
             orderBy: { id: 'asc' }
@@ -17,7 +17,7 @@ export class VerifyMatriz {
         }
     }
     async reorganizarSilver() {
-
+        console.log('Reorganizando IDs...');
 
         const registros = await prisma.matrizSilver.findMany({
             orderBy: { id: 'asc' }
@@ -31,6 +31,7 @@ export class VerifyMatriz {
         }
     }
     async reorganizarGold() {
+        console.log('Reorganizando IDs...');
 
         const registros = await prisma.matrizGold.findMany({
             orderBy: { id: 'asc' }
