@@ -1,31 +1,58 @@
 import { Request, Response } from "express";
 import { MailService } from "../../Config/mail/MailService";
-import { PasswordResetUseCase } from "../../Config/mail/token";
 import prismaClient from "../../prisma";
+MailService
 
 export class PasswordResetController {
-  constructor(
-    private resetUseCase: PasswordResetUseCase,
-    private mailService: MailService
-  ) {}
+  private mailService: MailService;
 
-  async requestReset(req: Request, res: Response) {
-    const { email } = req.body;
+  constructor() {
+    this.mailService = new MailService();
+  }
 
-    const user = await prismaClient.user.findUnique({
-        where: {
-          email: email,
-        },
-      });
+  async sendPasswordReset(req: Request, res: Response) {
+    const { email, name } = req.body;
+
+    const userAlreadyExists = await prismaClient.user.findFirst({
+      where: { email },
+    });
+
+    if (!userAlreadyExists) {
+      throw new Error("Email não cadastrado.");
+    }
+
+    try {
+      await this.mailService.sendPasswordReset(email);
+      return res.status(200).json({ message: "Código de recuperação enviado!" });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Erro ao enviar código de recuperação." });
+    }
+  }
+
+  async verifyCode(req: Request, res: Response) {
+  const { email, code } = req.body;
+
+  try {
+    const user = await prismaClient.user.findFirst({
+      where: { email },
+      select: { id: true },
+    });
 
     if (!user) {
-      return res.status(404).json({ error: "User not found" });
-    }      
+      return res.status(404).json({ message: "Usuário não encontrado." });
+    }
 
-    const token = await this.resetUseCase.generateResetToken(user.id);
+    const isValid = await this.mailService.verifyCode(email, code);
 
-    await this.mailService.sendPasswordReset(email, token);
-
-    return res.json({ message: "E-mail enviado para recuperação de senha." });
+    if (isValid) {
+      return res.status(200).json({id: user.id });
+    } else {
+      return res.status(400).json({ message: "Código inválido ou expirado." });
+    }
+  } catch (error) {
+    console.error("Erro ao verificar código:", error);
+    return res.status(500).json({ message: "Erro interno ao verificar o código." });
+    }
   }
 }

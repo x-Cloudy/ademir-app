@@ -8,56 +8,53 @@ datasource db {
 }
 
 model User {
-  id         Int    @id @default(autoincrement())
-  name       String
-  email      String   @unique
-  password   String
-  wallet     String?
-  whatsapp   String
-  active     Boolean   @default(true)
-  status     Boolean   @default(false)
-  matriz     String[]
-  roles      String[]
-  indication String?
-  plataform  String[]
-  sidePreference   String? 
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime?
-  deletedAt  DateTime?
-
-  MatrizCooper MatrizCooper[]
-  MatrizSilver MatrizSilver[]
-  MatrizGold   MatrizGold[]
+  name            String
+  email           String            @unique
+  password        String
+  wallet          String?
+  whatsapp        String
+  active          Boolean           @default(true)
+  matriz          String[]
+  createdAt       DateTime          @default(now())
+  id              Int               @id @default(autoincrement())
+  deletedAt       DateTime?
+  status          Boolean           @default(false)
+  updatedAt       DateTime?
+  plataform       String[]
+  indication      String?
+  roles           String[]
+  binaryTreeid    Int?
+  sidePreference  String?
+  codeInvite      String            @default("MTctczNjcjN0")
+  BinaryTree      BinaryTree?
+  IndicateNominee IndicateNominee[] @relation("IndicatedUser")
+  Indicates       Indicates?
+  MatrizCooper    MatrizCooper[]
+  MatrizGold      MatrizGold[]
+  MatrizSilver    MatrizSilver[]
+  binaryTree      BinaryTree?       @relation("SponsorUser", fields: [binaryTreeid], references: [id])
 
   @@map("users")
-
-  Indicates Indicates[]
-  IndicateNominee IndicateNominee[] @relation("IndicatedUser")
-  binaryTree BinaryTree? @relation("SponsorUser", fields: [binaryTreeid], references: [id])
-  binaryTreeid Int?
-  BinaryTree BinaryTree[] 
 }
 
 model Indicates {
-  id       Int    @id @default(autoincrement())
-  userId   Int    @unique
-  indicate User   @relation(fields: [userId], references: [id])
-  count    Int
-  nominees String[]
-  
+  id               Int               @id @default(autoincrement())
+  userId           Int               @unique
+  nominees         String[]
+  count            Int
   indicateNominees IndicateNominee[] @relation("IndicatesToIndicateNominee")
+  indicate         User              @relation(fields: [userId], references: [id])
 
   @@map("indicates")
 }
 
 model IndicateNominee {
-  id          Int      @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   indicatesId Int
   indicateeId Int
-  insertedAt  DateTime @default(now())
-
-  indicates   Indicates @relation(fields: [indicatesId], references: [id], name: "IndicatesToIndicateNominee")
-  indicatee   User      @relation(fields: [indicateeId], references: [id], name: "IndicatedUser")
+  insertedAt  DateTime  @default(now())
+  indicatee   User      @relation("IndicatedUser", fields: [indicateeId], references: [id])
+  indicates   Indicates @relation("IndicatesToIndicateNominee", fields: [indicatesId], references: [id])
 
   @@map("indicate_nominee")
 }
@@ -132,61 +129,62 @@ model sessions {
   @@index([last_activity], map: "sessions_last_activity_index")
   @@index([user_id], map: "sessions_user_id_index")
 }
+
 model MatrizCooper {
-  id        Int    @id @default(autoincrement()) 
-  userId    Int
-  user      User   @relation(fields: [userId], references: [id])
-  order     Int
+  id     Int  @id @default(autoincrement())
+  userId Int
+  order  Int
+  user   User @relation(fields: [userId], references: [id])
 
   @@map("matriz_cooper")
 }
 
 model MatrizSilver {
-  id        Int    @id @default(autoincrement()) 
-  userId    Int
-  user      User   @relation(fields: [userId], references: [id])
-  order     Int
+  id     Int  @id @default(autoincrement())
+  userId Int
+  order  Int
+  user   User @relation(fields: [userId], references: [id])
 
   @@map("matriz_silver")
 }
 
-model MatrizGold{
-  id        Int    @id @default(autoincrement()) 
-  userId    Int    
-  user      User   @relation(fields: [userId], references: [id])
-  order     Int
-  
+model MatrizGold {
+  id     Int  @id @default(autoincrement())
+  userId Int
+  order  Int
+  user   User @relation(fields: [userId], references: [id])
+
   @@map("matriz_gold")
 }
 
 model tableText {
-  id        Int    @id @default(autoincrement())
-  text      String? @db.Text
+  id   Int     @id @default(autoincrement())
+  text String?
 }
 
 model BinaryTree {
-  id          Int      @id @default(autoincrement())
-  userId      Int      @unique
-  user        User     @relation(fields: [userId], references: [id])
-
-  sponsorId   Int?     
-  sponsor     BinaryTree? @relation("SponsorUser", fields: [sponsorId], references: [id])
-  sponsored   BinaryTree[] @relation("SponsorUser")
-
-  leftChildId Int?     
-  leftChild   BinaryTree? @relation("LeftChild", fields: [leftChildId], references: [id])
-  leftChildren BinaryTree[] @relation("LeftChild")
-
-  rightChildId Int?    
-  rightChild  BinaryTree? @relation("RightChild", fields: [rightChildId], references: [id])
+  id            Int          @id @default(autoincrement())
+  userId        Int          @unique
+  sponsorId     Int?
+  leftChildId   Int?
+  rightChildId  Int?
+  createdAt     DateTime     @default(now())
+  leftChild     BinaryTree?  @relation("LeftChild", fields: [leftChildId], references: [id])
+  leftChildren  BinaryTree[] @relation("LeftChild")
+  rightChild    BinaryTree?  @relation("RightChild", fields: [rightChildId], references: [id])
   rightChildren BinaryTree[] @relation("RightChild")
-
-  createdAt   DateTime @default(now())
+  sponsor       BinaryTree?  @relation("SponsorUser", fields: [sponsorId], references: [id])
+  sponsored     BinaryTree[] @relation("SponsorUser")
+  user          User         @relation(fields: [userId], references: [id])
+  User          User[]       @relation("SponsorUser")
 
   @@map("binary_tree")
-  User User[] @relation("SponsorUser")
 }
 
-
-
-
+model PasswordResetToken1 {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  code      String
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+}
