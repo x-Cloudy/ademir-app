@@ -1,5 +1,5 @@
 <template>
-  <div v-if="tree.id">
+  <div class="flex justify-center items-center" v-if="tree.id">
     <BinaryTree :treeData="tree"/>
   </div>
 </template>

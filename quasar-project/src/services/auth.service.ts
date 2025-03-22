@@ -55,6 +55,7 @@ export class AuthService {
     const url = '/me'
     try {
       const response = await api.get<AuthUser>(url)
+      console.log('me', response)
       return response.data
     } catch (error) {
       this.clearAuth()

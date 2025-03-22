@@ -6,6 +6,7 @@ export interface AuthUser {
   id: number
   name: string
   last_name: string
+  codeInvite: string
   email: string
   avatar?: string
   avatar_url?: string

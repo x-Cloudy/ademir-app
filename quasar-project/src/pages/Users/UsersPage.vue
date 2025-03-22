@@ -15,7 +15,9 @@
       </div>
     </q-card>
 
-    <q-table :rows="users" :columns="tableColumn" style="width: 100%;">
+    <q-table :rows="users" :columns="tableColumn" :pagination="{
+      rowsPerPage: 50
+    }" style="width: 100%;">
       <template v-slot:header="props">
         <q-tr :props="props">
           <q-th v-for="col in cols(props)" :key="col.name" :props="props" class="text-white"
@@ -28,7 +30,7 @@
       </template>
 
       <template v-slot:body-cell-actions="props">
-        <q-td :props="props" style="display: flex; justify-content: center;">
+        <q-td :props="props" >
           <q-btn @click="() => {
             editForm.user = props.row
             editForm.id = props.row.id
