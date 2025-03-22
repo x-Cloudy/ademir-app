@@ -55,6 +55,7 @@ export class AuthService {
     const url = '/me'
     try {
       const response = await api.get<AuthUser>(url)
+      console.log('me', response)
       return response.data
     } catch (error) {
       this.clearAuth()
@@ -76,14 +77,10 @@ export class AuthService {
     }
 
     void this.setAuth(localToken)
-    let user: AuthUser
+    let user = '' as any
     const token = localToken
 
-    if (localUser) {
-      user = localUser as AuthUser
-    } else {
-      user = await this.getUserInfo()
-    }
+    user = await this.getUserInfo()
 
     return { user, token }
   }

@@ -1,50 +1,40 @@
 <template>
-  <!-- <div v-if="hasAccess(['Cripto', 'admin'])" id="app">
-    <UserPyramid style="scale: 0.8;" :userIds="users"
-    :depth="isMobile() ? 2 : 3"/>
+  <div class="flex justify-center items-center" v-if="tree.id">
+    <BinaryTree :treeData="tree"/>
   </div>
-
-  <RestrictPage v-else /> -->
-  <BinaryTree :treeData="tree"/>
 </template>
 
 <script setup lang="ts">
-import UserPyramid from 'src/components/Pyramid/UserPyramid.vue'
-import RestrictPage from 'src/components/RestrictPage/RestrictPage.vue';
-import { hasAccess } from 'src/utils/can-access';
-import isMobile from 'src/utils/isMobile';
 import BinaryTree from 'src/components/BinaryTree/BinaryTree.vue';
+import { api } from 'src/boot/axios';
+import { useAuthStore } from 'src/stores/authStore';
+import { onBeforeMount, ref } from 'vue';
 
-const users = Array.from({ length: 100 }, (_, index) => ({
-  id: index + 1,
-  nome: `Usuário ${index + 1}`,
-}));
+const authStore = useAuthStore()
+const tree = ref<any>({})
 
-const tree = {
-  id: 1,
-  name: "Juan",
-  sidePreference: "right",
-  left: {
-    id: 2,
-    name: "Maria",
-    sidePreference: "left",
-    left: null,
-    right: null
-  },
-  right: {
-    id: 3,
-    name: "Carlos",
-    sidePreference: "right",
-    left: {},
-    right: {
-      id: 4,
-      name: "Ana",
-      sidePreference: "left",
-      left: null,
-      right: null
-    }
+const getTreeData = async () => {
+  try {
+    const response = await api.get(`/tree/${authStore.user.id}`);
+    const children = response.data.children
+    tree.value = children
+    console.log(tree.value)
+  } catch (error) {
+    console.log(error)
   }
-};
+}
+
+// const tree = {
+//   id: 1,
+//   name: "Juan",
+//   sidePreference: "right",
+//   left: {},
+//   right: {}
+// };
+
+onBeforeMount(async () => {
+  await getTreeData()
+})
 </script>
 
 <style scoped>

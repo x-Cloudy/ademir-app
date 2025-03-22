@@ -99,24 +99,17 @@ export const useAuthStore = defineStore('auth', {
       document.location.reload()
     },
 
-    async me(): Promise<void> {
-      authService.setAuth(this.token)
-      this.user = await authService.getUserInfo()
-      LocalStorage.set(USER_STORAGE_KEY, this.user)
-      LocalStorage.set(TOKEN_STORAGE_KEY, this.token)
-    },
-
     async getUserInfo(): Promise<void> {
       if (!this.token) return
-      if (this.user && this.user.id) return
+      // if (this.user && this.user.id) return
 
       const result = await authService.getUserInfo();
       this.user = result
       LocalStorage.set(USER_STORAGE_KEY, this.user)
 
-      // if (!result.id) {
-      //   this.clearAuth()
-      // }
+      if (!result.id) {
+        this.clearAuth()
+      }
     },
 
     async loadAuth() {
@@ -150,88 +143,6 @@ export const useAuthStore = defineStore('auth', {
           message: errorMessage,
           color: 'negative'
         })
-      })
-    },
-
-    async sendPasswordResetEmail(email: string): Promise<void> {
-      if (!email) return
-      this.loading = true
-      this.emailsSent = false
-
-      await authService.sendPasswordResetEmail(email).then(({ data }) => {
-        if (data?.token) {
-
-          LocalStorage.set(USER_EMAIL_RECOVERY_PASSWORD_KEY, email)
-          LocalStorage.set(USER_TOKEN_RECOVERY_PASSWORD_KEY, data?.token)
-          // sessionStorage.setItem(TOKEN_STORAGE_KEY, data?.token)
-          // sessionStorage.setItem(USER_TOKEN_RECOVERY_PASSWORD_KEY, email)
-        }
-        this.emailsSent = true
-
-        if (data?.message) {
-          Notify.create({
-            message: data.message as string,
-            color: 'success'
-          })
-        }
-
-      })
-        .catch((data: any) => {
-          this.emailsSent = false
-
-          if (data.response?.data?.message) {
-            Notify.create({
-              message: data.response?.data?.message as string,
-              color: 'negative'
-            })
-          }
-
-        })
-        .finally(() => {
-          this.loading = false
-        })
-    },
-
-    async confirmationCode(code: string): Promise<void> {
-      this.loading = true
-      await authService.confirmationCode(code, LocalStorage.getItem(USER_TOKEN_RECOVERY_PASSWORD_KEY) as string).then(() => {
-        LocalStorage.set(USER_CODE_RECOVERY_PASSWORD_KEY, code)
-      }).catch((data: any) => {
-        if (data.response?.data?.message) {
-          Notify.create({
-            message: data.response?.data?.message as string,
-            color: 'negative'
-          })
-        }
-
-      }).finally(() => {
-        this.loading = false
-      })
-    },
-
-    async resetPassword(password: string, token: string, code: string): Promise<void> {
-      this.loading = true
-      await authService.resetPassword(password, token, code).then(({ data }) => {
-        this.successUpdatePassword = true
-        if (data?.message) {
-          Notify.create({
-            message: data.message as string,
-            color: 'success'
-          })
-        }
-
-      }).catch((data: any) => {
-        this.successUpdatePassword = false
-
-        if (data.response?.data?.message) {
-          Notify.create({
-            message: data.response?.data?.message as string,
-            color: 'negative'
-          })
-        }
-
-      }).finally(() => {
-        this.loading = false
       })
     },
 

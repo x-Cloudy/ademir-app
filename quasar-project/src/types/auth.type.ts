@@ -6,12 +6,14 @@ export interface AuthUser {
   id: number
   name: string
   last_name: string
+  codeInvite: string
   email: string
   avatar?: string
   avatar_url?: string
   roles?: Role[]
   collaborator_id?: number,
   client?: AuthClient
+  sidePreference: string;
 }
 
 export interface UpdateAuthUser extends AuthUser {
