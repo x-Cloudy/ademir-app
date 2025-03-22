@@ -25,7 +25,7 @@ model User {
   roles           String[]
   binaryTreeid    Int?
   sidePreference  String?
-  codeInvite      String            @default("MTctczNjcjN0")
+  codeInvite      String            @default("MS1zM2NyM3Q")
   BinaryTree      BinaryTree?
   IndicateNominee IndicateNominee[] @relation("IndicatedUser")
   Indicates       Indicates?

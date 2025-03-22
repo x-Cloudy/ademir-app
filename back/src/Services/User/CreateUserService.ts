@@ -5,7 +5,7 @@ import { GenerateCodeService } from "../code/GenerateCodeService";
 import { BinaryTreeService } from "../BinaryTree/BinaryTreeService";
 
 class CreateUserService {
-  async execute({ name, email, password, wallet, whatsapp, indication, roles, code }: UserRequest) {
+  async execute({ name, email, password, wallet, whatsapp, indication, roles, code}: UserRequest) {
     if (!name) throw new Error("O campo nome é obrigatório.");
     if (!email) throw new Error("O campo email é obrigatório.");
     if (!password) throw new Error("A senha não pode ser vazia.");
@@ -38,7 +38,7 @@ class CreateUserService {
         roles,
         indication,
         active: true,
-        codeInvite: code
+        codeInvite: indication
       },
       select: { id: true, name: true, email: true, codeInvite:true },
     });
