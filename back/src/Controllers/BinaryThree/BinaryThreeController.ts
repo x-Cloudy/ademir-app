@@ -46,13 +46,15 @@ export class BinaryTreeController {
 
   async getTree(req: Request, res: Response): Promise<Response> {
     try {
-      const { userId } = req.params;
+      const { userId, maxDepth } = req.params;
+      const level = 0;
       const userIdNumber = parseInt(userId, 10);
+      const depth = parseInt(maxDepth, 10);
       if (isNaN(userIdNumber)) {
         return res.status(400).json({ error: "userId deve ser um número válido." });
       }
 
-      const children = await this.getTreeChildren.getTreeChildren(userIdNumber);
+      const children = await this.getTreeChildren.getTreeChildren(userIdNumber, level, depth);
       return res.json({ children });
     } catch (error) {
       return res.status(404).json({ error: "Árvore vazia." });
