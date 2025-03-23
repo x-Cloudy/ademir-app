@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "users" ALTER COLUMN "codeInvite" DROP NOT NULL,
+ALTER COLUMN "codeInvite" DROP DEFAULT;
