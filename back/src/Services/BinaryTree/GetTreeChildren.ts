@@ -1,8 +1,14 @@
 import prismaClient from "../../prisma";
 
-export class BinaryTreeService {
-  async getTreeChildren(userId: number, level: number = 0, maxDepth: number = 15): Promise<any[]> {
-    if (level >= maxDepth) return []; // Limita a profundidade em 15 níveis
+
+export class GetTreeChildren {
+  private getFirstName(fullName: string): string {
+    if (!fullName) return "";
+    return fullName.split(" ")[0];
+  }
+
+  public async getTreeChildren(userId: number, level: number = 0, maxDepth: number): Promise<any> {
+    if (level >= maxDepth) return {}; // Limita a profundidade, retornando objeto vazio
 
     // Busca os filhos do usuário na árvore
     const userTree = await prismaClient.binaryTree.findFirst({

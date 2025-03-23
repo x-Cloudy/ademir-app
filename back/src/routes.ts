@@ -80,7 +80,7 @@ router.delete("/table-text/:id",isAuthenticated, (req, res) => text.delete(req, 
 router.post("/binary-tree/add",isAuthenticated, (req, res) => tree.addUser(req, res));
 router.get("/binary-tree/:userId",isAuthenticated, (req, res) => tree.getUserTree(req, res));
 router.get("/binary-tree/position/:userId",isAuthenticated, (req, res) => tree.getUserPosition(req, res));
-router.get("/tree/:userId", (req, res) => tree.getTree(req, res));
+router.get("/tree/:userId/:maxDepth", (req, res) => tree.getTree(req, res));
 router.get("/binary-tree", tree.getEntireTree);
 
 export { router };
