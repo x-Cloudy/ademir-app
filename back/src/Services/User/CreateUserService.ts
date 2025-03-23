@@ -5,19 +5,15 @@ import { GenerateCodeService } from "../code/GenerateCodeService";
 import { BinaryTreeService } from "../BinaryTree/BinaryTreeService";
 
 class CreateUserService {
-  async execute({ name, email, password, wallet, whatsapp, indication, roles, code}: UserRequest) {
+  async execute({ name, email, password, wallet, whatsapp, indication, roles, code }: UserRequest) {
     if (!name) throw new Error("O campo nome é obrigatório.");
     if (!email) throw new Error("O campo email é obrigatório.");
     if (password.length < 6) {
       throw new Error("A senha deve ter pelo menos 6 caracteres.");
     }
+    if (!wallet) throw new Error("O campo wallet é obrigatório.");
     if (!whatsapp) throw new Error("O campo whatsapp é obrigatório.");
     if (!roles || roles.length === 0) throw new Error("O campo roles é obrigatório.");
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      throw new Error("O e-mail informado é inválido.");
-    }
 
     const userAlreadyExists = await prismaClient.user.findFirst({
       where: { email },
@@ -39,10 +35,9 @@ class CreateUserService {
         whatsapp,
         roles,
         indication,
-        active: true,
-        codeInvite: indication
+        active: true, // Sempre ativo ao ser criado
       },
-      select: { id: true, name: true, email: true, codeInvite:true },
+      select: { id: true, name: true, email: true },
     });
 
     enum Roles {
@@ -51,6 +46,7 @@ class CreateUserService {
       Moderator = "Moderator",
       Invistribe = "Invistribe",
     }
+    
 
     // Processar código de indicação, se existir
     if (code) {
@@ -80,9 +76,8 @@ class CreateUserService {
         });
     } else {
         // Caso contrário, adiciona na árvore binária usando o lado do patrocinador
-        const indicate = String(user.id);;
         const binaryTreeService = new BinaryTreeService();
-        await binaryTreeService.addUserToTree(code, indicate);
+        await binaryTreeService.addUserToTree(user.id, sponsorUser.id, sponsorUser.sidePreference);
       }
     }
 

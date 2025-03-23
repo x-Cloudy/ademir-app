@@ -75,6 +75,7 @@
           </h4>
         </div>
       </q-card>
+      <WppBtn />
     </div>
   </div>
 
@@ -88,6 +89,7 @@ import { api } from 'src/boot/axios';
 import isMobile from 'src/utils/isMobile';
 import { hasAccess } from 'src/utils/can-access';
 import RestrictPage from 'src/components/RestrictPage/RestrictPage.vue';
+import WppBtn from 'src/components/Buttons/WppBtn.vue';
 
 const hasTop = ref<boolean>(true)
 

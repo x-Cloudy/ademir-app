@@ -3,17 +3,19 @@ export const roles = ['admin', 'Invistribe', 'Cripto'] as const
 export type Role = typeof roles[number]
 
 export interface AuthUser {
-  id: number
-  name: string
-  last_name: string
-  codeInvite: string
-  email: string
-  avatar?: string
-  avatar_url?: string
-  roles?: Role[]
+  id: number;
+  name: string;
+  last_name: string;
+  codeInvite: string;
+  email: string;
+  avatar?: string;
+  avatar_url?: string;
+  roles?: Role[];
   collaborator_id?: number,
-  client?: AuthClient
+  client?: AuthClient;
   sidePreference: string;
+  active: boolean;
+  status: boolean;
 }
 
 export interface UpdateAuthUser extends AuthUser {

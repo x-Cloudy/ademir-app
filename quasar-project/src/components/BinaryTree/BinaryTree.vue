@@ -5,13 +5,16 @@
 
 <script>
 import * as d3 from "d3";
-import { defineComponent, onMounted, ref } from "vue";
+import { defineComponent, onMounted, ref, defineEmits } from "vue";
 
 export default defineComponent({
   props: {
     treeData: Object,
   },
-  setup(props) {
+
+  emits: ['userPosition'],
+
+  setup(props, { emit }) {
     const treeContainer = ref(null);
 
     onMounted(() => {
@@ -42,7 +45,7 @@ export default defineComponent({
       });
 
       // Define o layout da árvore
-      const treeLayout = d3.tree().size([600, 500]);
+      const treeLayout = d3.tree().size([800, 700]);
       const treeData = treeLayout(hierarchyData);
 
       // Desenha os links (curvas) entre nós
@@ -72,8 +75,9 @@ export default defineComponent({
         .style("stroke", "#000")
         .style("stroke-width", "2px")
         .style("filter", "drop-shadow(2px 4px 6px rgba(0,0,0,0.3))")
+        .style("cursor", "pointer")
         .on("click", (event, d) => {
-          console.log(d.data.sidePreference);
+          emit("userPosition", d.data.id)
         });
 
       // Desenha os textos (labels)
@@ -87,9 +91,10 @@ export default defineComponent({
         .style("font-size", "14px")
         .style("font-family", "Arial, sans-serif")
         .style("fill", "#F2C037")
+        .style("cursor", "pointer")
         .text((d) => d.data.name)
         .on("click", (event, d) => {
-          console.log(d.data.sidePreference);
+          emit("userPosition", d.data.id)
         });
 
       // ------------------------------------
