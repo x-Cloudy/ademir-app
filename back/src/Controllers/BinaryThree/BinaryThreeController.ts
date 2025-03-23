@@ -45,15 +45,7 @@ export class BinaryTreeController {
     }
 
     try {
-      const { userId, maxDepth } = req.params;
-      const level = 0;
-      const userIdNumber = parseInt(userId, 10);
-      const depth = parseInt(maxDepth, 10);
-      if (isNaN(userIdNumber)) {
-        return res.status(400).json({ error: "userId deve ser um número válido." });
-      }
-
-      const children = await this.getTreeChildren.getTreeChildren(userIdNumber, level, depth);
+      const children = await this.binaryTreeService.getTreeChildren(userIdNumber);
 
       return res.json({ children });
     } catch (error) {
