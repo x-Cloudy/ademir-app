@@ -17,6 +17,7 @@ import { useAuthStore } from 'src/stores/authStore';
 import { api } from 'src/boot/axios';
 import ToggleBtn from './ToggleBtn.vue';
 import notify from 'src/utils/Notify';
+import { onMounted } from 'vue';
 
 const authStore = useAuthStore()
 const emit = defineEmits(['sideSelect'])

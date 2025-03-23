@@ -3,8 +3,8 @@
     <div class="q-my-lg" style="margin-bottom: 5rem;">
       <h2 class="main-title" style="
         font-family: arial black;
-        font-weight: 400; 
-        text-align: center; 
+        font-weight: 400;
+        text-align: center;
         margin: 0;
         ">
         SEJA BEM VINDO AO <br />
@@ -84,11 +84,12 @@
       </h5>
     </div>
   </div>
-
-  <q-page-sticky position="bottom-right" :offset="[30, 30]">
-      <q-btn fab icon="chat" style="color: black; background-color: #F2C037;"/>
-  </q-page-sticky>
+  <WppBtn />
 </template>
+
+<script setup lang="ts">
+import WppBtn from 'src/components/Buttons/WppBtn.vue';
+</script>
 
 <style scoped>
 .title {

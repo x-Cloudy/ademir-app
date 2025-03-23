@@ -12,7 +12,7 @@
         </div>
       </div>
 
-      <GradBtn @btn-click="dialog = true" class="q-mt-md" :title="'Entrar'" />
+      <GradBtn :disable="authStore.user.status" @btn-click="dialog = true" class="q-mt-md" :title="authStore.user.status ? 'Você está na árvore' : 'Entrar'" />
     </q-card>
 
     <q-card v-if="hasAccess(['Invistribe', 'admin'])" class="flex items-end q-mb-md card-custom">
@@ -120,7 +120,6 @@ const treeJoin = async () => {
   if (response.status > 200 && response.status < 300) {
     dialog.value = false;
   }
-  console.log('xx', response)
 }
 </script>
 

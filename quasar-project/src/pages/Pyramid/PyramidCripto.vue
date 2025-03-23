@@ -1,6 +1,7 @@
 <template>
   <div class="flex justify-center items-center" v-if="tree.id">
     <BinaryTree :treeData="tree"/>
+    <WppBtn />
   </div>
 </template>
 
@@ -9,6 +10,7 @@ import BinaryTree from 'src/components/BinaryTree/BinaryTree.vue';
 import { api } from 'src/boot/axios';
 import { useAuthStore } from 'src/stores/authStore';
 import { onBeforeMount, ref } from 'vue';
+import WppBtn from 'src/components/Buttons/WppBtn.vue';
 
 const authStore = useAuthStore()
 const tree = ref<any>({})

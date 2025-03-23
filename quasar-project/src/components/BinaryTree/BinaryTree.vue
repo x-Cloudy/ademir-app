@@ -42,7 +42,7 @@ export default defineComponent({
       });
 
       // Define o layout da árvore
-      const treeLayout = d3.tree().size([600, 500]);
+      const treeLayout = d3.tree().size([800, 700]);
       const treeData = treeLayout(hierarchyData);
 
       // Desenha os links (curvas) entre nós
