@@ -9,6 +9,7 @@ export class GetTreeChildren {
   public async getTreeChildren(userId: number, level: number = 0, maxDepth: number): Promise<any> {
     if (level >= maxDepth) return {}; // Limita a profundidade, retornando objeto vazio
 
+
     // Busca o nó da árvore do usuário, incluindo os dados do usuário atual e os filhos
     const node = await prismaClient.binaryTree.findUnique({
       where: { userId },

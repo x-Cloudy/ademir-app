@@ -55,6 +55,7 @@ export class BinaryTreeController {
       }
 
       const children = await this.getTreeChildren.getTreeChildren(userIdNumber, level, depth);
+
       return res.json({ children });
     } catch (error) {
       return res.status(404).json({ error: "Árvore vazia." });

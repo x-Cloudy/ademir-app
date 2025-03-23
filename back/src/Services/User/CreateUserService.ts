@@ -8,9 +8,12 @@ class CreateUserService {
   async execute({ name, email, password, wallet, whatsapp, indication, roles, code}: UserRequest) {
     if (!name) throw new Error("O campo nome é obrigatório.");
     if (!email) throw new Error("O campo email é obrigatório.");
+
     if (password.length < 6) {
       throw new Error("A senha deve ter pelo menos 6 caracteres.");
     }
+
+    if (!wallet) throw new Error("O campo wallet é obrigatório.");
     if (!whatsapp) throw new Error("O campo whatsapp é obrigatório.");
     if (!roles || roles.length === 0) throw new Error("O campo roles é obrigatório.");
 
