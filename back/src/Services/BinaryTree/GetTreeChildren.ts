@@ -1,6 +1,5 @@
 import prismaClient from "../../prisma";
 
-
 export class GetTreeChildren {
   private getFirstName(fullName: string): string {
     if (!fullName) return "";
@@ -10,29 +9,35 @@ export class GetTreeChildren {
   public async getTreeChildren(userId: number, level: number = 0, maxDepth: number): Promise<any> {
     if (level >= maxDepth) return {}; // Limita a profundidade, retornando objeto vazio
 
-    // Busca os filhos do usuário na árvore
-    const userTree = await prismaClient.binaryTree.findFirst({
+
+    // Busca o nó da árvore do usuário, incluindo os dados do usuário atual e os filhos
+    const node = await prismaClient.binaryTree.findUnique({
       where: { userId },
       select: {
-        leftChildren: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            sidePreference: true,
+          },
+        },
+        leftChild: {
           select: {
             user: {
               select: {
                 id: true,
                 name: true,
-                email: true,
                 sidePreference: true,
               },
             },
           },
         },
-        rightChildren: {
+        rightChild: {
           select: {
             user: {
               select: {
                 id: true,
                 name: true,
-                email: true,
                 sidePreference: true,
               },
             },
@@ -41,20 +46,23 @@ export class GetTreeChildren {
       },
     });
 
-    // Se não houver filhos, retorna array vazio
-    if (!userTree) return [];
+    // Se não encontrar o nó ou os dados do usuário, retorna objeto vazio
+    if (!node || !node.user) return {};
 
-    let children = [
-      ...userTree.leftChildren.map((child) => child.user),
-      ...userTree.rightChildren.map((child) => child.user),
-    ];
+    // Obtém recursivamente os filhos; se não existirem, retorna objeto vazio
+    const left = node.leftChild
+      ? await this.getTreeChildren(node.leftChild.user.id, level + 1, maxDepth)
+      : {};
+    const right = node.rightChild
+      ? await this.getTreeChildren(node.rightChild.user.id, level + 1, maxDepth)
+      : {};
 
-    // Recursivamente pega os filhos dos filhos, até o limite
-    for (const child of children) {
-      const childTree = await this.getTreeChildren(child.id, level + 1, maxDepth);
-      children = [...children, ...childTree];
-    }
-
-    return children;
+    return {
+      id: node.user.id,
+      name: this.getFirstName(node.user.name),
+      sidePreference: node.user.sidePreference,
+      left,
+      right,
+    };
   }
 }

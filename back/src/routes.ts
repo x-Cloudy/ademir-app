@@ -21,12 +21,13 @@ import { MatrizController } from "./Controllers/User/MatrizController";
 import { TableTextController } from "./Controllers/TableText/TableTextController";
 import { BinaryTreeController } from "./Controllers/BinaryThree/BinaryThreeController";
 import { ChangePositionController } from "./Controllers/User/ChangePositionController";
+import { IndicationsController } from "./Controllers/User/IndicationsController";
 
 const router = Router();
 const resetUseCase = new PasswordResetUseCase();
 const updateUser = new UpdateUserController();
 const mailService = new MailService();
-const passwordResetController = new PasswordResetController(resetUseCase, mailService);
+const passwordResetController = new PasswordResetController();
 const login = new AuthenticateUserController();
 const generateCode = new GenerateCodeController();
 const verifyUserInMatriz = new VerifyUserMatrizController();
@@ -41,17 +42,23 @@ const matrizController = new MatrizController();
 const text = new TableTextController();
 const tree = new BinaryTreeController();
 const sideController = new ChangePositionController();
+const indicationsController = new IndicationsController();
+const allUserController = new AllUserController();
 
 // User Routes
 router.post('/user', new CreateUserController().handle);
 router.put('/user/:id', isAuthenticated, updateUser.handle);
 router.get("/me", isAuthenticated, meController.handle);
 router.delete('/user/:id', isAuthenticated, new RemoveUserController().handle);
-router.post("/password-reset", (req, res) => passwordResetController.requestReset(req, res));
 router.post("/login", login.handle);
 router.get("/all-users", isAuthenticated, new AllUserController().handle);
 router.get("/verify-user-matriz/:id",isAuthenticated, (req, res) => verifyUserInMatriz.execute(req, res));
 router.post('change-side/:id',isAuthenticated, (req, res) => sideController.handle(req, res));
+router.post('/change-password',(req, res) => allUserController.passwordChange(req, res));
+
+//reset password
+router.post("/password-reset", passwordResetController.sendPasswordReset.bind(passwordResetController));
+router.post("/verify-code", passwordResetController.verifyCode.bind(passwordResetController));
 
 //Code Routes
 router.get("/generateCode/:userId",isAuthenticated, (req, res) => generateCode.generateInviteCode(req, res));
@@ -80,7 +87,9 @@ router.delete("/table-text/:id",isAuthenticated, (req, res) => text.delete(req, 
 router.post("/binary-tree/add",isAuthenticated, (req, res) => tree.addUser(req, res));
 router.get("/binary-tree/:userId",isAuthenticated, (req, res) => tree.getUserTree(req, res));
 router.get("/binary-tree/position/:userId",isAuthenticated, (req, res) => tree.getUserPosition(req, res));
-router.get("/tree/:userId/:maxDepth", (req, res) => tree.getTree(req, res));
+router.get("/tree/:userId", (req, res) => tree.getTree(req, res));
 router.get("/binary-tree", tree.getEntireTree);
+
+router.get("/indications/:userId", (req, res) =>indicationsController.getIndications(req, res));
 
 export { router };

@@ -18,7 +18,9 @@ export class MeService {
                 wallet: true,
                 active: true,
                 roles: true,
-                status: true
+                status: true,
+                sidePreference: true,
+                codeInvite:true
             },
         });
 
