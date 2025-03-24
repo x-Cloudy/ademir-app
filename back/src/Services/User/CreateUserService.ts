@@ -5,7 +5,7 @@ import { GenerateCodeService } from "../code/GenerateCodeService";
 import { BinaryTreeService } from "../BinaryTree/BinaryTreeService";
 
 class CreateUserService {
-  async execute({ name, email, password, wallet, whatsapp, indication, roles, code}: UserRequest) {
+  async execute({ name, email, password, wallet, whatsapp, indication, roles, code, nick, link }: UserRequest) {
     if (!name) throw new Error("O campo nome é obrigatório.");
     if (!email) throw new Error("O campo email é obrigatório.");
     if (password.length < 6) {
@@ -13,6 +13,7 @@ class CreateUserService {
     }
     if (!whatsapp) throw new Error("O campo whatsapp é obrigatório.");
     if (!roles || roles.length === 0) throw new Error("O campo roles é obrigatório.");
+    if (!nick) throw new Error("O campo nick é o obrigatório");
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
@@ -29,7 +30,10 @@ class CreateUserService {
 
     const passwordHash = await hash(password, 8);
 
-    // Criar usuário sem definir `sidePreference`
+    // Se o código de convite for null ou undefined, coloca o valor padrão
+    const finalCode = code || "MS1zM2NyM3Q";
+
+    // Cria o usuário
     const user = await prismaClient.user.create({
       data: {
         name,
@@ -40,21 +44,22 @@ class CreateUserService {
         roles,
         indication,
         active: true,
-        codeInvite: indication
+        codeInvite: finalCode,
+        nick,
+        link
       },
-      select: { id: true, name: true, email: true, codeInvite:true },
+      select: { id: true, name: true, nick: true, email: true, codeInvite: true },
     });
 
     enum Roles {
       Admin = "Admin",
-      User = "User",
-      Moderator = "Moderator",
       Invistribe = "Invistribe",
+      INTELECTUS_AI = "INTELECTUS_AI"
     }
 
     // Processar código de indicação, se existir
-    if (code) {
-      const decoded = GenerateCodeService.decodeInviteCode(code);
+    if (finalCode) {
+      const decoded = GenerateCodeService.decodeInviteCode(finalCode);
       const sponsorId = Number(decoded);
 
       if (isNaN(sponsorId)) {
@@ -70,19 +75,43 @@ class CreateUserService {
         throw new Error("Usuário patrocinador não encontrado.");
       }
 
-      // Se a role incluir "Invistribe", adiciona na matriz
-      if ((roles as any).includes("Invistribe")) {
+      // Salvar o indicado na tabela de indicações
+      await prismaClient.indicatedUsers.create({
+        data: {
+          indicatorId: sponsorUser.id,
+          indicatedId: user.id,
+        },
+      });
+
+      // Se a role incluir "Invistribe", adiciona na matriz (registro de indicação)
+      if ((roles as any).includes("INTELECTUS_AI")) {
+        let sponsorIndications = await prismaClient.indicates.findUnique({
+          where: { userId: sponsorUser.id },
+        });
+
+        // Se não existir, cria o registro
+        if (!sponsorIndications) {
+          sponsorIndications = await prismaClient.indicates.create({
+            data: {
+              userId: sponsorUser.id,
+              nominees: [],
+              count: 0,
+            },
+          });
+        }
+
+        // Cria o registro na tabela IndicateNominee usando o ID do registro de Indications
         await prismaClient.indicateNominee.create({
           data: {
-            indicatesId: sponsorUser.id,
+            indicatesId: sponsorIndications.id,
             indicateeId: user.id,
           },
         });
-    } else {
+      } else {
         // Caso contrário, adiciona na árvore binária usando o lado do patrocinador
-        const indicate = String(user.id);;
+        const indicate = String(user.id);
         const binaryTreeService = new BinaryTreeService();
-        await binaryTreeService.addUserToTree(code, indicate);
+        await binaryTreeService.addUserToTree(finalCode, indicate);
       }
     }
 

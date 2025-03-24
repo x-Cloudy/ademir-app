@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { MatrizService } from "../../Services/User/MatrizService";
 
-
 export class MatrizController {
   async getIndicatedUsers(req: Request, res: Response) {
     try {

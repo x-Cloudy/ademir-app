@@ -1,10 +1,7 @@
 import prismaClient from "../../prisma";
 
 export class GetTreeChildren {
-  private getFirstName(fullName: string): string {
-    if (!fullName) return "";
-    return fullName.split(" ")[0];
-  }
+ 
 
   public async getTreeChildren(userId: number, level: number = 0, maxDepth: number): Promise<any> {
     if (level >= maxDepth) return {}; // Limita a profundidade, retornando objeto vazio
@@ -16,7 +13,7 @@ export class GetTreeChildren {
         user: {
           select: {
             id: true,
-            name: true,
+            nick: true,
             sidePreference: true,
           },
         },
@@ -25,7 +22,7 @@ export class GetTreeChildren {
             user: {
               select: {
                 id: true,
-                name: true,
+                nick: true,
                 sidePreference: true,
               },
             },
@@ -36,7 +33,7 @@ export class GetTreeChildren {
             user: {
               select: {
                 id: true,
-                name: true,
+                nick: true,
                 sidePreference: true,
               },
             },
@@ -58,7 +55,7 @@ export class GetTreeChildren {
 
     return {
       id: node.user.id,
-      name: this.getFirstName(node.user.name),
+      nick: node.user.nick,
       sidePreference: node.user.sidePreference,
       left,
       right,

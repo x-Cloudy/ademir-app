@@ -25,8 +25,6 @@ export class BinaryTreeService {
         sponsorId = 1;
     }
 
-    console.log(sponsorId)
-
     // ... (restante do código permanece igual)
 
       const userId = parseInt(String(indicate));
@@ -142,6 +140,15 @@ export class BinaryTreeService {
               data: { rightChildId: newNode.id },
           });
       }
+
+      const status = await prismaClient.user.update({
+        where: {
+            id:userId
+        },
+        data:{
+            status: true
+        }
+      });
 
       return newNode;
   }

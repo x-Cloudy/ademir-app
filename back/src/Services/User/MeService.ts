@@ -12,7 +12,8 @@ export class MeService {
             where: { id },
             select: { 
                 id: true, 
-                name: true, 
+                name: true,
+                nick: true,
                 email: true, 
                 whatsapp: true,
                 wallet: true,
@@ -20,7 +21,8 @@ export class MeService {
                 roles: true,
                 status: true,
                 sidePreference: true,
-                codeInvite:true
+                codeInvite:true,
+                link:true
             },
         });
 
