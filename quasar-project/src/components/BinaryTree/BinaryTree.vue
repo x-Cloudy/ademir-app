@@ -5,7 +5,7 @@
 
 <script>
 import * as d3 from "d3";
-import { defineComponent, onMounted, ref, defineEmits } from "vue";
+import { defineComponent, onMounted, ref } from "vue";
 
 export default defineComponent({
   props: {
@@ -71,8 +71,7 @@ export default defineComponent({
         .attr("cx", (d) => d.x)
         .attr("cy", (d) => d.y)
         .attr("r", 30)
-        .style("fill", "#000000")
-        .style("stroke", "#000")
+        .style("fill", "#F2C037")
         .style("stroke-width", "2px")
         .style("filter", "drop-shadow(2px 4px 6px rgba(0,0,0,0.3))")
         .style("cursor", "pointer")
@@ -88,11 +87,13 @@ export default defineComponent({
         .attr("x", (d) => d.x)
         .attr("y", (d) => d.y + 5)
         .attr("text-anchor", "middle")
-        .style("font-size", "14px")
+        .style("font-size", "15px")
+        .style("text-transform", "uppercase")
+        .style("font-weight", "bolder")
         .style("font-family", "Arial, sans-serif")
-        .style("fill", "#F2C037")
+        .style("fill", "black")
         .style("cursor", "pointer")
-        .text((d) => d.data.name)
+        .text((d) => d.data.nick                                                                                                                                                       )
         .on("click", (event, d) => {
           emit("userPosition", d.data.id)
         });

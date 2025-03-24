@@ -2,10 +2,11 @@
   <div class="column q-mr-lg" :style="isMobile() ? {width: '100%'} : {width: '40%'}"
     style="height: 100%;">
 
-    <q-card class="flex items-end q-mb-md card-custom q-pt-md">
+    <q-card v-if="hasAccess(['INTELECTUS', 'admin'])" class="flex items-end q-mb-md card-custom q-pt-md">
       <div class="q-ml-md flex items-center" style="justify-content: space-between; width: 100%;">
+        <q-img :src="intelectus" style="scale: 0.8; margin: 0;" width="100px" class="q-my-md" />
         <div class="column">
-          <h6 style="margin: 0;">Árvore cripto:</h6>
+          <h6 style="margin: 0;">Árvore Intelectus:</h6>
           <div class="flex items-center">
             <p class="p-custom" style="margin: 0;">Você será posicionado na árvore</p>
           </div>
@@ -101,6 +102,7 @@
 import { ref } from 'vue';
 import { useAuthStore } from 'src/stores/authStore';
 import GradBtn from 'src/components/Buttons/GradBtn.vue';
+import intelectus from 'assets/moeda_04_1_5x.webp'
 import coper_medal from 'assets/coperMedalSemFundo.png'
 import silver_medal from 'assets/silverMedalSemFundo.png'
 import gold_medal from 'assets/goldMedalSemFundo.png'

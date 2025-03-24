@@ -28,7 +28,21 @@ const tableColumn = [
     align: 'left' as any,
   },
   {
-    name: "indication",
+    name: "link",
+    label: "Link",
+    field: "link",
+    sortable: false,
+    align: 'left' as any,
+  },
+  {
+    name: "email",
+    label: "Email",
+    field: "email",
+    sortable: false,
+    align: 'left' as any,
+  },
+  {
+    name: "roles",
     label: "inscrição",
     field: "roles",
     sortable: false,

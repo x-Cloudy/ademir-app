@@ -9,10 +9,17 @@
   </div>
 
   <q-form class="q-px-lg">
+    <q-input color="black" filled v-model="registerForm.nick" type="text" label="Login" outlined
+      :rules="[val => !!val || 'Login é obrigatório']">
+      <template v-slot:append>
+        <q-icon name="account_box" />
+      </template>
+    </q-input>
+
     <q-input color="black" filled v-model="registerForm.name" type="text" label="Nome" outlined
       :rules="[val => !!val || 'Nome é obrigatório']">
       <template v-slot:append>
-        <q-icon name="person" />
+        <q-icon name="badge" />
       </template>
     </q-input>
 
@@ -36,31 +43,6 @@
         <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer" @click="isPwd = !isPwd" />
       </template>
     </q-input>
-
-    <q-input color="black" filled v-model="registerForm.wallet" :type="'text'" label="Carteira"
-      outlined class="q-mb-md">
-      <template v-slot:append>
-        <q-icon name="wallet" />
-      </template>
-    </q-input>
-
-    <q-input color="black" class="q-mb-md" type="text" filled v-model="registerForm.indication" label="Código de indicação"
-      outlined>
-      <template v-slot:append>
-        <q-icon name="vpn_key" class="cursor-pointer" />
-      </template>
-    </q-input>
-
-    <q-select filled outlined multiple
-      label="Plataforma"
-      color="black"
-      class="q-mb-md"
-      v-model="registerForm.roles"
-      :options="[
-        'Invistribe',
-        'Cripto'
-      ]
-    "></q-select>
 
     <GradBtn :title="'Registrar'" :type="'button'" @btn-click="onRegister" />
 
@@ -96,6 +78,7 @@ const route = useRoute()
 const router = useRouter()
 const isPwd = ref(true)
 const registerForm = ref<any>({
+  nick: '',
   name: '',
   email: '',
   whatsapp: '',
@@ -115,8 +98,17 @@ const onRegister = async () => {
 }
 
 onMounted(() => {
-  if (hasId.value) {
-    registerForm.value.indication = hasId;
+  if (route.query.plat) {
+    const plataforma = route.query.plat
+    if (plataforma === 'Invistribe' || plataforma === 'INTELECTUS') {
+      registerForm.value.roles.push(plataforma)
+    }
+  }
+
+  if (route.query.code) {
+    if (route.query.code.length < 20) {
+      registerForm.value.indication = route.query.code
+    }
   }
 })
 </script>

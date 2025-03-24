@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-center items-center" v-if="tree.id">
+  <div v-if="hasAccess(['INTELECTUS', 'admin']) && tree.id" class="flex justify-center items-center">
     <BinaryTree :key="treeKey" :treeData="tree" @userPosition="(value) => getTreeData({id: value})" />
     <WppBtn />
     <q-page-sticky position="top-right" :offset="[30, 150]">
@@ -21,6 +21,7 @@ import vars from 'src/utils/vars';
 import { api } from 'src/boot/axios';
 import { useAuthStore } from 'src/stores/authStore';
 import { onBeforeMount, ref } from 'vue';
+import { hasAccess } from 'src/utils/can-access';
 import WppBtn from 'src/components/Buttons/WppBtn.vue';
 
 const authStore = useAuthStore()
@@ -30,6 +31,7 @@ const treeKey = ref(0);
 const getTreeData = async (
   { id = vars.admin_id, maxDepth = 15 }: { id?: number, maxDepth?: number }
 ) => {
+  console.log('id', id)
   try {
     const response = await api.get(`/tree/${id ? id : authStore.user.id}/${maxDepth}`);
     const children = response.data.children

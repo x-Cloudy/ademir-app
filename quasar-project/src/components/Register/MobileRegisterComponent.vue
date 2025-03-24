@@ -1,9 +1,15 @@
 <template>
   <q-form>
+    <q-input v-model="registerForm.nick" type="text" label="Login" outlined
+      :rules="[val => !!val || 'Login é obrigatório']">
+      <template v-slot:append>
+        <q-icon name="account_box" color="grey-6" size="xs" class="q-mt-sm" />
+      </template>
+    </q-input>
     <q-input v-model="registerForm.name" type="text" label="Nome" outlined
       :rules="[val => !!val || 'Nome é obrigatório']">
       <template v-slot:append>
-        <q-icon name="person" color="grey-6" size="xs" class="q-mt-sm" />
+        <q-icon name="badge" color="grey-6" size="xs" class="q-mt-sm" />
       </template>
     </q-input>
     <q-input v-model="registerForm.email" type="email" label="Email" outlined
@@ -24,28 +30,6 @@
         <q-icon name="password" color="grey-6" size="xs" class="q-mt-sm" />
       </template>
     </q-input>
-    <q-input class="q-mb-md" v-model="registerForm.wallet" type="tel" label="Carteira" outlined>
-      <template v-slot:append>
-        <q-icon name="wallet" color="grey-6" size="xs" class="q-mt-sm" />
-      </template>
-    </q-input>
-    <q-input v-model="registerForm.indication" type="tel" label="Código de convite" outlined>
-      <template v-slot:append>
-        <q-icon name="code" color="grey-6" size="xs" class="q-mt-sm" />
-      </template>
-    </q-input>
-    <q-select filled outlined multiple
-      label="Plataforma"
-      color="black"
-      class="q-mt-md"
-      v-model="registerForm.roles"
-      :options="[
-        'Invistribe',
-        'Cripto'
-      ]
-    "></q-select>
-
-
     <div class="q-mt-lg">
       <GradBtn :title="'Registrar'" :type="'button'" @btn-click="onRegister" />
     </div>
@@ -82,6 +66,7 @@ const authStore = useAuthStore()
 const router = useRouter()
 const route = useRoute()
 const registerForm = ref<any>({
+  nick: '',
   name: '',
   email: '',
   whatsapp: '',
@@ -101,8 +86,20 @@ const onRegister = async () => {
 }
 
 onMounted(() => {
-  if (hasId.value) {
-    registerForm.value.indication = hasId.value
+  if (route.query.plat) {
+    const plataforma = route.query.plat
+    if (plataforma === 'Invistribe' || plataforma === 'INTELECTUS') {
+      console.log(route.query)
+      registerForm.value.roles.push(plataforma)
+    }
   }
+
+  if (route.query.code) {
+    if (route.query.code.length < 20) {
+      registerForm.value.indication = route.query.code
+    }
+  }
+
+  console.log(registerForm.value)
 })
 </script>

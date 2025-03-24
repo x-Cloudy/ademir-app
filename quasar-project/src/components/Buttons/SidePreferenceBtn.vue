@@ -1,5 +1,5 @@
 <template>
-  <div v-if="hasAccess(['Cripto', 'admin'])"
+  <div v-if="hasAccess(['INTELECTUS', 'admin'])"
     class="q-mt-lg q-pa-sm flex column items-center justify-center text-black" style="border-radius: 5px; background-color: lightgrey;">
     <label style="font-size: 18px; font-weight: bold;">Preferência de lado na matriz</label>
     <div class="flex no-wrap items-center justify-center">

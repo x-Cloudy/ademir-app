@@ -1,4 +1,4 @@
-export const roles = ['admin', 'Invistribe', 'Cripto'] as const
+export const roles = ['admin', 'Invistribe', 'INTELECTUS'] as const
 
 export type Role = typeof roles[number]
 
@@ -16,6 +16,7 @@ export interface AuthUser {
   sidePreference: string;
   active: boolean;
   status: boolean;
+  link: string;
 }
 
 export interface UpdateAuthUser extends AuthUser {

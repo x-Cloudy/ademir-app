@@ -44,7 +44,7 @@
         </q-td>
       </template>
 
-      <template v-slot:body-cell-indication="props">
+      <template v-slot:body-cell-roles="props">
         <q-td :props="props">
           <q-select color="black" dropdown-icon="none" dense filled outlined v-model="props.row.roles" multiple />
         </q-td>
@@ -55,7 +55,7 @@
       <q-card style="width: 1000px; height: auto;" class="q-pa-lg ">
         <q-card-section style="display: flex; justify-content: center; align-items: center;" class=" q-pr-none q-gutter-x-md">
           <p style="margin: 0;" class="flex items-center">Deseja deletar usuário?</p>
-          <q-btn color="green" @click="handleDelete(deleteId)">Deletear</q-btn>
+          <q-btn color="green" @click="handleDelete(deleteId)">Deletar</q-btn>
           <q-btn color="red" @click="deleteDialog = false">Cancelar</q-btn>
         </q-card-section>
       </q-card>
@@ -67,7 +67,7 @@
         <q-input v-model="editForm.user.email" type="email" label="Email" outlined />
         <q-input v-model="editForm.user.whatsapp" type="tel" label="Whatsapp" outlined />
         <q-input v-model="editForm.user.wallet" type="tel" label="Carteira" outlined />
-        <q-select color="black" multiple v-model="editForm.user.roles" :options="role" type="tel" label="Carteira" outlined />
+        <q-select color="black" multiple v-model="editForm.user.roles" :options="roles" label="Plataforma" outlined />
 
         <q-card-section style="display: flex; justify-content: end;" class="q-gutter-md q-pr-none">
           <q-btn color="green" @click="handleEdit">Salvar</q-btn>
@@ -85,7 +85,7 @@ import { ref, onBeforeMount } from 'vue';
 import { api } from 'src/boot/axios';
 import tableColumn from './components/tableColumns';
 import notify from 'src/utils/Notify';
-import { role } from 'src/utils/roles';
+import { roles } from 'src/types';
 import { hasAccess } from 'src/utils/can-access';
 import RestrictPage from 'src/components/RestrictPage/RestrictPage.vue';
 
@@ -154,27 +154,6 @@ onBeforeMount(async () => {
     console.log(error)
   }
 })
-
-const mock = [
-  {
-    id: 1,
-    name: 'user 1',
-    wpp: '(12) 93213-1322',
-    wallet: 'AdsdxxSDXsdafesff98908324fsdf'
-  },
-  {
-    id: 2,
-    name: 'user 2',
-    wpp: '(12) 93213-1322',
-    wallet: 'AdsdxxSDXsdafesff98908324fsdf'
-  },
-  {
-    id: 3,
-    name: 'user 3',
-    wpp: '(12) 93213-1322',
-    wallet: 'AdsdxxSDXsdafesff98908324fsdf'
-  }
-] as any
 </script>
 
 <style scoped>
