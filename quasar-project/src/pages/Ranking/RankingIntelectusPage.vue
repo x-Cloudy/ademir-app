@@ -22,16 +22,16 @@
 
             <div v-if="top_rank.length > 0" style=" margin-bottom: 4rem;" :style="{ scale: isMobile() ? '0.9' : 1 }"
               class="column justify-center items-center q-mb-lg">
-              <div class="top-rank-circle gold" :style="{ marginBottom: isMobile() ? '2rem' : '' }">
+              <div v-if="top_rank[0]" class="top-rank-circle gold" :style="{ marginBottom: isMobile() ? '2rem' : '' }">
                 <div class="name-tag">{{ top_rank[0].name.split(' ')[0] }}</div>
                 <p class="tag-count">{{ top_rank[0].level }}</p>
               </div>
               <div class="flex">
-                <div :style="{ marginRight: isMobile() ? '40px' : '180px' }" class="top-rank-circle silver">
+                <div v-if="top_rank[1]" :style="{ marginRight: isMobile() ? '40px' : '180px' }" class="top-rank-circle silver">
                   <div class="name-tag">{{ top_rank[1].name.split(' ')[0] }}</div>
                   <p class="tag-count">{{ top_rank[1].level }}</p>
                 </div>
-                <div class="top-rank-circle coper">
+                <div v-if="top_rank[2]" class="top-rank-circle coper">
                   <div class="name-tag">{{ top_rank[2].name.split(' ')[0] }}</div>
                   <p class="tag-count">{{ top_rank[2].level }}</p>
                 </div>

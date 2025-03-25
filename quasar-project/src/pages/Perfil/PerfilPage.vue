@@ -41,7 +41,7 @@
               style="height: auto; font-weight: 600; font-size: 14px; font-family: Poppins;" class="bg-warning"
               type="submit">Adicionar Link</q-btn>
           </q-form>
-          <q-form @submit="addWallet" class="q-mt-lg">
+          <q-form v-if="optionStore.options.wallet" @submit="addWallet" class="q-mt-lg">
             <q-input :readonly="!!authStore.user.wallet" outlined color="black" v-model="user.wallet"
               class="bg-white q-mb-md" label="Carteira Descentralizada" />
             <q-btn v-if="!authStore.user.wallet"
@@ -98,13 +98,14 @@ import { columns } from './ColumnSchema';
 import { onMounted, ref } from 'vue';
 import isMobile from 'src/utils/isMobile';
 import { hasAccess } from 'src/utils/can-access';
-import SidePreferenceBtn from 'src/components/Buttons/SidePreferenceBtn.vue';
+import { useOptionsStore } from 'src/stores/optionStore';
 import notify from 'src/utils/Notify';
 import { api } from 'src/boot/axios';
 
 type Col = { cols: { value: unknown; name: string; label: string }[] }
 const cols = (props: Col) => props.cols
 
+const optionStore = useOptionsStore()
 const authStore = useAuthStore()
 const userInviteCode = ref('')
 const user = ref<any>(authStore.user || {});

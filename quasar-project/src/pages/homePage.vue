@@ -1,5 +1,5 @@
 <template>
-  <div v-if="hasAccess(['INTELECTUS', 'admin'])" style="display: flex; align-items: center;" class="q-mx-md column">
+  <div v-if="hasAccess(['Invistribe', 'admin'])" style="display: flex; align-items: center;" class="q-mx-md column">
     <div class="q-my-lg" style="margin-bottom: 5rem;">
       <h2 class="main-title" style="
         font-family: arial black;
@@ -101,7 +101,6 @@ const canAccess = ref(true)
 onMounted(() => {
   canAccess.value = authStore.user.roles.includes('Invistribe') ||
   authStore.user.roles.includes('admin');
-  console.log(canAccess.value)
 })
 
 watch(

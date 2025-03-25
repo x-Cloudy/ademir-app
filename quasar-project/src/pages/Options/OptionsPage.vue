@@ -10,7 +10,8 @@
               <div class="column q-pa-sm" style="border: 2px solid gray; border-radius: 5px; width: 100%;">
                 <label style="font-weight: 600;">CARTEIRA DE RECEBIMENTO</label>
                 <div class="flex justify-center" style="margin: 0; padding: 0; border-radius: 5px; width: 100%;">
-                  <Toggle :value="options.paymentWallet" @click="(value) => options.paymentWallet = value()"/>
+                  <Toggle :value="optionStore.options.wallet"
+                  @click="(value) =>  optionStore.optionChange(value())"/>
                 </div>
               </div>
             </div>
@@ -27,15 +28,17 @@
 import VideoAdd from 'src/components/Videos/VideoAdd.vue';
 import HeaderCard from 'src/components/HeaderCard/HeaderCard.vue';
 import Toggle from 'src/components/Buttons/ToggleBtn.vue';
-import { ref } from 'vue';
+import { onMounted } from 'vue';
 import isMobile from 'src/utils/isMobile';
 import { hasAccess } from 'src/utils/can-access';
 import RestrictPage from 'src/components/RestrictPage/RestrictPage.vue';
+import { useOptionsStore } from 'src/stores/optionStore';
 
-const options = ref({
-  paymentWallet: false
+const optionStore = useOptionsStore()
+
+onMounted(async () => {
+  await optionStore.getOptions()
 })
-
 </script>
 
 <style scoped>
