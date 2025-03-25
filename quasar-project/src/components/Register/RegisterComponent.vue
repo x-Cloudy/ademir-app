@@ -38,7 +38,10 @@
     </q-input>
 
     <q-input color="black" filled v-model="registerForm.password" :type="isPwd ? 'password' : 'text'" label="Senha"
-      outlined :rules="[val => !!val || 'Senha é obrigatória']">
+      outlined :rules="[
+        val => !!val || 'Senha é obrigatória',
+        val => (val && val.length >= 6) || 'Sua senha precisa ter mais de 6 caracteres'
+      ]">
       <template v-slot:append>
         <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer" @click="isPwd = !isPwd" />
       </template>
@@ -49,14 +52,13 @@
     <div class="text-center q-gutter-y-sm q-mt-md">
       <p class="text-grey-7 q-mb-none">
         Já tem uma conta?
-        <q-btn flat color="primary" label="Entrar" no-caps class="q-px-sm" padding="none"
-          @click="() => {
-            if (isRegisterPage || hasId) {
-              router.push('/');
-              return
-            }
-            emit('tab', 'login')
-            }" />
+        <q-btn flat color="primary" label="Entrar" no-caps class="q-px-sm" padding="none" @click="() => {
+          if (isRegisterPage || hasId) {
+            router.push('/');
+            return
+          }
+          emit('tab', 'login')
+        }" />
       </p>
     </div>
   </q-form>
