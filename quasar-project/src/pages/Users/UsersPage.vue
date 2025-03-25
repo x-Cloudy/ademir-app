@@ -82,7 +82,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed, nextTick } from 'vue';
+import { ref, reactive, computed } from 'vue';
 import { api } from 'src/boot/axios';
 import { useUsersStore } from 'src/stores/userStore';
 import tableColumn from './components/tableColumns';
@@ -151,7 +151,7 @@ const handleDelete = async (id: number) => {
       type: 'positive',
       msg: 'Usuário excluído'
     })
-    await usersStore.fetch({})
+    await usersStore.fetch(stateFilter)
     deleteDialog.value = false;
   } catch (error) {
     notify({

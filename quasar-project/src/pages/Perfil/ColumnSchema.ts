@@ -6,9 +6,9 @@ export const columns = [
     align: 'left'
   },
   {
-    name: 'nome',
-    field: 'nome',
-    label: 'NOME',
+    name: 'nick',
+    field: 'nick',
+    label: 'Login',
     align: 'left'
   },
   {

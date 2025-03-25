@@ -9,8 +9,8 @@
         <div :style="isMobile() ? { width: '100%', marginBottom: '2rem' } :
           { width: '48%', marginLeft: '1rem' }" style="padding: 0 1rem; border-radius: 5px;">
           <label style="font-size: 20px;">Informações do convidante</label>
-          <q-input filled v-model="user.nick" class="bg-white q-mb-md" label="Nick" disable />
-          <q-input filled v-model="user.nick" class="bg-white q-mb-md" label="Wpp" disable />
+          <q-input filled v-model="user_invited_info.nick" class="bg-white q-mb-md" label="Nick" disable />
+          <q-input filled v-model="user_invited_info.whatsapp" class="bg-white q-mb-md" label="Wpp" disable />
 
           <label style="font-size: 20px;">Meu Dados</label>
           <q-input filled v-model="user.nick" class="bg-white q-mb-md" label="Login" :disable="editingUser" />
@@ -36,9 +36,9 @@
 
 
           <q-form @submit="addWallet" class="q-mt-lg">
-            <q-input :readonly="!!user.wallet" outlined color="black" v-model="user.wallet" class="bg-white q-mb-md"
+            <q-input :readonly="!!authStore.user.wallet" outlined color="black" v-model="user.wallet" class="bg-white q-mb-md"
               label="Carteira Descentralizada" />
-            <q-btn :disable="!!user.wallet"
+            <q-btn v-if="!authStore.user.wallet"
               style="height: auto; font-weight: 600; font-size: 14px; font-family: Poppins;" class="bg-warning"
               type="submit">Adicionar Carteira</q-btn>
           </q-form>
@@ -76,8 +76,8 @@
           <p class="q-pa-sm">
             Convide uma pessoa para a plataforma.
           </p>
-          <q-input v-if="hasAccess(['INTELECTUS', 'admin'])" filled outlined bg-color="white"
-            v-model="inviteIntelectus" color="black" class="q-mb-md q-px-sm" label="Link Intelectus" />
+          <q-input v-if="hasAccess(['INTELECTUS', 'admin'])" filled outlined bg-color="white" v-model="inviteIntelectus"
+            color="black" class="q-mb-md q-px-sm" label="Link Intelectus" />
           <q-input v-if="hasAccess(['Invistribe', 'admin'])" filled outlined bg-color="white" v-model="inviteInvistribe"
             color="black" class="q-mb-md q-px-sm" label="Link Invisitribe" />
         </div>
@@ -90,7 +90,7 @@
 import ActivationBtn from 'src/components/Buttons/ActivationBtn.vue';
 import { useAuthStore } from 'src/stores/authStore';
 import { columns } from './ColumnSchema';
-import {onMounted, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import isMobile from 'src/utils/isMobile';
 import { hasAccess } from 'src/utils/can-access';
 import SidePreferenceBtn from 'src/components/Buttons/SidePreferenceBtn.vue';
@@ -101,8 +101,13 @@ type Col = { cols: { value: unknown; name: string; label: string }[] }
 const cols = (props: Col) => props.cols
 
 const authStore = useAuthStore()
+const userInviteCode = ref('')
 const user = ref<any>(authStore.user || {});
 const user_invites = ref<any[]>([]);
+const user_invited_info = ref({
+  nick: '',
+  whatsapp: ''
+})
 const editingUser = ref(true)
 
 const inviteInvistribe = ref<string>('')
@@ -111,6 +116,7 @@ const inviteIntelectus = ref<string>('')
 const generateInviteLink = async () => {
   try {
     const response = await api.get(`/generateCode/${user.value.id}`)
+    userInviteCode.value = response.data.inviteCode
     inviteInvistribe.value = `https://vipclubbusiness.com/register?plat=Invistribe&code=${response.data.inviteCode}`
     inviteIntelectus.value = `https://vipclubbusiness.com/register?plat=INTELECTUS&code=${response.data.inviteCode}`
   } catch (error) {
@@ -123,6 +129,7 @@ const addWallet = async () => {
     await api.put(`/user/${user.value.id}`, {
       wallet: user.value.wallet
     })
+    await authStore.getUserInfo()
     notify({
       type: 'positive',
       msg: 'Carteira adicionada'
@@ -157,12 +164,17 @@ onMounted(async () => {
   try {
     await authStore.getUserInfo()
     await generateInviteLink()
-    const response = await api.get(`/indications/${user.value.id}`);
-    const convidante = await api.get(`/indication/${user.value.codeInvite}`)
-    console.log('ff', convidante)
+    const response = await api.get(`/indications/${userInviteCode.value}`)
     if (response.status === 200) {
       user_invites.value = response.data
     }
+  } catch (error) {
+    console.log(error)
+  }
+
+  try {
+    const indicated = await api.get(`/indication/${user.value.id}`)
+    user_invited_info.value = indicated.data
   } catch (error) {
     console.log(error)
   }

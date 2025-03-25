@@ -7,6 +7,7 @@ export interface AuthUser {
   name: string;
   last_name: string;
   codeInvite: string;
+  wallet: string;
   email: string;
   avatar?: string;
   avatar_url?: string;
