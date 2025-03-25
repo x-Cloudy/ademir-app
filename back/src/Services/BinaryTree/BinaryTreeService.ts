@@ -1,174 +1,136 @@
-import { PrismaClient } from "@prisma/client";
-import { GenerateCodeService } from "../code/GenerateCodeService";
+import { PrismaClient, Prisma } from "@prisma/client";
 import prismaClient from "../../prisma";
 
-const prisma = new PrismaClient();
-
-export class BinaryTreeService { 
-
-  async addUserToTree(code: string, indicate: string) {
-    let sponsorId: number;
-
-    // Se code existir (não for null, undefined ou string vazia), decodifica
-    if (code) {
-        const decode = new GenerateCodeService();
-        const decodedCode = decode.decodeInviteCode(code);
-        sponsorId = parseInt(String(decodedCode));
-        
-        // Validação adicional para garantir que o decodedCode é um número
-        if (isNaN(sponsorId)) {
-            throw new Error("Código inválido.");
-        }
-    } 
-    // Se code for null, undefined ou vazio, usa sponsorId = 1
-    else {
-        sponsorId = 1;
-    }
-
-    // ... (restante do código permanece igual)
-
-      const userId = parseInt(String(indicate));
-
-      // Verifica se o novo usuário já está na árvore
-      const existingNode = await prisma.binaryTree.findUnique({ where: { userId } });
-      if (existingNode) {
-          throw new Error("Usuário já está na árvore.");
+export class BinaryTreeService {
+    async addUserToTree(
+      sponsorId: string, 
+      indicate: string,
+      tx: Prisma.TransactionClient
+    ) {
+      const parsedSponsorId = parseInt(sponsorId, 10);
+      const userId = parseInt(indicate, 10);
+  
+      if (isNaN(userId)) throw new Error("ID do usuário inválido");
+  
+      // Validação de existência
+      const [user, sponsor] = await Promise.all([
+        tx.user.findUnique({ where: { id: userId } }),
+        tx.user.findUnique({ where: { id: parsedSponsorId } })
+      ]);
+  
+      if (!user || !sponsor) {
+        throw new Error("Usuário ou sponsor não encontrados");
       }
-
-      // Se a árvore estiver vazia, o novo usuário é inserido como root
-      const isFirstUser = (await prisma.binaryTree.count()) === 0;
-      if (isFirstUser) {
-          const rootNode = await prisma.binaryTree.create({
-              data: {
-                  userId,
-                  sponsorId: null,
-                  leftChildId: null,
-                  rightChildId: null,
-              },
-          });
-          return rootNode;
-      }
-
-      // Busca o nó do sponsor na árvore
-      let currentNode = await prisma.binaryTree.findUnique({
-          where: { userId: sponsorId },
+  
+      // Verifica se já está na árvore
+      const existingNode = await tx.binaryTree.findUnique({ 
+        where: { userId } 
       });
-      if (!currentNode) {
-          throw new Error("Sponsor não encontrado na árvore.");
+  
+      if (existingNode) {
+        throw new Error("Usuário já está na árvore");
       }
-
-      /**
-       * Percorre a árvore até encontrar um nó que não tenha filho na posição
-       * definida pelo sidePreference do usuário DO PRÓPRIO nó (currentNode).
-       */
-      while (true) {
-          // 1) Descobre a preferência (left ou right) do usuário referente a currentNode
-          const currentUser = await prisma.user.findUnique({ // Corrigido prismaClient para prisma
-              where: { id: currentNode.userId },
-              select: { sidePreference: true },
-          });
-
-          if (!currentUser) {
-              throw new Error(`Usuário de ID ${currentNode.userId} não encontrado.`);
-          }
-
-          const currentPreference = currentUser.sidePreference;
-          if (currentPreference !== "left" && currentPreference !== "right") {
-              throw new Error("A posição (left ou right) deve ser informada corretamente no indicador.");
-          }
-
-          // 2) Verifica se há espaço (childId) na preferência do currentNode
-          if (currentPreference === "left") {
-              if (!currentNode.leftChildId) {
-                  // Achamos o local para inserir o novo nó
-                  break;
-              } else {
-                  // Avança para o filho da esquerda e repete o processo
-                  const nextNode = await prisma.binaryTree.findUnique({
-                      where: { id: currentNode.leftChildId },
-                  });
-                  if (!nextNode) {
-                      throw new Error("Erro ao buscar nó filho à esquerda.");
-                  }
-                  currentNode = nextNode;
-              }
-          } else {
-              // currentPreference === "right"
-              if (!currentNode.rightChildId) {
-                  // Achamos o local para inserir o novo nó
-                  break;
-              } else {
-                  // Avança para o filho da direita e repete o processo
-                  const nextNode = await prisma.binaryTree.findUnique({
-                      where: { id: currentNode.rightChildId },
-                  });
-                  if (!nextNode) {
-                      throw new Error("Erro ao buscar nó filho à direita.");
-                  }
-                  currentNode = nextNode;
-              }
-          }
-      }
-
-      // Cria o novo nó para o usuário
-      const newNode = await prisma.binaryTree.create({
-        data: {
+  
+      // Cria root se for o primeiro usuário
+      const isFirstUser = (await tx.binaryTree.count()) === 0;
+      if (isFirstUser) {
+        return await tx.binaryTree.create({
+          data: {
             userId,
-            sponsorId: currentNode.id, // Use o ID do nó do sponsor na árvore, não o userId!
+            sponsorId: null,
             leftChildId: null,
             rightChildId: null,
-        },
-    });
-
-      // Descobrimos novamente a preferência do currentNode
-      const finalUser = await prisma.user.findUnique({ // Corrigido prismaClient para prisma
-          where: { id: currentNode.userId },
-          select: { sidePreference: true },
+          },
+        });
+      }
+  
+      // Busca nó do sponsor
+      let currentNode = await tx.binaryTree.findUnique({
+        where: { userId: parsedSponsorId },
+        include: { user: true }
       });
-      if (!finalUser) {
-          throw new Error("Usuário não encontrado no final da inserção.");
+  
+      if (!currentNode) {
+        throw new Error("Sponsor não encontrado na árvore");
       }
-
-      if (finalUser.sidePreference === "left") {
-          await prisma.binaryTree.update({
-              where: { id: currentNode.id },
-              data: { leftChildId: newNode.id },
-          });
-      } else {
-          await prisma.binaryTree.update({
-              where: { id: currentNode.id },
-              data: { rightChildId: newNode.id },
-          });
+  
+      // Navegação na árvore
+      while (true) {
+        if (!currentNode.user?.sidePreference) {
+          throw new Error("Preferência de lado não definida");
+        }
+  
+        const childField = currentNode.user.sidePreference === "left" 
+          ? "leftChildId" 
+          : "rightChildId";
+  
+        const childId = currentNode[childField];
+  
+        if (!childId) break;
+  
+        const nextNode = await tx.binaryTree.findUnique({
+          where: { id: childId },
+          include: { user: true }
+        });
+  
+        if (!nextNode) {
+          throw new Error("Erro na navegação da árvore");
+        }
+        currentNode = nextNode;
       }
-
-      const status = await prismaClient.user.update({
-        where: {
-            id:userId
+  
+      // Cria novo nó
+      const newNode = await tx.binaryTree.create({
+        data: {
+          userId,
+          sponsorId: currentNode.id,
+          leftChildId: null,
+          rightChildId: null,
         },
-        data:{
-            status: true
+      });
+  
+      // Atualiza nó pai
+      await tx.binaryTree.update({
+        where: { id: currentNode.id },
+        data: {
+          [currentNode.user.sidePreference === "left" 
+            ? "leftChildId" 
+            : "rightChildId"]: newNode.id
         }
       });
-
+  
       return newNode;
-  }
-
-  async getUserTree(userId: number) {
-    return await prisma.binaryTree.findUnique({
-      where: { userId },
-      include: { leftChild: true, rightChild: true },
-    });
-  }
-
-  async getPosition(userId: number) {
-    const node = await prisma.binaryTree.findUnique({ where: { userId } });
-    if (!node) throw new Error("Usuário não encontrado na árvore.");
-
-    return {
-      userId: node.userId,
-      sponsorId: node.sponsorId,
-      leftChildId: node.leftChildId,
-      rightChildId: node.rightChildId,
-    };
-  }
+    }
+  
+    async getUserTree(userId: number) {
+      return await prismaClient.binaryTree.findUnique({
+        where: { userId },
+        include: { 
+          leftChild: true, 
+          rightChild: true,
+          user: true 
+        },
+      });
+    }
+  
+    async getPosition(userId: number) {
+      const node = await prismaClient.binaryTree.findUnique({ 
+        where: { userId },
+        include: {
+          user: true,
+          sponsor: true
+        }
+      });
+      
+      if (!node) throw new Error("Usuário não encontrado na árvore.");
+  
+      return {
+        userId: node.userId,
+        sponsor: node.sponsorId ? {
+          id: node.sponsor?.id,
+        } : null,
+        leftChildId: node.leftChildId,
+        rightChildId: node.rightChildId,
+      };
+    }
 }

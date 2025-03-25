@@ -46,69 +46,86 @@ export class AllUserService {
     return users;
   }
 
-    async execute2(code: string) {
-        const serviceCode = new GenerateCodeService();
-        const decoded = serviceCode.decodeInviteCode(code);
-    
-        // Converter para número (ajuste conforme sua lógica de decodificação)
-        const indicatorId = Number(decoded); 
-        if (isNaN(indicatorId)) {
-            throw new Error("Código de convite inválido");
+  async execute2(sponsorNick: string) {
+    // Busca case-insensitive pelo nick do sponsor no campo Indicator
+    const users = await prismaClient.user.findMany({
+        where: {
+            indication: {
+                equals: sponsorNick.trim(), // Remove espaços e busca exata
+                mode: 'insensitive' // Ignora maiúsculas/minúsculas
+            }
+        },
+        select: {
+            id: true,
+            nick: true,
+            plataform: true,
+            status: true,
+            createdAt: true
         }
-    
-        // Busca os usuários com o indicatorId especificado
-        const users = await prismaClient.user.findMany({
-            where: {
-                Indicator: String(indicatorId), // Se Indicator for String
-                // OU (se você mudou para Int no schema):
-                // Indicator: indicatorId,
-            },
-            select: {
-                id: true,
-                nick: true,
-                plataform: true,
-                status: true,
-            },
-        });
-    
-        return users;
+    });
+
+    if (users.length === 0) {
+        return []; // Retorna array vazio ao invés de erro
     }
 
-    async execute3(userId: number) {
-        // 1. Busca o usuário principal
-        const currentUser = await prismaClient.user.findUnique({
-            where: { id: userId },
-            select: { Indicator: true }
-        });
-    
-        if (!currentUser) {
-            throw new Error("Usuário não encontrado 🥺");
-        }
-    
-        // 2. Verifica se existe um indicador
-        if (!currentUser.Indicator) {
-            throw new Error("Usuário não tem um indicador ❌");
-        }
-    
-        // 3. Converte para número (se necessário)
-        const indicatorId = parseInt(currentUser.Indicator);
-        if (isNaN(indicatorId)) {
-            throw new Error("ID do indicador inválido 🚨");
-        }
-    
-        // 4. Busca os dados do indicador
-        const indicatorUser = await prismaClient.user.findUnique({
-            where: { id: indicatorId },
-            select: { 
-                nick: true,
-                whatsapp: true
+    return users;
+}
+
+async execute3(userId: number) {
+  // Busca o usuário e seu indicador (nick)
+  const currentUser = await prismaClient.user.findUnique({
+      where: { id: userId },
+      select: { 
+          Indicator: true 
+      }
+  });
+
+  if (!currentUser) {
+      throw new Error("Usuário não encontrado");
+  }
+
+  if (!currentUser.Indicator) {
+      throw new Error("Este usuário não tem um sponsor");
+  }
+
+  // Busca os dados do sponsor usando o nick armazenado
+  const sponsor = await prismaClient.user.findFirst({
+      where: { 
+          nick: currentUser.Indicator 
+      },
+      select: { 
+          nick: true,
+          whatsapp: true,
+          createdAt: true
+      }
+  });
+
+  if (!sponsor) {
+      throw new Error("Sponsor não encontrado na base de dados");
+  }
+
+  return sponsor;
+}
+
+    async execute4(take: number = 10) {
+        try {
+          const topUsers = await prismaClient.user.findMany({
+            orderBy: {
+              level: 'desc' // Ordena do maior para o menor
+            },
+            take: take, // Quantidade de usuários a retornar (padrão = 10)
+            select: {
+              id: true,
+              name: true,
+              level: true,
+              // Adicione outros campos se necessário
             }
-        });
-    
-        if (!indicatorUser) {
-            throw new Error("Indicador não encontrado na base 🔎");
+          });
+      
+          return topUsers;
+      
+        } catch (error) {
+          throw new Error(`Erro ao buscar usuários: ${error.message}`);
         }
-    
-        return indicatorUser;
-    }
+      }
 }

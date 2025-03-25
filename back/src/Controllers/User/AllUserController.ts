@@ -33,7 +33,7 @@ class AllUserController {
     async indicators(request: Request, response:Response){
         const detailUserService = new AllUserService();
         const {code} = request.params;
-        console.log("a" + code)
+        console.log("indicators", code)
         const user = await detailUserService.execute2(code);
         return response.status(200).json(user); 
     }
@@ -43,6 +43,12 @@ class AllUserController {
         const {userId} = request.params;
         const userIdNumber = parseInt(userId, 10);
         const user = await detailUserService.execute3(userIdNumber);
+        return response.status(200).json(user);
+    }
+
+    async top10Tree(response: Response){
+        const detailUserService = new AllUserService();
+        const user = await detailUserService.execute4();
         return response.status(200).json(user);
     }
 }

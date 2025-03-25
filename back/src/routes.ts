@@ -22,6 +22,8 @@ import { TableTextController } from "./Controllers/TableText/TableTextController
 import { BinaryTreeController } from "./Controllers/BinaryThree/BinaryThreeController";
 import { ChangePositionController } from "./Controllers/User/ChangePositionController";
 import { IndicationsController } from "./Controllers/User/IndicationsController";
+import { GetOptionsController } from "./Controllers/TableOptions/GetOptionsController";
+import { TableOptionsService } from "./Services/TableOptions/TableOptionsService";
 
 const router = Router();
 const resetUseCase = new PasswordResetUseCase();
@@ -45,6 +47,7 @@ const sideController = new ChangePositionController();
 const indicationsController = new IndicationsController();
 const allUserController = new AllUserController();
 const createUser = new CreateUserController();
+const options = new GetOptionsController();
 
 // User Routes
 router.post('/user',(req, res) => createUser.handle(req, res));
@@ -91,8 +94,10 @@ router.get("/binary-tree/:userId",isAuthenticated, (req, res) => tree.getUserTre
 router.get("/binary-tree/position/:userId",isAuthenticated, (req, res) => tree.getUserPosition(req, res));
 router.get("/tree/:userId/:maxDepth", (req, res) => tree.getTree(req, res));
 router.get("/binary-tree", tree.getEntireTree);
-
+router.get("/top10tree", (req, res) =>allUserController.top10Tree(res));
 router.get("/indications/:code", (req, res) =>allUserController.indicators(req, res));
 router.get("/indication/:userId", (req, res) =>allUserController.indicator(req, res));
-
+router.get("/options", (req, res) =>options.get(res));
+router.put("/options", (req, res) =>options.put(req, res));
+router.post("/options", (req, res) =>options.create(req, res));
 export { router };

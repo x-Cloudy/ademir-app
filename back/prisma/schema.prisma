@@ -9,7 +9,7 @@ datasource db {
 
 model User {
   name            String
-  nick            String?
+  nick            String?           @unique
   link            String?
   email           String            @unique
   password        String
@@ -27,7 +27,8 @@ model User {
   roles           String[]
   binaryTreeid    Int?
   Indicator       String?
-  sidePreference  String?
+  level           Int
+  sidePreference  String            @default("right")
   codeInvite      String            @default("MS1zM2NyM3Q")
   BinaryTree      BinaryTree?
   IndicateNominee IndicateNominee[] @relation("IndicatedUser")
@@ -204,4 +205,9 @@ model PasswordResetToken1 {
   code      String
   createdAt DateTime @default(now())
   expiresAt DateTime
+}
+
+model opcoes {
+   id              Int               @id @default(autoincrement())
+   wallet         Boolean            @default(false)  
 }

@@ -1,84 +1,121 @@
 import prismaClient from "../../prisma";
 import { hash } from "bcryptjs";
 import { UserRequest } from "../../models/User/UserRequest";
-import { GenerateCodeService } from "../code/GenerateCodeService";
+import { BinaryTreeService } from "../BinaryTree/BinaryTreeService";
 
 class CreateUserService {
-  async execute({
-    name,
-    email,
-    password,
-    wallet,
-    whatsapp,
-    indication,
-    roles,
-    code,
-    nick,
-    link,
-  }: UserRequest) {
-    if (!name) throw new Error("O campo nome é obrigatório.");
-    if (!email) throw new Error("O campo email é obrigatório.");
-    if (password.length < 6) {
-      throw new Error("A senha deve ter pelo menos 6 caracteres.");
-    }
-    if (!whatsapp) throw new Error("O campo whatsapp é obrigatório.");
-    if (!roles || roles.length === 0) throw new Error("O campo roles é obrigatório.");
-    if (!nick) throw new Error("O campo nick é obrigatório");
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      throw new Error("O e-mail informado é inválido.");
-    }
-
-    const serviceCode = new GenerateCodeService();
-
-    const userAlreadyExists = await prismaClient.user.findFirst({
-      where: { email },
-    });
-
-    if (userAlreadyExists) {
-      throw new Error("Email já cadastrado.");
-    }
-
-    const passwordHash = await hash(password, 8);
-    const finalCode = code || "MS1zM2NyM3Q";
-
-    // Cria o usuário
-    const user = await prismaClient.user.create({
-      data: {
-        name,
-        email,
-        password: passwordHash,
-        wallet,
-        whatsapp,
-        roles,
-        indication,
-        active: true,
-        codeInvite: finalCode,
-        nick,
-        link,
-      },
-      select: { id: true, name: true, nick: true, email: true, codeInvite: true },
-    });
-
-    // Processa o código de indicação, se existir
-    if (finalCode) {
-      const decoded = serviceCode.decodeInviteCode(finalCode);
-      const sponsorId = Number(decoded);
-
-      if (isNaN(sponsorId)) {
-        throw new Error("Código de convite inválido.");
+  async createUser(userData: {
+    nick: string;
+    name: string;
+    email: string;
+    whatsapp: string;
+    password: string;
+    indication: string;
+    code: string;
+    wallet: string;
+    roles: string[];
+    link: string;
+  }) {
+    return await prismaClient.$transaction(async (tx) => {
+      // 1. Validações básicas
+      if (!userData.nick || !userData.email || !userData.password) {
+        throw new Error("Campos obrigatórios faltando");
       }
 
-      const update = await prismaClient.user.update({
-        where: { id: user.id },
-        data: {
-          Indicator: String(sponsorId),
-        },
+      // 2. Verificar unicidade
+      const existingUser = await tx.user.findFirst({
+        where: {
+          OR: [
+            { email: userData.email },
+            { nick: userData.nick }
+          ]
+        }
       });
-    }
 
-    return user;
+      if (existingUser) {
+        throw new Error(existingUser.email === userData.email 
+          ? "Email já cadastrado" 
+          : "Nick já está em uso");
+      }
+
+      // 3. Buscar sponsor
+      let sponsorId: number | null = null;
+      
+      if (userData.indication) {
+        const processedNick = userData.indication.trim().toLowerCase();
+        
+        const sponsor = await tx.user.findFirst({
+          where: {
+            nick: {
+              equals: processedNick,
+              mode: 'insensitive'
+            }
+          },
+          select: { id: true }
+        });
+
+        if (!sponsor) {
+          throw new Error(`Sponsor '${processedNick}' não encontrado`);
+        }
+        sponsorId = sponsor.id;
+      }
+
+      // 4. Criar hash da senha
+      const hashedPassword = await hash(userData.password, 10);
+
+      // 5. Criar usuário
+      const newUser = await tx.user.create({
+        data: {
+          nick: userData.nick,
+          name: userData.name,
+          email: userData.email,
+          whatsapp: userData.whatsapp,
+          password: hashedPassword,
+          indication: userData.nick,
+          roles: userData.roles,
+          wallet: userData.wallet,
+          level: 0,
+          codeInvite: userData.nick,
+          active: true,
+          status: false,
+        },
+        select: { id: true, nick: true, email: true }
+      });
+
+      // 6. Adicionar na árvore binária
+      if (sponsorId) {
+        const binaryTreeService = new BinaryTreeService();
+        await binaryTreeService.addUserToTree(
+          sponsorId.toString(), 
+          newUser.id.toString(),
+          tx // Passando a transação
+        );
+      }
+
+      // 7. Atualizar status do usuário
+      await tx.user.update({
+        where: { id: newUser.id },
+        data: { status: true }
+      });
+
+      if (sponsorId) {
+        await tx.user.update({
+            where: { id: sponsorId },
+            data: { 
+                level: { 
+                    increment: 1 // Incrementa +1 no campo "level"
+                } 
+            }
+        });
+    }
+      return {
+        success: true,
+        user: {
+          ...newUser,
+          sponsorId: sponsorId || null
+        }
+      };
+    });
   }
 }
 
