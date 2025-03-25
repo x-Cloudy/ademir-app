@@ -5,7 +5,7 @@ const menus = [
     name: 'Home',
     path: '/home',
     icon: 'home',
-    roles: ['admin', 'Invistribe', 'INTELECTUS'] as Role[]
+    roles: ['admin', 'Invistribe'] as Role[]
   },
   {
     name: 'Ranking',
