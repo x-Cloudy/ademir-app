@@ -33,6 +33,7 @@ class AllUserController {
     async indicators(request: Request, response:Response){
         const detailUserService = new AllUserService();
         const {code} = request.params;
+        console.log("a" + code)
         const user = await detailUserService.execute2(code);
         return response.status(200).json(user); 
     }

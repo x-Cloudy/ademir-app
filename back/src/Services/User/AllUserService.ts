@@ -10,6 +10,8 @@ export interface UserFilters {
 }
 
 export class AllUserService {
+
+   
   async execute(filters?: UserFilters) {
     // Define explicitamente o tipo da variável "where"
     const where: Prisma.UserWhereInput = filters?.search
@@ -46,15 +48,27 @@ export class AllUserService {
   }
 
     async execute2(code: string) {
+        const serviceCode = new GenerateCodeService();
+        const decoded = serviceCode.decodeInviteCode(code);
 
-        const decoded = GenerateCodeService.decodeInviteCode(code);
-        
-        const indicatorId = typeof decoded === 'number' ? decoded : null;
-        
-        if (!indicatorId) {
+        // Debug: Verifique o valor e tipo de 'decoded'
+        console.log("Decoded:", decoded, "Type:", typeof decoded);
+
+        // Converter para número se necessário
+        let indicatorId: number | null = null;
+        if (typeof decoded === 'string') {
+            indicatorId = parseInt(decoded, 10);
+        } else if (typeof decoded === 'number') {
+            indicatorId = decoded;
+        }
+
+        // Validação robusta
+        if (isNaN(indicatorId) || indicatorId === null) {
             throw new Error("Código de convite inválido ou sem indicador");
         }
-    
+
+        console.log("Indicator ID:", indicatorId);
+        
         return await prismaClient.indicatedUsers.findMany({
             where: { indicatorId },
             include: { indicated: true },

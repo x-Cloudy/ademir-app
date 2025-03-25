@@ -44,9 +44,10 @@ const tree = new BinaryTreeController();
 const sideController = new ChangePositionController();
 const indicationsController = new IndicationsController();
 const allUserController = new AllUserController();
+const createUser = new CreateUserController();
 
 // User Routes
-router.post('/user', new CreateUserController().handle);
+router.post('/user',(req, res) => createUser.handle(req, res));
 router.put('/user/:id', isAuthenticated, updateUser.handle);
 router.get("/me", isAuthenticated, meController.handle);
 router.delete('/user/:id', isAuthenticated, new RemoveUserController().handle);
@@ -91,6 +92,6 @@ router.get("/binary-tree/position/:userId",isAuthenticated, (req, res) => tree.g
 router.get("/tree/:userId/:maxDepth", (req, res) => tree.getTree(req, res));
 router.get("/binary-tree", tree.getEntireTree);
 
-router.get("/indications/:userId", (req, res) =>indicationsController.getIndications(req, res));
+router.get("/indication/:code", (req, res) =>allUserController.indicators(req, res));
 
 export { router };

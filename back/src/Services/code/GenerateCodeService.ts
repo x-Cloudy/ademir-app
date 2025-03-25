@@ -1,7 +1,5 @@
 export class GenerateCodeService {
-    static decodeInviteCode(code: string) {
-      throw new Error('Method not implemented.');
-    }
+
     private readonly secretKey = 's3cr3t';
 
     public generateInviteCode(userId: string): string {
