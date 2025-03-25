@@ -7,6 +7,13 @@ const tableColumn = [
     align: 'left' as any,
   },
   {
+    name: "nick",
+    label: "Login",
+    field: "nick",
+    sortable: false,
+    align: 'left' as any,
+  },
+  {
     name: "name",
     label: "Nome",
     field: "name",

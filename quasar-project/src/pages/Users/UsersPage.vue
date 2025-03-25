@@ -9,15 +9,15 @@
 
       <div class="flex q-ml-md">
         <q-input color="warning" label-color="black" class="q-pl-xs"
-          style="background-color: white; border-radius: 3px;" dense label="Pesquisar usuário" v-model="search"
+          style="background-color: white; border-radius: 3px;" dense label="Pesquisar usuário" v-model="state.search"
           type="text" />
-        <q-btn icon="search" flat dense size="md" class="q-ml-sm bg-warning text-black" />
+        <q-btn @click="search" icon="search" flat dense size="md" class="q-ml-sm bg-warning text-black" />
+        <q-btn @click="handleReset" icon="restart_alt" flat dense size="md" class="q-ml-sm bg-warning text-black" />
       </div>
     </q-card>
 
-    <q-table :rows="users" :columns="tableColumn" :pagination="{
-      rowsPerPage: 50
-    }" style="width: 100%;">
+    <q-table :rows="users" :columns="tableColumn"
+      :pagination="{ rowsPerPage: 50 }" style="width: 100%;">
       <template v-slot:header="props">
         <q-tr :props="props">
           <q-th v-for="col in cols(props)" :key="col.name" :props="props" class="text-white"
@@ -30,7 +30,7 @@
       </template>
 
       <template v-slot:body-cell-actions="props">
-        <q-td :props="props" >
+        <q-td :props="props">
           <q-btn @click="() => {
             editForm.user = props.row
             editForm.id = props.row.id
@@ -53,7 +53,8 @@
     </q-table>
     <q-dialog v-model="deleteDialog">
       <q-card style="width: 1000px; height: auto;" class="q-pa-lg ">
-        <q-card-section style="display: flex; justify-content: center; align-items: center;" class=" q-pr-none q-gutter-x-md">
+        <q-card-section style="display: flex; justify-content: center; align-items: center;"
+          class=" q-pr-none q-gutter-x-md">
           <p style="margin: 0;" class="flex items-center">Deseja deletar usuário?</p>
           <q-btn color="green" @click="handleDelete(deleteId)">Deletar</q-btn>
           <q-btn color="red" @click="deleteDialog = false">Cancelar</q-btn>
@@ -81,8 +82,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onBeforeMount } from 'vue';
+import { ref, reactive, computed, nextTick } from 'vue';
 import { api } from 'src/boot/axios';
+import { useUsersStore } from 'src/stores/userStore';
 import tableColumn from './components/tableColumns';
 import notify from 'src/utils/Notify';
 import { roles } from 'src/types';
@@ -91,13 +93,16 @@ import RestrictPage from 'src/components/RestrictPage/RestrictPage.vue';
 
 type Col = { cols: { value: unknown; name: string; label: string }[] }
 const cols = (props: Col) => props.cols
-
+const state = reactive({
+  search: '',
+})
+const usersStore = useUsersStore()
 const deleteId = ref<number>(0)
 const deleteDialog = ref(false)
-const search = ref<string>('')
 const editForm = ref<any>({
   user: {
     name: '',
+    nick: '',
     email: '',
     whatsapp: '',
     wallet: '',
@@ -106,7 +111,21 @@ const editForm = ref<any>({
   id: ''
 })
 const showEdit = ref(false)
-const users = ref([])
+
+const users = computed(() => usersStore.users || [])
+
+const stateFilter = reactive({
+  filter: { ...usersStore.filter },
+  pagination: { ...usersStore.pagination }
+})
+
+const request = async (payload: any) => {
+  await usersStore.fetch({ ...payload, filter: state as any })
+}
+
+const search = async () => {
+  await usersStore.search(state)
+}
 
 const handleEdit = async () => {
   try {
@@ -132,7 +151,7 @@ const handleDelete = async (id: number) => {
       type: 'positive',
       msg: 'Usuário excluído'
     })
-    await getUser()
+    await usersStore.fetch({})
     deleteDialog.value = false;
   } catch (error) {
     notify({
@@ -142,18 +161,12 @@ const handleDelete = async (id: number) => {
   }
 }
 
-const getUser = async () => {
-  const response = await api.get("/all-users")
-  users.value = response.data
+const handleReset = async () => {
+  state.search = ''
+    await request(usersStore.resetFilter())
 }
 
-onBeforeMount(async () => {
-  try {
-    await getUser()
-  } catch (error) {
-    console.log(error)
-  }
-})
+void request(stateFilter)
 </script>
 
 <style scoped>
