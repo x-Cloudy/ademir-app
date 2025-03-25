@@ -1,7 +1,7 @@
 <template>
   <div v-if="hasAccess(['admin'])" style="width: 100%; height: auto;" class="q-px-md">
     <q-card class="bg-white q-pa-lg q-mt-md flex no-wrap" :class="isMobile() ? 'column' : ''" style="width: 100%; height: auto;">
-      <VideoAdd />
+      <VideoAdd :title="'ADICIONAR VÍDEOS INTELECTUS'"/>
 
       <div style="width: 100%; height: 100%;">
         <HeaderCard :title="'GERAL'" style="height: 100%;">

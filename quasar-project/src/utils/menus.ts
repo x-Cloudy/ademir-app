@@ -8,16 +8,22 @@ const menus = [
     roles: ['admin', 'Invistribe'] as Role[]
   },
   {
-    name: 'Ranking',
-    path: '/ranking',
-    icon: 'leaderboard',
-    roles: ['admin', 'Invistribe'] as Role[]
+    name: 'Vídeos Intelectus',
+    path: '/videos-intelectus',
+    icon: 'smart_display',
+    roles: ['admin', 'INTELECTUS'] as Role[]
   },
   {
-    name: 'Usuários',
-    path: '/usuarios',
-    icon: 'people',
-    roles: ['admin'] as Role[]
+    name: 'Ranking Intelectus',
+    path: '/ranking-Intelectus',
+    icon: 'leaderboard',
+    roles: ['admin', 'INTELECTUS'] as Role[]
+  },
+  {
+    name: 'Ranking Invistribe',
+    path: '/ranking-invistribe',
+    icon: 'leaderboard',
+    roles: ['admin', 'Invistribe'] as Role[]
   },
   {
     name: 'Matriz InvisTribe',
@@ -26,10 +32,16 @@ const menus = [
     roles: ['admin', 'Invistribe'] as Role[]
   },
   {
-    name: 'Matriz Cripto',
+    name: 'Matriz Intelectus',
     path: '/matriz-cripto',
     icon: 'stock',
     roles: ['admin', 'INTELECTUS'] as Role[]
+  },
+  {
+    name: 'Usuários',
+    path: '/usuarios',
+    icon: 'people',
+    roles: ['admin'] as Role[]
   },
   {
     name: 'Opções',

@@ -23,9 +23,21 @@ const routes: RouteRecordRaw[] = [
     meta: { requiresAuth: true },
   },
   {
-    path: '/ranking',
+    path: '/videos-intelectus',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/Videos/VideosIntelectus.vue') }],
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/ranking-invistribe',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/Ranking/RankingPage.vue') }],
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/ranking-intelectus',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/Ranking/RankingIntelectusPage.vue') }],
     meta: { requiresAuth: true },
   },
   {

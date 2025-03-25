@@ -8,17 +8,17 @@
 
         <div :style="isMobile() ? { width: '100%', marginBottom: '2rem' } :
           { width: '48%', marginLeft: '1rem' }" style="padding: 0 1rem; border-radius: 5px;">
-          <label style="font-size: 20px;">Informações do convidante</label>
-          <q-input filled v-model="user_invited_info.nick" class="bg-white q-mb-md" label="Nick" disable />
-          <q-input filled v-model="user_invited_info.whatsapp" class="bg-white q-mb-md" label="Wpp" disable />
+          <label style="font-size: 20px;">Contato do Pratrocinador</label>
+          <q-input filled v-model="user_invited_info.nick" class="bg-white q-mb-md" label="Login" disable />
+          <q-input filled v-model="user_invited_info.whatsapp" class="bg-white q-mb-md" label="Whatsapp" disable />
+          <q-input filled v-model="user_invited_info.link" class="bg-white q-mb-md" label="Link" disable />
 
           <label style="font-size: 20px;">Meu Dados</label>
-          <q-input filled v-model="user.nick" class="bg-white q-mb-md" label="Login" :disable="editingUser" />
+          <q-input filled v-model="user.nick" class="bg-white q-mb-md" label="Login" :disable="true" />
           <q-input filled v-model="user.name" class="bg-white q-mb-md" label="Nome" :disable="editingUser" />
           <q-input filled v-model="user.email" class="bg-white q-mb-md" label="Email" :disable="editingUser" />
           <q-input filled v-model="user.whatsapp" class="bg-white q-mb-md" label="Wpp" :disable="editingUser" />
-          <q-input filled v-model="user.link" class="bg-white q-mb-md" label="Link da plataforma"
-            :disable="editingUser" />
+
           <div class="q-gutter-sm">
             <q-btn v-if="editingUser" @click="editingUser = false" class="bg-warning"
               style="height: auto; font-weight: 600; font-size: 14px; font-family: Poppins;">
@@ -34,15 +34,20 @@
             </q-btn>
           </div>
 
-
+          <q-form @submit="addLink" class="q-mt-lg">
+            <q-input :readonly="!!authStore.user.link" outlined color="black" v-model="user.link"
+              class="bg-white q-mb-md" :label="`Link ${authStore.user.roles?.length ? authStore.user.roles[0] : 'Plataforma'}`" />
+            <q-btn v-if="!authStore.user.link"
+              style="height: auto; font-weight: 600; font-size: 14px; font-family: Poppins;" class="bg-warning"
+              type="submit">Adicionar Link</q-btn>
+          </q-form>
           <q-form @submit="addWallet" class="q-mt-lg">
-            <q-input :readonly="!!authStore.user.wallet" outlined color="black" v-model="user.wallet" class="bg-white q-mb-md"
-              label="Carteira Descentralizada" />
+            <q-input :readonly="!!authStore.user.wallet" outlined color="black" v-model="user.wallet"
+              class="bg-white q-mb-md" label="Carteira Descentralizada" />
             <q-btn v-if="!authStore.user.wallet"
               style="height: auto; font-weight: 600; font-size: 14px; font-family: Poppins;" class="bg-warning"
               type="submit">Adicionar Carteira</q-btn>
           </q-form>
-          <SidePreferenceBtn v-if="user.sidePreference !== null" />
         </div>
       </div>
     </q-card>
@@ -106,21 +111,30 @@ const user = ref<any>(authStore.user || {});
 const user_invites = ref<any[]>([]);
 const user_invited_info = ref({
   nick: '',
-  whatsapp: ''
+  whatsapp: '',
+  link: ''
 })
 const editingUser = ref(true)
 
-const inviteInvistribe = ref<string>('')
-const inviteIntelectus = ref<string>('')
+const inviteInvistribe = ref<string>(`https://vipclubbusiness.com/register?plat=INTELECTUS&code=${authStore.user.nick}`)
+const inviteIntelectus = ref<string>(`https://vipclubbusiness.com/register?plat=Invistribe&code=${authStore.user.nick}`)
 
-const generateInviteLink = async () => {
+
+const addLink = async () => {
   try {
-    const response = await api.get(`/generateCode/${user.value.id}`)
-    userInviteCode.value = response.data.inviteCode
-    inviteInvistribe.value = `https://vipclubbusiness.com/register?plat=Invistribe&code=${response.data.inviteCode}`
-    inviteIntelectus.value = `https://vipclubbusiness.com/register?plat=INTELECTUS&code=${response.data.inviteCode}`
+    await api.put(`/user/${user.value.id}`, {
+      link: user.value.link
+    })
+    await authStore.getUserInfo()
+    notify({
+      type: 'positive',
+      msg: 'Carteira adicionada'
+    })
   } catch (error) {
-    console.log(error)
+    notify({
+      type: 'negative',
+      msg: 'Erro ao adicionar carteira'
+    })
   }
 }
 
@@ -163,7 +177,6 @@ const changeUserInfos = async () => {
 onMounted(async () => {
   try {
     await authStore.getUserInfo()
-    await generateInviteLink()
     const response = await api.get(`/indications/${userInviteCode.value}`)
     if (response.status === 200) {
       user_invites.value = response.data

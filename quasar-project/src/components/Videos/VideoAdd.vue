@@ -1,13 +1,13 @@
 <template>
   <div class="flex column q-mb-md" :class="isMobile() ? '' : 'q-mr-md'" style="min-width: 300px; height: 100%;">
-    <HeaderCard :title="'ADICIONAR VIDEOS'">
+    <HeaderCard :title="props.title">
       <q-input color="black" bg-color="white" class="full-width" outlined label="URL DO YOUTUBE" v-model="form" />
       <q-btn @click="handleSave" class="q-mt-sm full-width text-black" style="font-weight: 600;" color="warning">
         Salvar
       </q-btn>
     </HeaderCard>
 
-    <HeaderCard :title="'VIDEOS'" style="height: auto; min-height: 400px; margin-top: 1rem;">
+    <HeaderCard :title="'VÍDEOS'" style="height: auto; min-height: 400px; margin-top: 1rem;">
       <div style="overflow-y: scroll;">
         <div class="flex q-mb-md" v-for="(item, index) of videos" :key="index">
           <iframe width="100%" height="150" :src="`https://www.youtube.com/embed/${item.text}?si=vGK9wXF7Sqxrhc8s`"
@@ -29,6 +29,13 @@ import { api } from 'src/boot/axios';
 
 const form = ref<any>('')
 const videos = ref<any>([])
+
+const props = defineProps({
+  title: {
+    type: String,
+    required: true
+  }
+})
 
 const handleSave = async () => {
   try {

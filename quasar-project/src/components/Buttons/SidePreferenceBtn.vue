@@ -1,12 +1,11 @@
 <template>
   <div v-if="hasAccess(['INTELECTUS', 'admin'])"
-    class="q-mt-lg q-pa-sm flex column items-center justify-center text-black" style="border-radius: 5px; background-color: lightgrey;">
-    <label style="font-size: 18px; font-weight: bold;">Preferência de lado na matriz</label>
+    class=" flex column items-center justify-center" style="border-radius: 5px; background-color: lightgrey; width: 100%;">
     <div class="flex no-wrap items-center justify-center">
-      <p style="margin: 0; font-weight: bold;">Esquerda</p>
+      <p class="text-black" style="margin: 0; font-weight: bold;">Esquerda</p>
       <ToggleBtn :value="getSidePreference(authStore.user.sidePreference)"
         @click="(value: any) => changeSidePreference(value())" />
-      <p style="margin: 0; font-weight: bold;">Direita</p>
+      <p class="text-black" style="margin: 0; font-weight: bold;">Direita</p>
     </div>
   </div>
 </template>

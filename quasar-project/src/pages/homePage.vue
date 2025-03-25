@@ -1,5 +1,5 @@
 <template>
-  <div style="display: flex; align-items: center;" class="q-mx-md column">
+  <div v-if="hasAccess(['INTELECTUS', 'admin'])" style="display: flex; align-items: center;" class="q-mx-md column">
     <div class="q-my-lg" style="margin-bottom: 5rem;">
       <h2 class="main-title" style="
         font-family: arial black;
@@ -89,6 +89,29 @@
 
 <script setup lang="ts">
 import WppBtn from 'src/components/Buttons/WppBtn.vue';
+import { hasAccess } from 'src/utils/can-access';
+import { onMounted, ref, watch } from 'vue';
+import { useAuthStore } from 'src/stores/authStore';
+import { useRouter } from 'vue-router';
+
+const authStore = useAuthStore();
+const router = useRouter()
+const canAccess = ref(true)
+
+onMounted(() => {
+  canAccess.value = authStore.user.roles.includes('Invistribe') ||
+  authStore.user.roles.includes('admin');
+  console.log(canAccess.value)
+})
+
+watch(
+  () => canAccess.value,
+  async (value) => {
+    if (!value) {
+      await router.push('/perfil')
+    }
+  }
+)
 </script>
 
 <style scoped>

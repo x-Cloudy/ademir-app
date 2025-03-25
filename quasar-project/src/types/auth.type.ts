@@ -5,13 +5,14 @@ export type Role = typeof roles[number]
 export interface AuthUser {
   id: number;
   name: string;
+  nick: string
   last_name: string;
   codeInvite: string;
   wallet: string;
   email: string;
   avatar?: string;
   avatar_url?: string;
-  roles?: Role[];
+  roles: Role[];
   collaborator_id?: number,
   client?: AuthClient;
   sidePreference: string;

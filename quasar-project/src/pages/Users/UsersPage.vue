@@ -67,7 +67,8 @@
         <q-input v-model="editForm.user.name" type="text" label="Nome" outlined />
         <q-input v-model="editForm.user.email" type="email" label="Email" outlined />
         <q-input v-model="editForm.user.whatsapp" type="tel" label="Whatsapp" outlined />
-        <q-input v-model="editForm.user.wallet" type="tel" label="Carteira" outlined />
+        <q-input v-model="editForm.user.wallet" label="Carteira" outlined />
+        <q-input v-model="editForm.user.link" label="Link" outlined />
         <q-select color="black" multiple v-model="editForm.user.roles" :options="roles" label="Plataforma" outlined />
 
         <q-card-section style="display: flex; justify-content: end;" class="q-gutter-md q-pr-none">
