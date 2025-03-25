@@ -54,7 +54,7 @@ class CreateUserService {
     enum Roles {
       Admin = "Admin",
       Invistribe = "Invistribe",
-      INTELECTUS_AI = "INTELECTUS_AI"
+      INTELECTUS = "INTELECTUS"
     }
 
     // Processar código de indicação, se existir
@@ -84,7 +84,7 @@ class CreateUserService {
       });
 
       // Se a role incluir "Invistribe", adiciona na matriz (registro de indicação)
-      if ((roles as any).includes("INTELECTUS_AI")) {
+      if ((roles as any).includes("INTELECTUS")) {
         let sponsorIndications = await prismaClient.indicates.findUnique({
           where: { userId: sponsorUser.id },
         });
