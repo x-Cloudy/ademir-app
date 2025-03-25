@@ -92,6 +92,7 @@ router.get("/binary-tree/position/:userId",isAuthenticated, (req, res) => tree.g
 router.get("/tree/:userId/:maxDepth", (req, res) => tree.getTree(req, res));
 router.get("/binary-tree", tree.getEntireTree);
 
-router.get("/indication/:code", (req, res) =>allUserController.indicators(req, res));
+router.get("/indications/:code", (req, res) =>allUserController.indicators(req, res));
+router.get("/indication/:userId", (req, res) =>allUserController.indicator(req, res));
 
 export { router };

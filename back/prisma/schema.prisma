@@ -26,6 +26,7 @@ model User {
   indication      String?
   roles           String[]
   binaryTreeid    Int?
+  Indicator       String?
   sidePreference  String?
   codeInvite      String            @default("MS1zM2NyM3Q")
   BinaryTree      BinaryTree?

@@ -37,6 +37,14 @@ class AllUserController {
         const user = await detailUserService.execute2(code);
         return response.status(200).json(user); 
     }
+
+    async indicator(request: Request, response:Response){
+        const detailUserService = new AllUserService();
+        const {userId} = request.params;
+        const userIdNumber = parseInt(userId, 10);
+        const user = await detailUserService.execute3(userIdNumber);
+        return response.status(200).json(user);
+    }
 }
 
 export { AllUserController };

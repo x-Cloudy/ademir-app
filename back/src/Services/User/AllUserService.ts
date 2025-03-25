@@ -38,10 +38,9 @@ export class AllUserService {
         email: true,
         whatsapp: true,
         nick: true,
-        createdAt: true,
-        updatedAt: true,
         roles: true,
-        link: true
+        link: true,
+        wallet:true
       }
     });
     return users;
@@ -50,28 +49,66 @@ export class AllUserService {
     async execute2(code: string) {
         const serviceCode = new GenerateCodeService();
         const decoded = serviceCode.decodeInviteCode(code);
-
-        // Debug: Verifique o valor e tipo de 'decoded'
-        console.log("Decoded:", decoded, "Type:", typeof decoded);
-
-        // Converter para número se necessário
-        let indicatorId: number | null = null;
-        if (typeof decoded === 'string') {
-            indicatorId = parseInt(decoded, 10);
-        } else if (typeof decoded === 'number') {
-            indicatorId = decoded;
+    
+        // Converter para número (ajuste conforme sua lógica de decodificação)
+        const indicatorId = Number(decoded); 
+        if (isNaN(indicatorId)) {
+            throw new Error("Código de convite inválido");
         }
-
-        // Validação robusta
-        if (isNaN(indicatorId) || indicatorId === null) {
-            throw new Error("Código de convite inválido ou sem indicador");
-        }
-
-        console.log("Indicator ID:", indicatorId);
-        
-        return await prismaClient.indicatedUsers.findMany({
-            where: { indicatorId },
-            include: { indicated: true },
+    
+        // Busca os usuários com o indicatorId especificado
+        const users = await prismaClient.user.findMany({
+            where: {
+                Indicator: String(indicatorId), // Se Indicator for String
+                // OU (se você mudou para Int no schema):
+                // Indicator: indicatorId,
+            },
+            select: {
+                id: true,
+                nick: true,
+                plataform: true,
+                status: true,
+            },
         });
+    
+        return users;
+    }
+
+    async execute3(userId: number) {
+        // 1. Busca o usuário principal
+        const currentUser = await prismaClient.user.findUnique({
+            where: { id: userId },
+            select: { Indicator: true }
+        });
+    
+        if (!currentUser) {
+            throw new Error("Usuário não encontrado 🥺");
+        }
+    
+        // 2. Verifica se existe um indicador
+        if (!currentUser.Indicator) {
+            throw new Error("Usuário não tem um indicador ❌");
+        }
+    
+        // 3. Converte para número (se necessário)
+        const indicatorId = parseInt(currentUser.Indicator);
+        if (isNaN(indicatorId)) {
+            throw new Error("ID do indicador inválido 🚨");
+        }
+    
+        // 4. Busca os dados do indicador
+        const indicatorUser = await prismaClient.user.findUnique({
+            where: { id: indicatorId },
+            select: { 
+                nick: true,
+                whatsapp: true
+            }
+        });
+    
+        if (!indicatorUser) {
+            throw new Error("Indicador não encontrado na base 🔎");
+        }
+    
+        return indicatorUser;
     }
 }

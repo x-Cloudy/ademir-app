@@ -4,7 +4,18 @@ import { UserRequest } from "../../models/User/UserRequest";
 import { GenerateCodeService } from "../code/GenerateCodeService";
 
 class CreateUserService {
-  async execute({ name, email, password, wallet, whatsapp, indication, roles, code, nick, link }: UserRequest) {
+  async execute({
+    name,
+    email,
+    password,
+    wallet,
+    whatsapp,
+    indication,
+    roles,
+    code,
+    nick,
+    link,
+  }: UserRequest) {
     if (!name) throw new Error("O campo nome é obrigatório.");
     if (!email) throw new Error("O campo email é obrigatório.");
     if (password.length < 6) {
@@ -59,20 +70,10 @@ class CreateUserService {
         throw new Error("Código de convite inválido.");
       }
 
-      const sponsorUser = await prismaClient.user.findFirst({
-        where: { id: sponsorId },
-        select: { id: true, sidePreference: true },
-      });
-
-      if (!sponsorUser) {
-        throw new Error("Usuário patrocinador não encontrado.");
-      }
-
-      // Salva o indicado na tabela de indicações
-      await prismaClient.indicatedUsers.create({
+      const update = await prismaClient.user.update({
+        where: { id: user.id },
         data: {
-          indicatorId: sponsorUser.id,
-          indicatedId: user.id,
+          Indicator: String(sponsorId),
         },
       });
     }
