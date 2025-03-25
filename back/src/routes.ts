@@ -52,6 +52,7 @@ router.get("/me", isAuthenticated, meController.handle);
 router.delete('/user/:id', isAuthenticated, new RemoveUserController().handle);
 router.post("/login", login.handle);
 router.get("/all-users", isAuthenticated, new AllUserController().handle);
+router.get("/indicators/:code", isAuthenticated, new AllUserController().indicators);
 router.get("/verify-user-matriz/:id",isAuthenticated, (req, res) => verifyUserInMatriz.execute(req, res));
 router.post('change-side/:id',isAuthenticated, (req, res) => sideController.handle(req, res));
 router.post('/change-password',(req, res) => allUserController.passwordChange(req, res));

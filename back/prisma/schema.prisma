@@ -9,6 +9,8 @@ datasource db {
 
 model User {
   name            String
+  nick            String?
+  link            String?
   email           String            @unique
   password        String
   wallet          String?
@@ -33,9 +35,23 @@ model User {
   MatrizGold      MatrizGold[]
   MatrizSilver    MatrizSilver[]
   binaryTree      BinaryTree?       @relation("SponsorUser", fields: [binaryTreeid], references: [id])
+  indications    IndicatedUsers[]  @relation("UserIndicator")
+  indicatedBy    IndicatedUsers[]  @relation("UserIndicated")
 
   @@map("users")
 }
+
+model IndicatedUsers {
+  id           Int    @id @default(autoincrement())
+  indicatorId  Int    // ID do usuário que fez a indicação
+  indicatedId  Int    // ID do usuário indicado
+
+  indicator    User   @relation("UserIndicator", fields: [indicatorId], references: [id])
+  indicated    User   @relation("UserIndicated", fields: [indicatedId], references: [id])
+
+  @@unique([indicatorId, indicatedId]) // Impede duplicações de indicação
+}
+
 
 model Indicates {
   id               Int               @id @default(autoincrement())

@@ -16,7 +16,7 @@ export class IndicationsController {
         return res.status(400).json({ error: "User ID inválido" });
       }
 
-      const indicatedUsers = await this.indicationsService.getIndicatedUsers(Number(userId));
+      const indicatedUsers = await this.indicationsService.getIndications(Number(userId));
 
       return res.json(indicatedUsers);
     } catch (error) {

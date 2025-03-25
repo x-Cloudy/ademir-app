@@ -1,31 +1,10 @@
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import prismaClient from "../../prisma";
 
 export class IndicationsService {
-  async getIndicatedUsers(userId: number) {
-    const indicates = await prisma.indicates.findUnique({
-      where: { userId },
-      include: {
-        indicateNominees: {
-          include: {
-            indicatee: {
-              select: {
-                id: true,
-                name: true,
-                whatsapp: true,
-                status: true,
-              },
-            },
-          },
-        },
-      },
+  async getIndications(indicatorId: number) {
+    return await prismaClient.indicatedUsers.findMany({
+      where: { indicatorId },
+      include: { indicated: true },
     });
-
-    if (!indicates) {
-      return [];
-    }
-
-    return indicates.indicateNominees.map(nominee => nominee.indicatee);
   }
 }
