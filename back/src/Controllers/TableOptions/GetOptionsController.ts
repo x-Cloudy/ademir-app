@@ -7,9 +7,8 @@ export class GetOptionsController {
         const service = new TableOptionsService();
        const dada =  await service.get();
 
-        return response.status(200).json({
-            data: dada
-        })
+        return response.json(dada);
+
     }
 
     async put(request: Request, response: Response) {

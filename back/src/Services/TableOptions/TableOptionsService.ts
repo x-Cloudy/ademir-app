@@ -13,7 +13,12 @@ export class TableOptionsService {
 
 
     async get(){
-        const data = await prisma.opcoes.findMany({});
+        const data = await prisma.opcoes.findFirst({
+            where : {id: 1},
+            select: {
+                wallet:true
+            }
+        });
         return data;
     }
 
