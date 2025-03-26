@@ -1,19 +1,21 @@
 <template>
   <div class="sidebar">
-    <div class="q-mt-md q-mb-lg">
-      <q-img class="q-mx-auto block q-mb-md q-mt-md" :src="logo" />
-    </div>
+    <div>
+      <div class="q-mt-md q-mb-lg">
+        <q-img class="q-mx-auto block q-mb-md q-mt-md" :src="logo" />
+      </div>
 
-    <div v-for="(item, index) of menus" :key="index">
-      <div v-if="hasAccess(item.roles)" :class="{ active: currentRoute === item.path }" class="menu-item"
-        @click="activeMenu = item.path">
-        <router-link :to="item.path" class="link q-pa-md"
-          :class="{ linkActive: currentRoute === item.path }">
-          <q-icon :name="item.icon" size="25px" class="q-mr-sm" />
-          {{ item.name }}
-        </router-link>
+      <div v-for="(item, index) of menus" :key="index">
+        <div v-if="hasAccess(item.roles)" :class="{ active: currentRoute === item.path }" class="menu-item"
+          @click="activeMenu = item.path">
+          <router-link :to="item.path" class="link q-pa-md" :class="{ linkActive: currentRoute === item.path }">
+            <q-icon :name="item.icon" size="25px" class="q-mr-sm" />
+            {{ item.name }}
+          </router-link>
+        </div>
       </div>
     </div>
+
 
     <div class="logout">
       <q-btn @click="logout" class="custon-btn flex justify-start text-white" flat>
@@ -58,6 +60,15 @@ const logout = () => {
   transition: 0.6s ease;
   display: flex;
   flex-direction: column;
+  overflow: scroll;
+  overflow: auto;
+  scrollbar-width: none;
+  justify-content: space-between;
+}
+
+.sidebar::-webkit-scrollbar {
+  display: none;
+  /* Para Chrome, Safari e Edge */
 }
 
 .menu-item {
@@ -90,12 +101,11 @@ const logout = () => {
 }
 
 .logout {
-  padding: 1rem 2rem;
+  position: relative;
+  padding: 1rem 0rem;
   width: 100%;
   height: 100px;
-  position: absolute;
-  bottom: 0;
-  left: 0;
+  display: flex;
 }
 
 .custon-btn {

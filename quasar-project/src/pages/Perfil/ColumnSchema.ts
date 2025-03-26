@@ -12,6 +12,12 @@ export const columns = [
     align: 'left'
   },
   {
+    name: 'level',
+    field: 'level',
+    label: 'nº de diretos',
+    align: 'center'
+  },
+  {
     name: 'status',
     field: 'status',
     label: 'STATUS'

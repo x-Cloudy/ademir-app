@@ -1,5 +1,5 @@
 <template>
-  <div v-if="hasAccess(['admin', 'Invistribe'])" style="width: 100%;">
+  <div v-if="hasAccess(['admin', 'INTELECTUS'])" style="width: 100%;">
     <div v-if="hasTop" style="width: 100%;">
       <div style="width: 100%;" class="q-px-md">
         <q-card class="bg-dark q-my-md q-pa-md flex items-center justify-between"
@@ -23,16 +23,16 @@
             <div v-if="top_rank.length > 0" style=" margin-bottom: 4rem;" :style="{ scale: isMobile() ? '0.9' : 1 }"
               class="column justify-center items-center q-mb-lg">
               <div v-if="top_rank[0]" class="top-rank-circle gold" :style="{ marginBottom: isMobile() ? '2rem' : '' }">
-                <div class="name-tag">{{ top_rank[0].name.split(' ')[0] }}</div>
+                <div class="name-tag">{{ top_rank[0].nick.split(' ')[0] }}</div>
                 <p class="tag-count">{{ top_rank[0].level }}</p>
               </div>
               <div class="flex">
                 <div v-if="top_rank[1]" :style="{ marginRight: isMobile() ? '40px' : '180px' }" class="top-rank-circle silver">
-                  <div class="name-tag">{{ top_rank[1].name.split(' ')[0] }}</div>
+                  <div class="name-tag">{{ top_rank[1].nick.split(' ')[0] }}</div>
                   <p class="tag-count">{{ top_rank[1].level }}</p>
                 </div>
                 <div v-if="top_rank[2]" class="top-rank-circle coper">
-                  <div class="name-tag">{{ top_rank[2].name.split(' ')[0] }}</div>
+                  <div class="name-tag">{{ top_rank[2].nick.split(' ')[0] }}</div>
                   <p class="tag-count">{{ top_rank[2].level }}</p>
                 </div>
               </div>
@@ -97,11 +97,8 @@ const top_rank = ref<any[]>([])
 onMounted(async () => {
   try {
     const response = await api.get('/top10tree')
-    console.log('top10 response', response)
     top_rank.value = response.data.splice('0', 3)
     userRank.value = response.data
-
-    console.log(top_rank.value, userRank.value)
   } catch (error) {
     hasTop.value = false;
   }

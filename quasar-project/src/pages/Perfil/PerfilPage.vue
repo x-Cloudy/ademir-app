@@ -107,7 +107,6 @@ const cols = (props: Col) => props.cols
 
 const optionStore = useOptionsStore()
 const authStore = useAuthStore()
-const userInviteCode = ref('')
 const user = ref<any>(authStore.user || {});
 const user_invites = ref<any[]>([]);
 const user_invited_info = ref({
