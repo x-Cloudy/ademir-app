@@ -178,7 +178,7 @@ const changeUserInfos = async () => {
 onMounted(async () => {
   try {
     await authStore.getUserInfo()
-    const response = await api.get(`/indications/${userInviteCode.value}`)
+    const response = await api.get(`/indications/${authStore.user.nick}`)
     if (response.status === 200) {
       user_invites.value = response.data
     }
