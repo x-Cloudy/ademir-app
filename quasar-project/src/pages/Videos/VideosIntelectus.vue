@@ -11,11 +11,7 @@
             referrerpolicy="strict-origin-when-cross-origin"></iframe>
         </div>
       </div>
-      <div v-else>
-        <div class="text-h5" style="height: 100%;">Ainda não temos vídeos de indicação</div>
-      </div>
     </HeaderCard>
-
     </q-card>
   </div>
 </template>

@@ -47,6 +47,15 @@
       </template>
     </q-input>
 
+    <q-input color="black" filled v-model="repeat_password" :type="isPwd ? 'password' : 'text'" label="Repetir senha"
+      outlined :rules="[
+        val => val === registerForm.password || 'Suas senhas precisam ser iguais'
+      ]">
+      <template v-slot:append>
+        <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer" @click="isPwd = !isPwd" />
+      </template>
+    </q-input>
+
     <GradBtn :title="'Registrar'" :type="'button'" @btn-click="onRegister" />
 
     <div class="text-center q-gutter-y-sm q-mt-md">
@@ -79,6 +88,7 @@ const isRegisterPage = computed(() => route.path === '/register')
 const route = useRoute()
 const router = useRouter()
 const isPwd = ref(true)
+const repeat_password = ref('')
 const registerForm = ref<any>({
   nick: '',
   name: '',

@@ -16,7 +16,7 @@
     </div>
 
     <div class="logout">
-      <q-btn @click="logout" class="flex justify-start text-white" flat>
+      <q-btn @click="logout" class="custon-btn flex justify-start text-white" flat>
         <q-icon name="logout" size="23px" class="q-mr-sm" />
         Sair
       </q-btn>
@@ -85,6 +85,10 @@ const logout = () => {
   font-weight: 500;
 }
 
+.link:hover {
+  color: #F2C037;
+}
+
 .logout {
   padding: 1rem 2rem;
   width: 100%;
@@ -92,5 +96,14 @@ const logout = () => {
   position: absolute;
   bottom: 0;
   left: 0;
+}
+
+.custon-btn {
+  transition: 0.3s;
+
+  &:hover {
+    color: #F2C037 !important;
+    background-color: transparent !important;
+  }
 }
 </style>
