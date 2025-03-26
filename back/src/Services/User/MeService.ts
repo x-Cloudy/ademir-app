@@ -22,7 +22,8 @@ export class MeService {
                 status: true,
                 sidePreference: true,
                 codeInvite:true,
-                link:true
+                link:true,
+                indication: true
             },
         });
 
