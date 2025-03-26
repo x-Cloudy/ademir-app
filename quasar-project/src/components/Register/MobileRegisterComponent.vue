@@ -25,11 +25,21 @@
       </template>
     </q-input>
     <q-input v-model="registerForm.password" type="text" label="Senha" outlined
-      :rules="[val => !!val || 'Senha é obrigatório']">
+    :rules="[
+        val => !!val || 'Senha é obrigatória',
+        val => (val && val.length >= 6) || 'Sua senha precisa ter mais de 6 caracteres'
+      ]">
       <template v-slot:append>
         <q-icon name="password" color="grey-6" size="xs" class="q-mt-sm" />
       </template>
     </q-input>
+    <q-input v-model="repeat_password" type="text" label="Repetir enha" outlined
+      :rules="[val => val === registerForm.password || 'As senhas precisam ser iguais']">
+      <template v-slot:append>
+        <q-icon name="password" color="grey-6" size="xs" class="q-mt-sm" />
+      </template>
+    </q-input>
+
     <div class="q-mt-lg">
       <GradBtn :title="'Registrar'" :type="'button'" @btn-click="onRegister" />
     </div>
@@ -62,6 +72,7 @@ const emit = defineEmits(['tab'])
 const hasId = computed(() => typeof route.params.id === 'string' && route.params.id.length > 0 ? route.params.id : null)
 const isRegisterPage = computed(() => route.path === '/register')
 
+const repeat_password = ref('')
 const authStore = useAuthStore()
 const router = useRouter()
 const route = useRoute()
