@@ -32,7 +32,6 @@ watch(
 )
 
 onBeforeMount(async () => {
-  console.log('onmOUted', authStore.isLogged)
   if (authStore.isLogged) {
     await router.push("/home")
   }
