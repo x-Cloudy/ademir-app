@@ -34,13 +34,13 @@ export class AllUserService {
       take: filters?.limit,
       select: {
         id: true,
-        name: true,
         email: true,
         whatsapp: true,
         nick: true,
         roles: true,
         link: true,
-        wallet:true
+        wallet:true,
+        level: true
       }
     });
     return users;
@@ -60,7 +60,8 @@ export class AllUserService {
             nick: true,
             plataform: true,
             status: true,
-            createdAt: true
+            createdAt: true,
+            level:true
         }
     });
 
@@ -116,7 +117,7 @@ async execute3(userId: number) {
             take: take, // Quantidade de usuários a retornar (padrão = 10)
             select: {
               id: true,
-              name: true,
+              nick: true,
               level: true,
               // Adicione outros campos se necessário
             }

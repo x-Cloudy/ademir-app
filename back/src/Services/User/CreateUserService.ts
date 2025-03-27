@@ -71,7 +71,7 @@ class CreateUserService {
           email: userData.email,
           whatsapp: userData.whatsapp,
           password: hashedPassword,
-          indication: userData.nick,
+          indication: userData.indication,
           roles: userData.roles,
           wallet: userData.wallet,
           level: 0,
