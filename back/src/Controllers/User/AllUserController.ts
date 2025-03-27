@@ -38,12 +38,22 @@ class AllUserController {
         return response.status(200).json(user); 
     }
 
-    async indicator(request: Request, response:Response){
+    async indicator(request: Request, response: Response) {
         const detailUserService = new AllUserService();
-        const {userId} = request.params;
+        const { userId } = request.params;
         const userIdNumber = parseInt(userId, 10);
-        const user = await detailUserService.execute3(userIdNumber);
-        return response.status(200).json(user);
+    
+        // Verifica se o ID é um número válido
+        if (isNaN(userIdNumber)) {
+            return response.status(400).json({ error: "ID do usuário inválido" });
+        }
+    
+        try {
+            const user = await detailUserService.execute3(userIdNumber);
+            return response.status(200).json(user);
+        } catch (error: any) {
+            return response.status(404).json({ error: error.message });
+        }
     }
 
     async top10Tree(response: Response){

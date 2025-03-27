@@ -26,7 +26,7 @@ model User {
   indication      String?
   roles           String[]
   binaryTreeid    Int?
-  Indicator       String?
+  indicatorSponsor       String?
   level           Int
   sidePreference  String            @default("right")
   codeInvite      String            @default("MS1zM2NyM3Q")

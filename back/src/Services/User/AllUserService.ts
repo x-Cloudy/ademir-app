@@ -10,7 +10,6 @@ export interface UserFilters {
 }
 
 export class AllUserService {
-
    
   async execute(filters?: UserFilters) {
     // Define explicitamente o tipo da variável "where"
@@ -50,7 +49,7 @@ export class AllUserService {
     // Busca case-insensitive pelo nick do sponsor no campo Indicator
     const users = await prismaClient.user.findMany({
         where: {
-            indication: {
+          indicatorSponsor: {
                 equals: sponsorNick.trim(), // Remove espaços e busca exata
                 mode: 'insensitive' // Ignora maiúsculas/minúsculas
             }
@@ -73,36 +72,36 @@ export class AllUserService {
 }
 
 async execute3(userId: number) {
-  // Busca o usuário e seu indicador (nick)
   const currentUser = await prismaClient.user.findUnique({
-      where: { id: userId },
-      select: { 
-          Indicator: true 
-      }
+    where: { id: userId },
+    select: { indicatorSponsor: true }
   });
 
   if (!currentUser) {
-      throw new Error("Usuário não encontrado");
+    throw new Error("Usuário não encontrado");
   }
 
-  if (!currentUser.Indicator) {
-      throw new Error("Este usuário não tem um sponsor");
+  if (!currentUser.indicatorSponsor) {
+    throw new Error("Este usuário não tem um sponsor");
   }
 
-  // Busca os dados do sponsor usando o nick armazenado
+  // Busca case-insensitive pelo nick do sponsor
   const sponsor = await prismaClient.user.findFirst({
-      where: { 
-          nick: currentUser.Indicator 
-      },
-      select: { 
-          nick: true,
-          whatsapp: true,
-          createdAt: true
+    where: { 
+      nick: { 
+        equals: currentUser.indicatorSponsor,
+        mode: 'insensitive'
       }
+    },
+    select: { 
+      nick: true,
+      whatsapp: true,
+      createdAt: true
+    }
   });
 
   if (!sponsor) {
-      throw new Error("Sponsor não encontrado na base de dados");
+    throw new Error("Sponsor não encontrado");
   }
 
   return sponsor;

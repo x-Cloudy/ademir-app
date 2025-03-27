@@ -51,8 +51,9 @@ class CreateUserService {
               mode: 'insensitive'
             }
           },
-          select: { id: true }
+          select: { id: true, indicatorSponsor: true } // <-- Aqui, para garantir que o campo existe
         });
+        
 
         if (!sponsor) {
           throw new Error(`Sponsor '${processedNick}' não encontrado`);
@@ -62,6 +63,7 @@ class CreateUserService {
 
       // 4. Criar hash da senha
       const hashedPassword = await hash(userData.password, 10);
+      console.log(userData);
 
       // 5. Criar usuário
       const newUser = await tx.user.create({
@@ -71,16 +73,19 @@ class CreateUserService {
           email: userData.email,
           whatsapp: userData.whatsapp,
           password: hashedPassword,
-          indication: userData.indication,
+          indication: userData.nick, // Código de indicação é o próprio nick
+          indicatorSponsor: userData.indication, // Nick do sponsor
           roles: userData.roles,
           wallet: userData.wallet,
-          level: 0,
           codeInvite: userData.nick,
+          level: 0,
           active: true,
           status: false,
         },
-        select: { id: true, nick: true, email: true }
+        select: { id: true, nick: true, email: true , indicatorSponsor:true}
       });
+
+      console.log(newUser);
 
       // 6. Adicionar na árvore binária
       if (sponsorId) {
@@ -88,7 +93,7 @@ class CreateUserService {
         await binaryTreeService.addUserToTree(
           sponsorId.toString(), 
           newUser.id.toString(),
-          tx // Passando a transação
+          tx
         );
       }
 
@@ -98,16 +103,18 @@ class CreateUserService {
         data: { status: true }
       });
 
+      // 8. Atualizar nível do sponsor
       if (sponsorId) {
         await tx.user.update({
-            where: { id: sponsorId },
-            data: { 
-                level: { 
-                    increment: 1 // Incrementa +1 no campo "level"
-                } 
-            }
+          where: { id: sponsorId },
+          data: { 
+            level: { 
+              increment: 1
+            } 
+          }
         });
-    }
+      }
+
       return {
         success: true,
         user: {
