@@ -116,8 +116,8 @@ const user_invited_info = ref({
 })
 const editingUser = ref(true)
 
-const inviteInvistribe = ref<string>(`https://vipclubbusiness.com/register?plat=INTELECTUS&code=${authStore.user.nick}`)
-const inviteIntelectus = ref<string>(`https://vipclubbusiness.com/register?plat=Invistribe&code=${authStore.user.nick}`)
+const inviteInvistribe = ref<string>(`https://vipclubbusiness.com/register?plat=Invistribe&code=${authStore.user.nick}`)
+const inviteIntelectus = ref<string>(`https://vipclubbusiness.com/register?plat=INTELECTUS&code=${authStore.user.nick}`)
 
 
 const addLink = async () => {
