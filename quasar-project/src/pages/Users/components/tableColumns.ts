@@ -49,6 +49,13 @@ const tableColumn = [
     align: 'left' as any,
   },
   {
+    name: "level",
+    label: "Nº de diretos",
+    field: "level",
+    sortable: false,
+    align: 'left' as any,
+  },
+  {
     name: "roles",
     label: "inscrição",
     field: "roles",
