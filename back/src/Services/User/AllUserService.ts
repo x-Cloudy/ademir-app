@@ -39,7 +39,8 @@ export class AllUserService {
         roles: true,
         link: true,
         wallet:true,
-        level: true
+        level: true,
+        name: true
       }
     });
     return users;

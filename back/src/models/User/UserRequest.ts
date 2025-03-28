@@ -1,6 +1,5 @@
 type Roles = 'invistribe' | 'Cripto'
 
-
 export interface UserRequest {
   name: string;
   email: string;
