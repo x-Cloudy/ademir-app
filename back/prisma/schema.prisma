@@ -9,6 +9,8 @@ datasource db {
 
 model User {
   name            String
+  nick            String?           @unique
+  link            String?
   email           String            @unique
   password        String
   wallet          String?
@@ -24,7 +26,9 @@ model User {
   indication      String?
   roles           String[]
   binaryTreeid    Int?
-  sidePreference  String?
+  indicatorSponsor       String?
+  level           Int
+  sidePreference  String            @default("right")
   codeInvite      String            @default("MS1zM2NyM3Q")
   BinaryTree      BinaryTree?
   IndicateNominee IndicateNominee[] @relation("IndicatedUser")
@@ -33,9 +37,23 @@ model User {
   MatrizGold      MatrizGold[]
   MatrizSilver    MatrizSilver[]
   binaryTree      BinaryTree?       @relation("SponsorUser", fields: [binaryTreeid], references: [id])
+  indications    IndicatedUsers[]  @relation("UserIndicator")
+  indicatedBy    IndicatedUsers[]  @relation("UserIndicated")
 
   @@map("users")
 }
+
+model IndicatedUsers {
+  id           Int    @id @default(autoincrement())
+  indicatorId  Int    // ID do usuário que fez a indicação
+  indicatedId  Int    // ID do usuário indicado
+
+  indicator    User   @relation("UserIndicator", fields: [indicatorId], references: [id])
+  indicated    User   @relation("UserIndicated", fields: [indicatedId], references: [id])
+
+  @@unique([indicatorId, indicatedId]) // Impede duplicações de indicação
+}
+
 
 model Indicates {
   id               Int               @id @default(autoincrement())
@@ -187,4 +205,9 @@ model PasswordResetToken1 {
   code      String
   createdAt DateTime @default(now())
   expiresAt DateTime
+}
+
+model opcoes {
+   id              Int               @id @default(autoincrement())
+   wallet         Boolean            @default(false)  
 }

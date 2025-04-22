@@ -22,6 +22,8 @@ import { TableTextController } from "./Controllers/TableText/TableTextController
 import { BinaryTreeController } from "./Controllers/BinaryThree/BinaryThreeController";
 import { ChangePositionController } from "./Controllers/User/ChangePositionController";
 import { IndicationsController } from "./Controllers/User/IndicationsController";
+import { GetOptionsController } from "./Controllers/TableOptions/GetOptionsController";
+import { TableOptionsService } from "./Services/TableOptions/TableOptionsService";
 
 const router = Router();
 const resetUseCase = new PasswordResetUseCase();
@@ -44,14 +46,17 @@ const tree = new BinaryTreeController();
 const sideController = new ChangePositionController();
 const indicationsController = new IndicationsController();
 const allUserController = new AllUserController();
+const createUser = new CreateUserController();
+const options = new GetOptionsController();
 
 // User Routes
-router.post('/user', new CreateUserController().handle);
+router.post('/user',(req, res) => createUser.handle(req, res));
 router.put('/user/:id', isAuthenticated, updateUser.handle);
 router.get("/me", isAuthenticated, meController.handle);
 router.delete('/user/:id', isAuthenticated, new RemoveUserController().handle);
 router.post("/login", login.handle);
 router.get("/all-users", isAuthenticated, new AllUserController().handle);
+router.get("/indicators/:code", isAuthenticated, new AllUserController().indicators);
 router.get("/verify-user-matriz/:id",isAuthenticated, (req, res) => verifyUserInMatriz.execute(req, res));
 router.post('change-side/:id',isAuthenticated, (req, res) => sideController.handle(req, res));
 router.post('/change-password',(req, res) => allUserController.passwordChange(req, res));
@@ -89,7 +94,10 @@ router.get("/binary-tree/:userId",isAuthenticated, (req, res) => tree.getUserTre
 router.get("/binary-tree/position/:userId",isAuthenticated, (req, res) => tree.getUserPosition(req, res));
 router.get("/tree/:userId", (req, res) => tree.getTree(req, res));
 router.get("/binary-tree", tree.getEntireTree);
-
-router.get("/indications/:userId", (req, res) =>indicationsController.getIndications(req, res));
-
+router.get("/top10tree", (req, res) =>allUserController.top10Tree(res));
+router.get("/indications/:code", (req, res) =>allUserController.indicators(req, res));
+router.get("/indication/:userId", (req, res) =>allUserController.indicator(req, res));
+router.get("/options", (req, res) =>options.get(res));
+router.put("/options", (req, res) =>options.put(req, res));
+router.post("/options", (req, res) =>options.create(req, res));
 export { router };
